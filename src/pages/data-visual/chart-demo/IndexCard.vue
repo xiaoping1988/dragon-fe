@@ -1,0 +1,21 @@
+<template>
+    <DChartFactory :data="data" :meta="meta" id="1"></DChartFactory>
+</template>
+
+<script>
+    import DChartFactory from '../chart-factory'
+    import {mockChartData} from '../../../mock/data-visual/chart/mockChartData'
+    import MetaDemo from '../../../mock/data-visual/chart/meta-demo/IndexCard'
+    export default {
+        name: 'DIndexCardDemo',
+        components: {
+            DChartFactory
+        },
+        data () {
+            return {
+                meta: MetaDemo,
+                data: mockChartData(MetaDemo)
+            }
+        }
+    }
+</script>

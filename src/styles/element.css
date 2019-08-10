@@ -1,0 +1,63 @@
+.d-head-nav .el-menu {
+    background: #001529!important;
+    border: none!important;
+}
+
+.d-side-nav .el-menu {
+    border: none!important;
+}
+
+.d-head-nav .el-menu-item {
+    color: hsla(0,0%,100%,.65)!important;
+    height: 45px;
+    line-height: 45px;
+}
+
+.d-head-nav .el-menu-item:hover {
+    background: #002140!important;
+    color: #ffffff!important;
+}
+
+.d-side-nav .el-menu-item {
+    height: 40px!important;
+    line-height: 40px!important;
+}
+
+.d-side-nav .el-menu-item.is-active,
+.d-side-nav .el-menu-item:not(.is-disabled):focus,
+.d-side-nav .el-menu-item:hover {
+    background: #409eff30!important;
+    box-sizing: border-box;
+    font-weight: 700;
+    color: #303133!important;
+}
+
+.d-side-nav .el-menu-item.is-active {
+    border-left: 5px solid #409EFF;
+}
+
+.d-head-nav .el-menu-item.is-active,
+.d-head-nav .el-menu-item:not(.is-disabled):focus {
+    background: #409EFF!important;
+    color: #ffffff!important;
+}
+
+.d-content > .el-row {
+    margin-bottom: 20px;
+}
+
+.el-card__header {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.el-table,
+.el-tabs__item,
+.el-select-dropdown__item,
+.el-select__input {
+    font-size: 12px!important;
+}
+
+.el-table td, .el-table th {
+    padding: 8px 0px!important;
+}
