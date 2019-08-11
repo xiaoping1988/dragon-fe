@@ -10,7 +10,6 @@
                :remote-method="filterOptions"
                :style="{width: width}"
                @change="changeOption">
-        <span slot="prefix">dddd</span>
         <el-option :value="allValue" label="全部">全部</el-option>
         <el-option v-for="(item, index) in optionList" :value="item" :key="index" :label="item">{{ item }}</el-option>
     </el-select>

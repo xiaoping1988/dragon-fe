@@ -142,7 +142,19 @@
             <h2>数字框</h2>
         </el-row>
         <el-row>
-
+            <el-col :span="12" class="d-desclist-index">
+                <div class="d-desclist-index-detail">
+                    <div>
+                        <span>条件值: {{numValue}}</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>显示: {{numLabel}}</span>
+                    </div>
+                    <DInputNumber :width="300"
+                             value="1,"
+                             @inited="changeNumber"
+                             @change="changeNumber"></DInputNumber>
+                </div>
+            </el-col>
         </el-row>
         <el-row>
             <h2>文本框</h2>
@@ -156,9 +168,10 @@
 <script>
     import DDatePicker from '../chart-filter/DatePicker'
     import DSelect from '../chart-filter/Select'
+    import DInputNumber from '../chart-filter/InputNumber'
     export default {
         name: 'DChartFilterDemo',
-        components: {DDatePicker, DSelect},
+        components: {DDatePicker, DSelect, DInputNumber},
         data () {
             return {
                 singleDayValue: '',
@@ -175,7 +188,9 @@
                 rangeYearLabel: '',
                 selectData: ['开始','的说法','定时','dsfa','的为','的说法为','权威','ytry','复旦复华',
                     '挂号费v','贵好几倍v','到生产','萨达','下单','请遵守','规范化','奥德赛'],
-                selectValue: ''
+                selectValue: '',
+                numValue: '',
+                numLabel: ''
             }
         },
         methods: {
@@ -205,6 +220,10 @@
             },
             changeSelect (conditionValue) {
                 this.selectValue = conditionValue
+            },
+            changeNumber (conditionValue, showLabel) {
+                this.numValue = conditionValue
+                this.numLabel = showLabel
             }
         }
     }
