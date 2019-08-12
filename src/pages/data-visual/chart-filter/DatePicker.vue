@@ -5,7 +5,7 @@
                 size="mini"
                 @change="changeDateOption"
                 ref="Select"
-                :style="{width: width}">
+                :style="{width: width + 'px'}">
             <el-option :value="allValue" label="全部">全部</el-option>
             <el-option v-for="(item, index) in optionList" :value="item.dateNum" :key="index" :label="item.name">{{ item.name }}</el-option>
             <el-option :value="customDateOptionValue" label="自定义时间">自定义时间</el-option>
@@ -64,7 +64,7 @@
             range: Boolean, // 是否区间
             value: [String, Number], //
             customDate: String, // 自定义时间的值
-            width: String
+            width: Number
         },
         data () {
             return {

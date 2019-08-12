@@ -15,7 +15,7 @@
                     <DDatePicker
                             type="day"
                             :value="1"
-                            width="300px"
+                            :width="300"
                             @inited="changeDay"
                             @change="changeDay"></DDatePicker>
                 </div>
@@ -33,7 +33,7 @@
                             type="day"
                             range
                             :value="-99"
-                            width="300px"
+                            :width="300"
                             customDate="2019-08-01,2019-08-08 12:10:11"
                             @inited="changeDayRange"
                             @change="changeDayRange"></DDatePicker>
@@ -55,7 +55,7 @@
                     <DDatePicker
                             type="month"
                             :value="0"
-                            width="300px"
+                            :width="300"
                             @inited="changeMonth"
                             @change="changeMonth"></DDatePicker>
                 </div>
@@ -73,7 +73,7 @@
                             type="month"
                             range
                             :value="1"
-                            width="300px"
+                            :width="300"
                             @inited="changeMonthRange"
                             @change="changeMonthRange"></DDatePicker>
                 </div>
@@ -95,7 +95,7 @@
                             type="year"
                             :value="-99"
                             customDate="2018"
-                            width="300px"
+                            :width="300"
                             @inited="changeYear"
                             @change="changeYear"></DDatePicker>
                 </div>
@@ -113,7 +113,7 @@
                             type="year"
                             range
                             :value="3"
-                            width="300px"
+                            :width="300"
                             @inited="changeYearRange"
                             @change="changeYearRange"></DDatePicker>
                 </div>
@@ -130,7 +130,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <span>显示: {{selectValue}}</span>
                     </div>
-                    <DSelect width="300px"
+                    <DSelect :width="300"
                              value="全部"
                              :data="selectData"
                              @inited="changeSelect"
@@ -160,7 +160,17 @@
             <h2>文本框</h2>
         </el-row>
         <el-row>
-
+            <div class="d-desclist-index-detail">
+                <div>
+                    <span>条件值: {{inputValue}}</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>显示: {{inputValue}}</span>
+                </div>
+                <DInputText :width="300"
+                            value="小学生"
+                            @inited="changeInput"
+                            @change="changeInput"></DInputText>
+            </div>
         </el-row>
     </div>
 </template>
@@ -169,9 +179,10 @@
     import DDatePicker from '../chart-filter/DatePicker'
     import DSelect from '../chart-filter/Select'
     import DInputNumber from '../chart-filter/InputNumber'
+    import DInputText from '../chart-filter/InputText'
     export default {
         name: 'DChartFilterDemo',
-        components: {DDatePicker, DSelect, DInputNumber},
+        components: {DDatePicker, DSelect, DInputNumber, DInputText},
         data () {
             return {
                 singleDayValue: '',
@@ -190,7 +201,8 @@
                     '挂号费v','贵好几倍v','到生产','萨达','下单','请遵守','规范化','奥德赛'],
                 selectValue: '',
                 numValue: '',
-                numLabel: ''
+                numLabel: '',
+                inputValue: ''
             }
         },
         methods: {
@@ -218,12 +230,15 @@
                 this.rangeYearValue = conditionValue
                 this.rangeYearLabel = showLabel
             },
-            changeSelect (conditionValue) {
+            changeSelect (conditionValue, showLabel) {
                 this.selectValue = conditionValue
             },
             changeNumber (conditionValue, showLabel) {
                 this.numValue = conditionValue
                 this.numLabel = showLabel
+            },
+            changeInput (conditionValue, showLabel) {
+                this.inputValue = conditionValue
             }
         }
     }
