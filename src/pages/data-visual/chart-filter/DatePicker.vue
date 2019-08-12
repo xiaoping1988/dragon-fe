@@ -63,7 +63,6 @@
             }, // day日,month月,year年
             range: Boolean, // 是否区间
             value: [String, Number], //
-            customDate: String, // 自定义时间的值
             width: Number
         },
         data () {
@@ -114,15 +113,19 @@
                     } else {
                         this.optionList = TimeFreq[this.type].single
                     }
-                    if (Number(this.value) === this.allValue) { // 全部
+                    let tmpValue = this.value
+                    if (tmpValue === undefined || tmpValue.trim() === '') { // 全部
+                        tmpValue = this.allValue
+                    }
+                    if (tmpValue === this.allValue) { // 全部
                         this.showLabel = ''
                         this.currentDateStr = ''
                         this.currentValue = Number(this.value)
-                    } else if (Number(this.value) === this.customDateOptionValue) { // 自定义时间
-                        this.currentDateStr = this.customDate
+                    } else if (isNaN(tmpValue)) { // 自定义时间
+                        this.currentDateStr = tmpValue
                         this.lastSelectOptionValue = this.customDateOptionValue
                         if (this.range) {
-                            let dates = this.customDate.split(',')
+                            let dates = tmpValue.split(',')
                             this.customDateForm.startDate = dates[0]
                             if (this.type === TimeFreq.day.code && this.customDateForm.startDate.length === 10) {
                                 this.customDateForm.startDate = this.customDateForm.startDate + ' 00:00:00'
@@ -130,8 +133,8 @@
                             this.customDateForm.endDate = dates[1]
                             this.showLabel = dates[0] + '~' + dates[1]
                         } else {
-                            this.customDateForm.startDate = this.customDate
-                            this.showLabel = this.customDate
+                            this.customDateForm.startDate = tmpValue
+                            this.showLabel = tmpValue
                         }
                         this.$nextTick(function () {
                             this.currentValue = this.showLabel

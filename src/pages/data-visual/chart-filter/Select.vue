@@ -33,12 +33,16 @@
         },
         methods: {
             initData () {
-                this.selectValue = this.value.split(',')
+                let tmpValue = this.value
+                if (tmpValue === undefined || tmpValue.trim() === '') { // 全部
+                    tmpValue = this.allValue
+                }
+                this.selectValue = tmpValue.split(',')
                 this.$refs.Select.$refs.input.placeholder = '可输入关键词搜索'
-                if (this.value === this.allValue) {
+                if (tmpValue === this.allValue) { // 全部
                     this.$emit('inited', '')
                 } else {
-                    this.$emit('inited', this.value)
+                    this.$emit('inited', tmpValue)
                 }
                 this.filterOptions()
             },

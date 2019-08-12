@@ -32,9 +32,8 @@
                     <DDatePicker
                             type="day"
                             range
-                            :value="-99"
+                            value="2019-08-01,2019-08-08 12:10:11"
                             :width="300"
-                            customDate="2019-08-01,2019-08-08 12:10:11"
                             @inited="changeDayRange"
                             @change="changeDayRange"></DDatePicker>
                 </div>
@@ -93,8 +92,7 @@
                     </div>
                     <DDatePicker
                             type="year"
-                            :value="-99"
-                            customDate="2018"
+                            value="2018"
                             :width="300"
                             @inited="changeYear"
                             @change="changeYear"></DDatePicker>
@@ -131,7 +129,7 @@
                         <span>显示: {{selectValue}}</span>
                     </div>
                     <DSelect :width="300"
-                             value="全部"
+                             value=""
                              :data="selectData"
                              @inited="changeSelect"
                              @change="changeSelect"></DSelect>
