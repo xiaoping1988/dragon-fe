@@ -21,7 +21,7 @@
         props: {
             value: String,
             data: Array,
-            width: String
+            width: Number
         },
         data () {
             return {
