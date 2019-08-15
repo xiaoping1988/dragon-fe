@@ -8,7 +8,7 @@
                reserve-keyword
                placeholder="可输入关键词搜索"
                :remote-method="filterOptions"
-               :style="{width: width}"
+               :style="{width: width + 'px'}"
                @change="changeOption">
         <el-option :value="allValue" label="全部">全部</el-option>
         <el-option v-for="(item, index) in optionList" :value="item" :key="index" :label="item">{{ item }}</el-option>

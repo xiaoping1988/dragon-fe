@@ -117,11 +117,19 @@
                     if (tmpValue === undefined || tmpValue.trim() === '') { // 全部
                         tmpValue = this.allValue
                     }
-                    if (tmpValue === this.allValue) { // 全部
+                    if (this.optionList.includes(Number(tmpValue))) { // 相对日期
+                        this.currentDateStr = TimeFreq[this.type].getDateStr(tmpValue, this.range)
+                        let dds = this.optionList.filter(d => d.dateNum === Number(tmpValue))
+                        if (dds.length) {
+                            this.showLabel = dds[0].name
+                            this.lastSelectOptionValue = Number(tmpValue)
+                            this.currentValue = Number(tmpValue)
+                        }
+                    } else if (tmpValue === this.allValue) { // 全部
                         this.showLabel = ''
                         this.currentDateStr = ''
-                        this.currentValue = Number(this.value)
-                    } else if (isNaN(tmpValue)) { // 自定义时间
+                        this.currentValue = tmpValue
+                    } else { // 自定义时间
                         this.currentDateStr = tmpValue
                         this.lastSelectOptionValue = this.customDateOptionValue
                         if (this.range) {
@@ -139,14 +147,6 @@
                         this.$nextTick(function () {
                             this.currentValue = this.showLabel
                         })
-                    } else {
-                        this.currentDateStr = TimeFreq[this.type].getDateStr(this.value, this.range)
-                        let dds = this.optionList.filter(d => d.dateNum === Number(this.value))
-                        if (dds.length) {
-                            this.showLabel = dds[0].name
-                            this.lastSelectOptionValue = Number(this.value)
-                            this.currentValue = Number(this.value)
-                        }
                     }
                     this.$emit('inited', this.currentDateStr, this.showLabel)
                 } else {
