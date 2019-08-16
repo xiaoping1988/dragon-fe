@@ -114,10 +114,10 @@
                         this.optionList = TimeFreq[this.type].single
                     }
                     let tmpValue = this.value
-                    if (tmpValue === undefined || tmpValue.trim() === '') { // 全部
+                    if (tmpValue === undefined || tmpValue === '') { // 全部
                         tmpValue = this.allValue
                     }
-                    if (this.optionList.includes(Number(tmpValue))) { // 相对日期
+                    if (this.optionList.findIndex(d => d.dateNum === Number(tmpValue)) >= 0) { // 相对日期
                         this.currentDateStr = TimeFreq[this.type].getDateStr(tmpValue, this.range)
                         let dds = this.optionList.filter(d => d.dateNum === Number(tmpValue))
                         if (dds.length) {
