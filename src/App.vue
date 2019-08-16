@@ -17,7 +17,7 @@
         computed: {
             heightStyle () {
                 let tmpPath = this.$route.path
-                if (this.paths.includes(tmpPath)) {
+                if (!window.HeadNav || this.paths.includes(tmpPath)) {
                     return {
                         height: '100%'
                     }
