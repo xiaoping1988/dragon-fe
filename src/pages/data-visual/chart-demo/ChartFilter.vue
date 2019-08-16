@@ -1,5 +1,11 @@
 <template>
-    <div style="width: 100%">
+    <div style="width: 100%;height: 100%">
+        <el-row>
+            <DFilterItem :meta="dateFilterColumn"></DFilterItem>
+            <DFilterItem :meta="selectFilterColumn"></DFilterItem>
+            <DFilterItem :meta="numberFilterColumn"></DFilterItem>
+            <DFilterItem :meta="textFilterColumn"></DFilterItem>
+        </el-row>
         <el-row>
             <h2>日期</h2>
         </el-row>
@@ -178,9 +184,10 @@
     import DSelect from '../chart-filter/Select'
     import DInputNumber from '../chart-filter/InputNumber'
     import DInputText from '../chart-filter/InputText'
+    import DFilterItem from '../chart-filter/FilterItem'
     export default {
         name: 'DChartFilterDemo',
-        components: {DDatePicker, DSelect, DInputNumber, DInputText},
+        components: {DDatePicker, DSelect, DInputNumber, DInputText, DFilterItem},
         data () {
             return {
                 singleDayValue: '',
@@ -200,7 +207,22 @@
                 selectValue: '',
                 numValue: '',
                 numLabel: '',
-                inputValue: ''
+                inputValue: '',
+                dateFilterColumn: {
+                    showName: '时间字段',
+                    filterConfig: {
+                        controlType: ''
+                    }
+                },
+                numberFilterColumn: {
+                    showName: '数字字段'
+                },
+                selectFilterColumn: {
+                    showName: '枚举字段'
+                },
+                textFilterColumn: {
+                    showName: '文本字段'
+                }
             }
         },
         methods: {

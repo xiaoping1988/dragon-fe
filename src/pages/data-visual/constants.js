@@ -308,6 +308,29 @@ export const ChartType = {
     }
 }
 
+/**
+ * 筛选控件类型
+ * @type {{date: {code: string, name: string}, number: {code: string, name: string}, select: {code: string, name: string}, text: {code: string, name: string}}}
+ */
+export const FilterControlType = {
+    date: {
+        code: 'date',
+        name: '时间筛选'
+    },
+    select: {
+        code: 'select',
+        name: '下拉框筛选'
+    },
+    number: {
+        code: 'number',
+        name: '数字框筛选'
+    },
+    text: {
+        code: 'text',
+        name: '文本框筛选'
+    }
+}
+
 export const proviceCitys = [
     {
         areaCode: 110000,

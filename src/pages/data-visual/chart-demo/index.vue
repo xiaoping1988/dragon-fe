@@ -1,7 +1,7 @@
 <template>
     <DPageContent>
         <DMenuNav slot="side" :data="sideMenuList" mode="vertical"></DMenuNav>
-        <div class="d-chart-container d-box-middle d-chart-full-screen">
+        <div class="d-chart-container d-box-middle d-chart-full-screen" style="overflow: auto">
             <router-view></router-view>
         </div>
     </DPageContent>

@@ -1,7 +1,7 @@
 <template>
     <li class="d-chart-filter-item">
         <div class="label">
-
+            {{meta.showName}}
         </div>
         <div class="control">
             
@@ -22,3 +22,9 @@
         }
     }
 </script>
+
+<style>
+    .d-chart-filter-item .label {
+        text-align: right;
+    }
+</style>
