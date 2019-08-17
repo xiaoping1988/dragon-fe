@@ -1,12 +1,12 @@
 <template>
     <div :style="{width: width + 'px'}">
-        <el-input :style="{width: (width/2 - 20) + 'px'}"
+        <el-input :style="{width: (width/2 - 14) + 'px'}"
                   size="mini"
                   placeholder="大于等于"
                   v-model="start"
                   @change="changeStart"></el-input>
         <span style="margin-left: 10px;margin-right: 10px">~</span>
-        <el-input :style="{width: (width/2 - 20) + 'px'}"
+        <el-input :style="{width: (width/2 - 14) + 'px'}"
                   size="mini"
                   placeholder="小于等于"
                   v-model="end"

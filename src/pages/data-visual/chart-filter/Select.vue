@@ -9,6 +9,8 @@
                placeholder="可输入关键词搜索"
                :remote-method="filterOptions"
                :style="{width: width + 'px'}"
+               class="d-select"
+               @focus="focusInput"
                @change="changeOption">
         <el-option :value="allValue" label="全部">全部</el-option>
         <el-option v-for="(item, index) in optionList" :value="item" :key="index" :label="item">{{ item }}</el-option>
@@ -40,9 +42,9 @@
                 this.selectValue = tmpValue.split(',')
                 this.$refs.Select.$refs.input.placeholder = '可输入关键词搜索'
                 if (tmpValue === this.allValue) { // 全部
-                    this.$emit('inited', '')
+                    this.$emit('inited', '', '')
                 } else {
-                    this.$emit('inited', tmpValue)
+                    this.$emit('inited', tmpValue, tmpValue)
                 }
                 this.filterOptions()
             },
@@ -68,10 +70,18 @@
                 }
                 let conditionValue = this.selectValue.toString()
                 if (conditionValue === this.allValue) {
-                    this.$emit('change', '')
+                    this.$emit('change', '', '')
                 } else {
-                    this.$emit('change', conditionValue)
+                    this.$emit('change', conditionValue, conditionValue)
                 }
+            },
+            focusInput (e) {
+                this.$emit('focus', e)
+            }
+        },
+        watch: {
+            data () {
+                this.filterOptions()
             }
         },
         mounted () {
@@ -79,3 +89,9 @@
         }
     }
 </script>
+
+<style>
+    .d-select input {
+        cursor: pointer;
+    }
+</style>

@@ -1,10 +1,10 @@
 <template>
     <div style="width: 100%;height: 100%">
         <el-row>
-            <DFilterItem :meta="dateFilterColumn"></DFilterItem>
-            <DFilterItem :meta="selectFilterColumn"></DFilterItem>
-            <DFilterItem :meta="numberFilterColumn"></DFilterItem>
-            <DFilterItem :meta="textFilterColumn"></DFilterItem>
+            <DFilterItem :meta="dateFilterColumn" :labelWidth="labelWidth"></DFilterItem>
+            <DFilterItem :meta="selectFilterColumn" :labelWidth="labelWidth"></DFilterItem>
+            <DFilterItem :meta="numberFilterColumn" :labelWidth="labelWidth"></DFilterItem>
+            <DFilterItem :meta="textFilterColumn" :labelWidth="labelWidth"></DFilterItem>
         </el-row>
         <el-row>
             <h2>日期</h2>
@@ -185,6 +185,7 @@
     import DInputNumber from '../chart-filter/InputNumber'
     import DInputText from '../chart-filter/InputText'
     import DFilterItem from '../chart-filter/FilterItem'
+    import {FilterControlType, TimeFreq} from '../constants'
     export default {
         name: 'DChartFilterDemo',
         components: {DDatePicker, DSelect, DInputNumber, DInputText, DFilterItem},
@@ -208,20 +209,51 @@
                 numValue: '',
                 numLabel: '',
                 inputValue: '',
+                labelWidth: 130,
                 dateFilterColumn: {
                     showName: '时间字段',
-                    filterConfig: {
-                        controlType: ''
+                    colName: 'createtime',
+                    tbId: 1,
+                    dbName: 'dw',
+                    tbName: 'tb',
+                    filterConfig: { // 筛选配置
+                        controlType: FilterControlType.date.code, // 筛选控件类型
+                        defaultValue: 7, // 默认值
+                        dateType: TimeFreq.day.code
                     }
                 },
                 numberFilterColumn: {
-                    showName: '数字字段'
+                    showName: '数字字段的所产生的',
+                    colName: 'amt',
+                    tbId: 1,
+                    dbName: 'dw',
+                    tbName: 'tb',
+                    filterConfig: {
+                        controlType: FilterControlType.number.code,
+                        defaultValue: '1,5'
+                    }
                 },
                 selectFilterColumn: {
-                    showName: '枚举字段'
+                    showName: '枚举字段',
+                    colName: 'state',
+                    tbId: 1,
+                    dbName: 'dw',
+                    tbName: 'tb',
+                    filterConfig: {
+                        controlType: FilterControlType.select.code,
+                        defaultValue: ''
+                    }
                 },
                 textFilterColumn: {
-                    showName: '文本字段'
+                    showName: '文本字段',
+                    colName: 'addr',
+                    tbId: 1,
+                    dbName: 'dw',
+                    tbName: 'tb',
+                    filterConfig: {
+                        controlType: FilterControlType.text.code,
+                        defaultValue: 'xiao'
+                    }
                 }
             }
         },

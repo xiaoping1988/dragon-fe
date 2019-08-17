@@ -2,7 +2,7 @@
     <el-input :style="{width: width + 'px'}"
               size="mini"
               v-model="inputValue"
-              placeholder="请输入关键词搜索"
+              placeholder="请输入关键词"
               @change="changeInput"></el-input>
 </template>
 

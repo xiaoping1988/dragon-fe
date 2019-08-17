@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="{width: width + 'px'}">
         <el-select
                 v-model="currentValue"
                 size="mini"
