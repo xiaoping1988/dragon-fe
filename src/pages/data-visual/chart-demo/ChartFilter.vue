@@ -1,10 +1,31 @@
 <template>
     <div style="width: 100%;height: 100%">
         <el-row>
-            <DFilterItem :meta="dateFilterColumn" :labelWidth="labelWidth"></DFilterItem>
-            <DFilterItem :meta="selectFilterColumn" :labelWidth="labelWidth"></DFilterItem>
-            <DFilterItem :meta="numberFilterColumn" :labelWidth="labelWidth"></DFilterItem>
-            <DFilterItem :meta="textFilterColumn" :labelWidth="labelWidth"></DFilterItem>
+            <h2>筛选项列表：纵向</h2>
+        </el-row>
+        <el-row>
+            <!--<DFilterItem :meta="dateFilterColumn" :labelWidth="labelWidth"></DFilterItem>-->
+            <!--<DFilterItem :meta="selectFilterColumn" :labelWidth="labelWidth"></DFilterItem>-->
+            <!--<DFilterItem :meta="numberFilterColumn" :labelWidth="labelWidth"></DFilterItem>-->
+            <!--<DFilterItem :meta="textFilterColumn" :labelWidth="labelWidth"></DFilterItem>-->
+            <div class="d-ellipsis">
+                <span class="d-chart-filter-tip">
+                    <span v-for="(item, index) in showLabelArr"
+                          v-if="item.value !== '' && item.value !== '全部'"
+                          :key="index"
+                          class="item">
+                        <span class="label">{{item.showName}}</span>
+                        <span class="value">{{item.showLabel}}</span>
+                    </span>
+                </span>
+            </div>
+            <DFilterList :data="filterList" @inited="initedFilterList" @change="changeCondition"></DFilterList>
+        </el-row>
+        <el-row>
+            <h2>筛选项列表：水平</h2>
+        </el-row>
+        <el-row>
+            <DFilterList :data="filterList" horizontal></DFilterList>
         </el-row>
         <el-row>
             <h2>日期</h2>
@@ -185,10 +206,61 @@
     import DInputNumber from '../chart-filter/InputNumber'
     import DInputText from '../chart-filter/InputText'
     import DFilterItem from '../chart-filter/FilterItem'
+    import DFilterList from '../chart-filter/FilterList'
     import {FilterControlType, TimeFreq} from '../constants'
+    import {DataType} from '../../../services/data-map/col-manage'
+    let dateFilterColumn = {
+            showName: '时间字段',
+            colName: 'createtime',
+            tbId: 1,
+            dbName: 'dw',
+            tbName: 'tb',
+            filterConfig: { // 筛选配置
+                controlType: FilterControlType.date.code, // 筛选控件类型
+                defaultValue: 7, // 默认值
+                dateType: TimeFreq.day.code, // 日期类型
+                dataType: DataType.date.code // 数据类型
+            }
+        }
+    let numberFilterColumn = {
+            showName: '数字字段的所产生的',
+            colName: 'amt',
+            tbId: 1,
+            dbName: 'dw',
+            tbName: 'tb',
+            filterConfig: {
+                controlType: FilterControlType.num.code,
+                defaultValue: '1,5',
+                dataType: DataType.num.code // 数据类型
+            }
+        }
+    let selectFilterColumn = {
+            showName: '枚举字段',
+            colName: 'state',
+            tbId: 1,
+            dbName: 'dw',
+            tbName: 'tb',
+            filterConfig: {
+                controlType: FilterControlType.select.code,
+                defaultValue: '北京',
+                dataType: DataType.text.code // 数据类型
+            }
+        }
+    let textFilterColumn = {
+            showName: '文本字段',
+            colName: 'addr',
+            tbId: 1,
+            dbName: 'dw',
+            tbName: 'tb',
+            filterConfig: {
+                controlType: FilterControlType.text.code,
+                defaultValue: 'xiao',
+                dataType: DataType.text.code // 数据类型
+            }
+        }
     export default {
         name: 'DChartFilterDemo',
-        components: {DDatePicker, DSelect, DInputNumber, DInputText, DFilterItem},
+        components: {DDatePicker, DSelect, DInputNumber, DInputText, DFilterItem, DFilterList},
         data () {
             return {
                 singleDayValue: '',
@@ -210,51 +282,13 @@
                 numLabel: '',
                 inputValue: '',
                 labelWidth: 130,
-                dateFilterColumn: {
-                    showName: '时间字段',
-                    colName: 'createtime',
-                    tbId: 1,
-                    dbName: 'dw',
-                    tbName: 'tb',
-                    filterConfig: { // 筛选配置
-                        controlType: FilterControlType.date.code, // 筛选控件类型
-                        defaultValue: 7, // 默认值
-                        dateType: TimeFreq.day.code
-                    }
-                },
-                numberFilterColumn: {
-                    showName: '数字字段的所产生的',
-                    colName: 'amt',
-                    tbId: 1,
-                    dbName: 'dw',
-                    tbName: 'tb',
-                    filterConfig: {
-                        controlType: FilterControlType.number.code,
-                        defaultValue: '1,5'
-                    }
-                },
-                selectFilterColumn: {
-                    showName: '枚举字段',
-                    colName: 'state',
-                    tbId: 1,
-                    dbName: 'dw',
-                    tbName: 'tb',
-                    filterConfig: {
-                        controlType: FilterControlType.select.code,
-                        defaultValue: ''
-                    }
-                },
-                textFilterColumn: {
-                    showName: '文本字段',
-                    colName: 'addr',
-                    tbId: 1,
-                    dbName: 'dw',
-                    tbName: 'tb',
-                    filterConfig: {
-                        controlType: FilterControlType.text.code,
-                        defaultValue: 'xiao'
-                    }
-                }
+                dateFilterColumn: dateFilterColumn,
+                numberFilterColumn: numberFilterColumn,
+                selectFilterColumn: selectFilterColumn,
+                textFilterColumn: textFilterColumn,
+                filterList: [dateFilterColumn, numberFilterColumn, selectFilterColumn, textFilterColumn],
+                conditionValueArr: [],
+                showLabelArr: []
             }
         },
         methods: {
@@ -291,7 +325,31 @@
             },
             changeInput (conditionValue, showLabel) {
                 this.inputValue = conditionValue
+            },
+            initedFilterList (conditionValueArr, showLabelArr) {
+                this.conditionValueArr = conditionValueArr
+                this.showLabelArr = showLabelArr
+            },
+            changeCondition (conditionValueArr, showLabelArr) {
+                this.conditionValueArr = conditionValueArr
+                this.showLabelArr = showLabelArr
             }
         }
     }
 </script>
+
+<style>
+    .d-chart-filter-tip .item {
+        padding-right: 10px;
+    }
+
+    .d-chart-filter-tip .item .label {
+        font-weight: 100;
+        color: #ccc;
+        padding-right: 5px;
+    }
+
+    .d-chart-filter-tip .item .value {
+        font-weight: 100;
+    }
+</style>

@@ -1,4 +1,76 @@
 import DateUtils from '../../utils/dateUtils'
+
+/**
+ * 条件比较符
+ * @type {{unempty: {code: string, name: string}, in: {code: string, name: string}, like: {code: string, name: string}, lteq: {code: string, name: string}, notlike: {code: string, name: string}, lt: {code: string, name: string}, unequal: {code: string, name: string}, gteq: {code: string, name: string}, endlike: {code: string, name: string}, gt: {code: string, name: string}, empty: {code: string, name: string}, equal: {code: string, name: string}, unbetween: {code: string, name: string}, startlike: {code: string, name: string}, notin: {code: string, name: string}, between: {code: string, name: string}}}
+ */
+export const Operator = {
+    in: {
+        code: 'in',
+        name: '包含下列选项'
+    },
+    notin: {
+        code: 'notin',
+        name: '不包含下列选项'
+    },
+    equal: {
+        code: 'equal',
+        name: '等于'
+    },
+    unequal: {
+        code: 'unequal',
+        name: '不等于'
+    },
+    gteq: {
+        code: 'gteq',
+        name: '大于等于'
+    },
+    gt: {
+        code: 'gt',
+        name: '大于'
+    },
+    lteq: {
+        code: 'lteq',
+        name: '小于等于'
+    },
+    lt: {
+        code: 'lt',
+        name: '小于'
+    },
+    between: {
+        code: 'between',
+        name: '区间内'
+    },
+    unbetween: {
+        code: 'unbetween',
+        name: '区间外'
+    },
+    empty: {
+        code: 'empty',
+        name: '为空'
+    },
+    unempty: {
+        code: 'unempty',
+        name: '不为空'
+    },
+    like: {
+        code: 'like',
+        name: '包含'
+    },
+    notlike: {
+        code: 'notlike',
+        name: '不包含'
+    },
+    startlike: {
+        code: 'startlike',
+        name: '开头包含'
+    },
+    endlike: {
+        code: 'endlike',
+        name: '结尾包含'
+    }
+}
+
 /**
  * 指标值的显示类型
  * @type {{text: {code: string, name: string}, num: {code: string, name: string}, amt: {code: string, name: string}, rate: {code: string, name: string}}}
@@ -310,7 +382,7 @@ export const ChartType = {
 
 /**
  * 筛选控件类型
- * @type {{date: {code: string, name: string}, number: {code: string, name: string}, select: {code: string, name: string}, text: {code: string, name: string}}}
+ * @type {{date: {code: string, name: string}, num: {code: string, name: string}, select: {code: string, name: string}, text: {code: string, name: string}}}
  */
 export const FilterControlType = {
     date: {
@@ -321,8 +393,8 @@ export const FilterControlType = {
         code: 'select',
         name: '下拉框筛选'
     },
-    number: {
-        code: 'number',
+    num: {
+        code: 'num',
         name: '数字框筛选'
     },
     text: {

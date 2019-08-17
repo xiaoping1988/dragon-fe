@@ -1,12 +1,12 @@
 <template>
     <div class="d-chart-container">
         <div class="head">
-            <div class="left">
+            <div class="left d-ellipsis">
                 <span class="title" v-if="chartMeta.chartType !== 'INDEX_CARD' || !showChart">{{chart.name}}</span>
-                <span style="margin-left: 10px">
+                <span style="margin-left: 10px;margin-right: 10px;">
                     <el-tooltip placement="bottom" effect="light">
                         <div slot="content" style="width: 300px; max-height: 400px;overflow: auto">
-                            <el-row :gutter="24">
+                            <el-row :gutter="24" style="margin: 0px">
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-detail">
                                             <h4>{{chart.isCertified === 1 ? '数据部门已认证,数据质量可靠' : '未经过数据部门认证'}}</h4>
@@ -35,22 +35,36 @@
                       <i class="fa fa-trophy grey-icon" :class="{'data-certified': chart.isCertified === 1}"></i>
                     </el-tooltip>
                 </span>
-<!--                <span class="title">{{chart.name}}</span>-->
+                <span class="d-chart-filter-tip">
+                    <span v-for="(item, index) in showLabelArr"
+                          v-if="item.value !== '' && item.value !== '全部'"
+                          :key="index"
+                          class="item">
+                        <span class="label">{{item.showName}}</span>
+                        <span class="value">{{item.showLabel}}</span>
+                    </span>
+                </span>
             </div>
+
             <div class="right">
-                <div v-if="chart.editAuth" title="编辑报表">
+                <div v-if="chart.editAuth"
+                     title="编辑报表"
+                     class="btn">
                     <i class="fa fa-pencil"></i>
                 </div>
-                <div>
+                <div v-if="filterMeta.length" class="btn filter-btn">
                     <i class="fa fa-filter"></i>
+                    <div class="d-chart-filter-panel">
+                        <DFilterList :data="filterMeta" @inited="initedFilterList" @change="changeCondition"></DFilterList>
+                    </div>
                 </div>
-                <div>
+                <div class="btn">
                     <i class="fa fa-line-chart"></i>
                 </div>
-                <div>
+                <div class="btn">
                     <i class="fa fa-sliders"></i>
                 </div>
-                <div class="more-btn">
+                <div class="btn more-btn">
                     <i class="fa fa-ellipsis-v"></i>
                     <ul class="d-chart-btn-more d-btn-list">
                         <li >导出EXCEL</li>
@@ -80,11 +94,11 @@
 
 <script>
     import DChartFactory from '../chart-factory'
-
+    import DFilterList from '../chart-filter/FilterList'
     import {queryData} from '../../../services/data-visual/chart'
     export default {
         name: 'DChartContainer',
-        components: {DChartFactory},
+        components: {DChartFactory, DFilterList},
         props: {
             chart: Object,
             globalFilterValue: String,
@@ -97,21 +111,23 @@
         data () {
             return {
                 chartMeta: {},
-                filterMeta: {},
+                filterMeta: [],
                 data: [],
                 showChart: false,
                 tipMsg: '',
                 loading: false,
                 sortFieldKey: '',
                 sortType: '',
-                chartFilterValue: ''
+                chartFilterValue: '',
+                conditionValueArr: [], // 筛选项列表的值
+                showLabelArr: [] // 筛选项列表值的显示
             }
         },
         methods: {
             handleMeta () {
                 let meta = JSON.parse(this.chart.meta)
                 this.chartMeta = meta.chartMeta
-                this.filterMeta = meta.filterMeta
+                this.filterMeta = meta.filterMeta ? meta.filterMeta : []
             },
             sortData (key, sortType) {
                 this.sortFieldKey = key
@@ -145,6 +161,14 @@
                     this.tipMsg = error.msg
                     this.data = []
                 })
+            },
+            initedFilterList (conditionValueArr, showLabelArr) {
+                this.conditionValueArr = conditionValueArr
+                this.showLabelArr = showLabelArr
+            },
+            changeCondition (conditionValueArr, showLabelArr) {
+                this.conditionValueArr = conditionValueArr
+                this.showLabelArr = showLabelArr
             }
         },
         watch: {
@@ -180,6 +204,7 @@
 
     .d-chart-container .head .left {
         float: left;
+        max-width: 100%;
     }
 
     .d-chart-container .head .left .title {
@@ -191,30 +216,27 @@
     }
 
     .d-chart-container .head .right {
-        float: right;
+        position: absolute;
+        right: 0px;
+        background: #fff;
         display: none;
-        /*display: inline-flex;*/
-    }
-
-    .d-chart-container .head .right div {
-        width: 20px;
-        text-align: center;
-    }
-
-    .d-chart-container .head .right .more-btn {
-        position: relative;
-        cursor: pointer;
     }
 
     .d-chart-container .head .right .more-btn:hover .d-chart-btn-more {
         display: block;
     }
 
-    .d-chart-container .head .right div > i {
+    .d-chart-container .head .right .btn {
+        position: relative;
+        cursor: pointer;
+        width: 20px;
+    }
+
+    .d-chart-container .head .right .btn > i {
         color: rgba(10,18,32,.64);
     }
 
-    .d-chart-container .head .right div:hover > i {
+    .d-chart-container .head .right .btn:hover > i {
         color: #409eff;
     }
 
@@ -235,5 +257,18 @@
 
     .data-certified {
         color: #F5B50D!important;
+    }
+
+    .d-chart-container .head .right .filter-btn:hover > .d-chart-filter-panel {
+        display: block;
+    }
+
+    .d-chart-filter-panel {
+        position: absolute;
+        display: none;
+        background: #fff;
+        z-index: 1000;
+        box-shadow: 0 0 6px 0 rgba(0,0,0,.1), 0 10px 12px 0 rgba(170,182,206,.36);
+        padding: 5px 0px 5px 10px;
     }
 </style>

@@ -10,7 +10,7 @@
                     range
                     :value="meta.filterConfig.defaultValue"
                     :width="controlWidth"
-                    @inited="changeCondition"
+                    @inited="initedCondition"
                     @change="changeCondition"></DDatePicker>
 
             <DSelect v-if="filterControlTypeObj.select.code === meta.filterConfig.controlType"
@@ -18,19 +18,19 @@
                      :value="meta.filterConfig.defaultValue"
                      :data="selectData"
                      @focus="setSelectData"
-                     @inited="changeCondition"
+                     @inited="initedCondition"
                      @change="changeCondition"></DSelect>
 
-            <DInputNumber v-if="filterControlTypeObj.number.code === meta.filterConfig.controlType"
+            <DInputNumber v-if="filterControlTypeObj.num.code === meta.filterConfig.controlType"
                           :width="controlWidth"
                           :value="meta.filterConfig.defaultValue"
-                          @inited="changeCondition"
+                          @inited="initedCondition"
                           @change="changeCondition"></DInputNumber>
 
             <DInputText  v-if="filterControlTypeObj.text.code === meta.filterConfig.controlType"
                          :width="controlWidth"
                          :value="meta.filterConfig.defaultValue"
-                         @inited="changeCondition"
+                         @inited="initedCondition"
                          @change="changeCondition"></DInputText>
 
             <DLoading :loading="loading" style="height: 100px"></DLoading>
@@ -55,8 +55,6 @@
         data () {
             return {
                 filterControlTypeObj: FilterControlType, // 筛选控件类型集合
-                conditionValue: '', // 筛选选中或者输入的条件值
-                showLabel: '', // 筛选选中或者输入的显示值
                 controlWidth: 200, // 筛选控件的宽度
                 selectData: [], // 下拉框筛选的枚举值
                 initedSelectData: false, // 下拉框筛选的枚举值数据是否初始化了
@@ -65,9 +63,11 @@
             }
         },
         methods: {
+            initedCondition (conditionValue, showLabel) {
+                this.$emit('inited', conditionValue, showLabel)
+            },
             changeCondition (conditionValue, showLabel) {
-                this.conditionValue = conditionValue
-                this.showLabel = showLabel
+                this.$emit('change', conditionValue, showLabel)
             },
             setSelectData () {
                 if (this.initedSelectData) {
@@ -106,6 +106,6 @@
 
     .d-chart-filter-item .control {
         position: relative;
-        /*width: 200px;*/
+        margin-right: 10px;
     }
 </style>

@@ -5,6 +5,7 @@
                 size="mini"
                 @change="changeDateOption"
                 ref="Select"
+                :popper-append-to-body="false"
                 :style="{width: width + 'px'}">
             <el-option :value="allValue" label="全部">全部</el-option>
             <el-option v-for="(item, index) in optionList" :value="item.dateNum" :key="index" :label="item.name">{{ item.name }}</el-option>
@@ -14,6 +15,7 @@
                 :visible.sync="customDateForm.showModal"
                 title="自定义时间"
                 width="720px"
+                append-to-body
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
                 :show-close="false">

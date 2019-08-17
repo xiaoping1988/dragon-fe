@@ -151,3 +151,13 @@ function randomDouble(base) {
 }
 
 export {randomDouble}
+
+/**
+ * 获取字节长度
+ * @param str
+ */
+function getByteLength (str) {
+  return str.replace(/[^\x00-\xff]/g, 'aa').length
+}
+
+export {getByteLength}

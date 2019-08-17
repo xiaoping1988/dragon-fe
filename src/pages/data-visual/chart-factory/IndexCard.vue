@@ -141,13 +141,16 @@
         height: 20px;
         line-height: 20px;
         text-align: center;
+        font-size: 14px;
+        font-weight: 700;
     }
 
     .d-indexcard .index-value {
-        height: 30px;
-        line-height: 30px;
+        height: 20px;
+        line-height: 20px;
         text-align: right;
-        font-size: 20px;
+        font-weight: 700;
+        font-size: 18px;
     }
 
     .d-indexcard .advanced-value {

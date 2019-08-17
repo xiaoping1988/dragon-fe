@@ -9,6 +9,7 @@
                placeholder="可输入关键词搜索"
                :remote-method="filterOptions"
                :style="{width: width + 'px'}"
+               :popper-append-to-body="false"
                class="d-select"
                @focus="focusInput"
                @change="changeOption">

@@ -2,12 +2,66 @@ import Mock from '@/mock'
 import DateUtils from '../../../utils/dateUtils'
 
 import {ApiUrl} from '../../../services/data-visual/chart'
-import {ChartType, SortType, ShowType} from '../../../pages/data-visual/constants'
+import {ChartType, SortType, ShowType, FilterControlType, TimeFreq} from '../../../pages/data-visual/constants'
+import {DataType} from '../../../services/data-map/col-manage'
 import MetaDemo from './meta-demo'
 import {mockChartData} from './mockChartData'
 import {compareStr} from '../../../utils/assist'
 
+let dateFilterColumn = {
+    showName: '时间字段',
+    colName: 'createtime',
+    tbId: 1,
+    dbName: 'dw',
+    tbName: 'tb',
+    filterConfig: { // 筛选配置
+        controlType: FilterControlType.date.code, // 筛选控件类型
+        defaultValue: 7, // 默认值
+        dateType: TimeFreq.day.code, // 日期类型
+        dataType: DataType.date.code // 数据类型
+    }
+}
+let numberFilterColumn = {
+    showName: '数字字段的所产生的',
+    colName: 'amt',
+    tbId: 1,
+    dbName: 'dw',
+    tbName: 'tb',
+    filterConfig: {
+        controlType: FilterControlType.num.code,
+        defaultValue: '1,5',
+        dataType: DataType.num.code // 数据类型
+    }
+}
+let selectFilterColumn = {
+    showName: '枚举字段',
+    colName: 'state',
+    tbId: 1,
+    dbName: 'dw',
+    tbName: 'tb',
+    filterConfig: {
+        controlType: FilterControlType.select.code,
+        defaultValue: '北京',
+        dataType: DataType.text.code // 数据类型
+    }
+}
+let textFilterColumn = {
+    showName: '文本字段',
+    colName: 'addr',
+    tbId: 1,
+    dbName: 'dw',
+    tbName: 'tb',
+    filterConfig: {
+        controlType: FilterControlType.text.code,
+        defaultValue: 'xiao',
+        dataType: DataType.text.code // 数据类型
+    }
+}
+
 function buildMeta(chartMeta, filterMeta) {
+    if (!filterMeta) {
+        filterMeta = [dateFilterColumn, numberFilterColumn, selectFilterColumn, textFilterColumn]
+    }
     let meta = {
         chartMeta: chartMeta,
         filterMeta: filterMeta

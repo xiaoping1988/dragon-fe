@@ -72,7 +72,7 @@ function getSpecialField (config) {
         specialField[key] = {
           field: config.specialField[key].fieldName,
           title: config.specialField[key].title,
-          number: config.specialField[key].fieldType === FieldType.num.code,
+          num: config.specialField[key].fieldType === FieldType.num.code,
           showName: config.specialField[key].showName
         }
       }
