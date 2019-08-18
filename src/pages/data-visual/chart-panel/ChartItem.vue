@@ -32,13 +32,10 @@
         data () {
             return {
                 count: 0,
-                resizeCount: 0,
-                dragStartX: 0,
-                dragStartY: 0,
-                chartStartLeft: 0,
-                chartStartTop: 0,
+                resizeCount: 0, //
                 dom: null,
-                isResizing: false
+                isResizing: false, // 是否正在resize
+                isMoved: false // 图表是否有移动过
             }
         },
         methods: {
@@ -71,7 +68,7 @@
             },
             mouseDownDrag (e) { // 拖动图表的鼠标按下事件
                 let vue = this
-                if (vue.isResizing) {
+                if (vue.isResizing || !vue.chart.editAuth) {
                     return
                 }
                 vue.chart.dragStartX = e.clientX // 鼠标按下拖动时的位置 x
@@ -84,14 +81,18 @@
             },
             mouseUpDrag (e) { // 拖动图表的鼠标释放事件
                 let vue = this
-                vue.$emit('move-over', vue.dom, e.clientX, e.clientY)
+                if (vue.isMoved) {
+                    vue.$emit('move-over', vue.dom, e.clientX, e.clientY)
+                }
+                vue.isMoved = false
                 document.documentElement.removeEventListener('mousemove', vue.mouseMoveDrag)
                 document.documentElement.removeEventListener('mouseup', vue.mouseUpDrag)
             },
             mouseMoveDrag (e) { // 拖动图表的鼠标移动事件
                 let vue = this
-                // vue.dom.style.left = (e.clientX - vue.dragStartX + vue.chartStartLeft) + 'px'
-                // vue.dom.style.top = (e.clientY - vue.dragStartY + vue.chartStartTop) + 'px'
+                if (vue.chart.dragStartX !== e.clientX || vue.chart.dragStartY !== e.clientY) {
+                    vue.isMoved = true
+                }
                 vue.$emit('moving', vue.dom, e.clientX, e.clientY)
             },
             addResizeCount () {

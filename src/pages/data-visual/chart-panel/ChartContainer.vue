@@ -35,14 +35,29 @@
                       <i class="fa fa-trophy grey-icon" :class="{'data-certified': chart.isCertified === 1}"></i>
                     </el-tooltip>
                 </span>
-                <span class="d-chart-filter-tip">
-                    <span v-for="(item, index) in showLabelArr"
-                          v-if="item.value !== '' && item.value !== '全部'"
-                          :key="index"
-                          class="item">
-                        <span class="label">{{item.showName}}</span>
-                        <span class="value">{{item.showLabel}}</span>
-                    </span>
+                <span>
+                    <el-tooltip placement="bottom-start" effect="light">
+                        <div slot="content" style="width: 300px; max-height: 400px;overflow: auto">
+                            <el-row :gutter="24" style="margin: 0px">
+                                    <el-col v-for="(item, index) in showLabelArr"
+                                            v-if="item.showLabel !== '' && item.showLabel !== '全部'"
+                                            :key="index"
+                                            class="d-desclist-index">
+                                        <div class="d-desclist-index-term">{{item.showName}}</div>
+                                        <div class="d-desclist-index-detail">{{item.showLabel}}</div>
+                                    </el-col>
+                            </el-row>
+                        </div>
+                        <span class="d-chart-filter-tip">
+                            <span v-for="(item, index) in showLabelArr"
+                                  v-if="item.showLabel !== '' && item.showLabel !== '全部'"
+                                  :key="index"
+                                  class="item">
+                                <span class="label">{{item.showName}}</span>
+                                <span class="value">{{item.showLabel}}</span>
+                            </span>
+                        </span>
+                    </el-tooltip>
                 </span>
             </div>
 
@@ -52,9 +67,9 @@
                      class="btn">
                     <i class="fa fa-pencil"></i>
                 </div>
-                <div v-if="filterMeta.length" class="btn filter-btn">
+                <div v-if="filterMeta.length" class="btn filter-btn" @mouseenter="mouseEnterFilterBtn" @mouseleave="mouseLeaveFilterBtn">
                     <i class="fa fa-filter"></i>
-                    <div class="d-chart-filter-panel">
+                    <div class="d-chart-filter-panel" :id="'filter_panel_' + chart.id">
                         <DFilterList :data="filterMeta" @inited="initedFilterList" @change="changeCondition"></DFilterList>
                     </div>
                 </div>
@@ -68,7 +83,7 @@
                     <i class="fa fa-ellipsis-v"></i>
                     <ul class="d-chart-btn-more d-btn-list">
                         <li >导出EXCEL</li>
-                        <li >导出图片</li>
+                        <li v-if="chartMeta.chartType !== chartTypeObj.IndexCard.code && chartMeta.chartType !== chartTypeObj.Table.code">导出图片</li>
                         <li >刷新数据</li>
                         <li v-if="chart.editAuth">复制图表</li>
                         <li v-if="chart.editAuth">移动图表</li>
@@ -96,6 +111,7 @@
     import DChartFactory from '../chart-factory'
     import DFilterList from '../chart-filter/FilterList'
     import {queryData} from '../../../services/data-visual/chart'
+    import {ChartType} from '../constants'
     export default {
         name: 'DChartContainer',
         components: {DChartFactory, DFilterList},
@@ -106,21 +122,25 @@
                 type: Number,
                 default: 0
             },
-            visibled: Boolean // 是否可见过了
+            visibled: Boolean // 是否在可视区域内
         },
         data () {
             return {
-                chartMeta: {},
-                filterMeta: [],
-                data: [],
-                showChart: false,
-                tipMsg: '',
+                chartTypeObj: ChartType,
+                chartMeta: {}, // chart图渲染用的配置
+                filterMeta: [], // 筛选项配置
+                data: [], // 图表数据
+                showChart: false, // 是否要显示图表factory控件
+                tipMsg: '', // 图表未查到数据或者报错的提示
                 loading: false,
-                sortFieldKey: '',
-                sortType: '',
-                chartFilterValue: '',
+                sortFieldKey: '', // 排序字段
+                sortType: '', // 排序类型,asc,desc
+                chartFilterValue: '[]', // 本次查询的筛选值
+                lastChartFilterValue: '', // 上一次查询的筛选值
                 conditionValueArr: [], // 筛选项列表的值
-                showLabelArr: [] // 筛选项列表值的显示
+                showLabelArr: [], // 筛选项列表值的显示
+                filterInited: false, // 筛选列表是否初始化完
+                filterOperating: false // 是否正在操作筛选
             }
         },
         methods: {
@@ -128,6 +148,9 @@
                 let meta = JSON.parse(this.chart.meta)
                 this.chartMeta = meta.chartMeta
                 this.filterMeta = meta.filterMeta ? meta.filterMeta : []
+                if (this.filterMeta.length === 0) {
+                    this.filterInited = true
+                }
             },
             sortData (key, sortType) {
                 this.sortFieldKey = key
@@ -135,10 +158,11 @@
                 this.setData()
             },
             setData () {
-                if (!this.visibled) {
+                if (!this.visibled || !this.filterInited || this.lastChartFilterValue === this.chartFilterValue) {
                     return
                 }
                 this.loading = true
+                this.lastChartFilterValue = this.chartFilterValue
                 queryData({
                     id: this.chart.id,
                     chartFilterValue: this.chartFilterValue,
@@ -164,11 +188,35 @@
             },
             initedFilterList (conditionValueArr, showLabelArr) {
                 this.conditionValueArr = conditionValueArr
+                this.chartFilterValue = JSON.stringify(conditionValueArr)
                 this.showLabelArr = showLabelArr
+                this.filterInited = true
+                this.setData()
             },
             changeCondition (conditionValueArr, showLabelArr) {
                 this.conditionValueArr = conditionValueArr
+                this.chartFilterValue = JSON.stringify(conditionValueArr)
                 this.showLabelArr = showLabelArr
+            },
+            mouseEnterFilterBtn (e) {
+                this.filterOperating = true
+                let ww = window.innerWidth
+                let ex = e.clientX
+                let dom = document.getElementById('filter_panel_' + this.chart.id)
+                if ((ww - ex) < 200) {
+                    dom.style.right =  '-20px'
+                } else if ((ex - 220) < 200) {
+                    dom.style.left =  '-20px'
+                } else {
+                    dom.style.right = -dom.clientWidth / 2 + 'px'
+                }
+            },
+            mouseLeaveFilterBtn () {
+                let vue = this
+                vue.filterOperating = false
+                setTimeout(function () {
+                    vue.setData()
+                }, 100)
             }
         },
         watch: {
@@ -220,6 +268,7 @@
         right: 0px;
         background: #fff;
         display: none;
+        padding-left: 10px;
     }
 
     .d-chart-container .head .right .more-btn:hover .d-chart-btn-more {

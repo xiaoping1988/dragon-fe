@@ -38,7 +38,7 @@
         },
         data () {
             return {
-                chartTypeObj: ChartType,
+                chartTypeObj: ChartType
             }
         },
         methods: {
