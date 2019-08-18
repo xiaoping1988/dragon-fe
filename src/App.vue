@@ -23,7 +23,7 @@
                     }
                 }
                 return {
-                    height: 'calc(100% - 30px)'
+                    height: 'calc(100% - 31px)'
                 }
             }
         },
