@@ -8,11 +8,12 @@ let router = new Router({
     routes: [
         {
             path: '/',
-            component: Pages.Home
+            component: Pages.Home,
+            redirect: '/data-visual'
         },
         {
             path: '*',
-            redirect: '/'
+            redirect: '/data-visual'
         },
         {
             path: '/sso/login',
