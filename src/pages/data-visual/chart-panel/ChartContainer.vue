@@ -36,7 +36,7 @@
                     </el-tooltip>
                 </span>
                 <span>
-                    <el-tooltip placement="bottom-start" effect="light">
+                    <el-tooltip placement="bottom-start" effect="light" :visible-arrow="false">
                         <div slot="content" style="width: 300px; max-height: 400px;overflow: auto">
                             <el-row :gutter="24" style="margin: 0px">
                                     <el-col v-for="(item, index) in showLabelArr"
