@@ -60,7 +60,6 @@
                     </el-tooltip>
                 </span>
             </div>
-
             <div class="right">
                 <div v-if="chart.editAuth"
                      title="编辑报表"

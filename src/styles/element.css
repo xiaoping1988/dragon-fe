@@ -51,11 +51,16 @@
     font-size: 14px;
 }
 
+.el-dialog__body,
 .el-table,
 .el-tabs__item,
 .el-select-dropdown__item,
 .el-select__input {
     font-size: 12px!important;
+}
+
+.el-dialog__body {
+    padding-top: 0px;
 }
 
 .el-table td, .el-table th {

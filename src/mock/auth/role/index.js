@@ -12,7 +12,7 @@ export const RoleList = [
     {id: 5, name: '管理员', code: 'REPORT_ADMIN', remark: '什么都能干', grade: RoleGrade.ADMIN.code, type: RoleType.STATIC.code, operPrivilege: '', projId: 1, creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
     {id: 6, name: '市场部', code: 'REPORT_MARKET', remark: '什么都能干', grade: RoleGrade.ORDINARY.code, type: RoleType.DATA.code, operPrivilege: OperPrivilege.CREATE_TABLE.code, projId: 1, creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
     {id: 7, name: '数据部', code: 'REPORT_MARKET', remark: '什么都能干', grade: RoleGrade.ORDINARY.code, type: RoleType.DATA.code, operPrivilege: OperPrivilege.CREATE_TABLE.code, projId: 1, creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
-    {id: 8, name: 'XXXX', code: 'DATA_SERVICE_MARKET', remark: '什么都能干', grade: RoleGrade.ORDINARY.code, type: RoleType.DATA.code, operPrivilege: OperPrivilege.CREATE_TABLE.code, projId: 4, creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'}
+    {id: 8, name: 'XXXX', code: 'DATA_API_MARKET', remark: '什么都能干', grade: RoleGrade.ORDINARY.code, type: RoleType.DATA.code, operPrivilege: OperPrivilege.CREATE_TABLE.code, projId: 4, creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'}
 ]
 
 const StaticRoleResourceList = [

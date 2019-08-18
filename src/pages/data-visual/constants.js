@@ -1,6 +1,25 @@
 import DateUtils from '../../utils/dateUtils'
 
 /**
+ * 图表大分类
+ * @type {{GpsMap: {code: number, name: string}, External: {code: number, name: string}, General: {code: number, name: string}}}
+ */
+export const LargeChartType = {
+    General: {
+        code: 1,
+        name: '普通图表'
+    },
+    GpsMap: {
+        code: 2,
+        name: '经纬度地图'
+    },
+    External: {
+        code: 3,
+        name: '外部图表'
+    }
+}
+
+/**
  * 条件比较符
  * @type {{unempty: {code: string, name: string}, in: {code: string, name: string}, like: {code: string, name: string}, lteq: {code: string, name: string}, notlike: {code: string, name: string}, lt: {code: string, name: string}, unequal: {code: string, name: string}, gteq: {code: string, name: string}, endlike: {code: string, name: string}, gt: {code: string, name: string}, empty: {code: string, name: string}, equal: {code: string, name: string}, unbetween: {code: string, name: string}, startlike: {code: string, name: string}, notin: {code: string, name: string}, between: {code: string, name: string}}}
  */

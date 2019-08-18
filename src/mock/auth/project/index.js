@@ -4,10 +4,10 @@ import DateUtils from '../../../utils/dateUtils'
 import {ApiUrl} from '../../../services/auth/project'
 
 export const ProjList = [
-    {id: 2, name: '地图平台', code: 'MAP', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
-    {id: 3, name: '统一权限', code: 'AUTH', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
-    {id: 4, name: '数据服务', code: 'DATA_SERVICE', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
-    {id: 1, name: '报表平台', code: 'REPORT', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'}
+    {id: 2, name: '数据地图', code: 'DATA_MAP', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
+    {id: 3, name: '权限中心', code: 'AUTH', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
+    {id: 4, name: '数据API', code: 'DATA_API', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'},
+    {id: 1, name: '数据可视化', code: 'REPORT', creator: 'liujiangping', createTime: '2019-05-10 10:23:21', updator: 'sanshang', updateTime: '2019-05-12 10:23:21'}
 ]
 
 export default {

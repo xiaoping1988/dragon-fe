@@ -3,7 +3,10 @@
         <div class="head">
             <h2 class="title">{{dash.name}}</h2>
             <div class="btn">
-                <el-button type="text" size="mini" v-if="dash.editAuth">
+                <el-button v-if="dash.editAuth"
+                           type="text"
+                           size="mini"
+                           @click="openAddChart">
                     <i class="fa fa-bar-chart-o d-icon"></i>添加图表
                 </el-button>
                 <el-button type="text" size="mini" v-if="dash.editAuth">
@@ -30,7 +33,7 @@
             <el-button type="text" size="mini" icon="el-icon-search">查询</el-button>
         </div>
         <div class="d-dash-main" :style="dashMainStyle" :id="'main_' + dashId">
-            <el-tabs v-if="hasTab" v-model="activeTabId" @tab-click="clickTab">
+            <el-tabs v-if="hasTab" v-model="activeTabId">
                 <el-tab-pane v-for="tab in tabList" :label="tab.name" :name="tab.id + ''" :key="tab.id">
                     <DChartList :tabId="tab.id"
                                 :activeTabId="activeTabId"
@@ -47,6 +50,59 @@
                         :containerWidth="containerWidth"></DChartList>
         </div>
         <DLoading :loading="loading"></DLoading>
+        <el-dialog
+                :visible.sync="showAddChartModal"
+                title="添加图表"
+                width="360px">
+            <el-row class="d-row">
+                选择图表类型
+            </el-row>
+            <el-row class="d-box-middle d-row">
+                <el-radio-group v-model="largeChartType">
+                    <el-radio v-for="(item, index) in largeChartTypeList" :label="item.code" :key="item.code">{{item.name}}</el-radio>
+                </el-radio-group>
+            </el-row>
+            <div v-if="largeChartType === 3">
+                <el-row class="d-row">
+                    外部报表URL
+                </el-row>
+                <el-row class="d-row">
+                    <el-input
+                            size="mini"
+                            clearable
+                            placeholder="请输入外部报表URL"
+                            v-model.trim="externalReportUrl">
+                    </el-input>
+                </el-row>
+                <DSubmitCancel slot="footer" nohr @submit="submitExternalReport" @cancel="showAddChartModal = false" size="mini">
+                </DSubmitCancel>
+            </div>
+            <div v-else>
+                <el-row class="d-row">
+                    选择工作表
+                </el-row>
+                <el-row class="d-row">
+                    <el-input
+                            size="mini"
+                            clearable
+                            placeholder="搜索工作表"
+                            suffix-icon="el-icon-search"
+                            v-model.trim="tableKeyWord"
+                            @change="searchTable">
+                    </el-input>
+                </el-row>
+                <el-row class="d-row">
+                    <div class="d-tb-panel">
+                        <ul class="d-tb-list">
+                            <li v-for="(item, index) in searchedTableList" :key="index" class="d-tb-item">
+                                <h4 class="d-tb-title d-ellipsis" :title="item.dbName + '.' + item.tbName">{{item.dbName}}.{{item.tbName}}</h4>
+                                <div class="d-tb-desc d-ellipsis" :title="item.tbNameCn">{{item.tbNameCn}}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </el-row>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -54,7 +110,11 @@
     import {
         getDashMetaForShow
     } from '../../../services/data-visual/dashboard'
+    import {
+        listMyTbOwn
+    } from '../../../services/data-map/tb-manage'
     import DChartList from '../chart-panel/ChartList.vue'
+    import {LargeChartType} from '../constants'
     export default {
         name: 'DDashContainer',
         components: {DChartList},
@@ -66,12 +126,18 @@
                 activeTabId: '',
                 dash: {},
                 loading: false,
-                hasTab: false,
+                hasTab: false, // 是否有页签
                 chartList: [], // 仪表盘没分tab, 仪表盘内展现的图表
                 tabList: [], // 仪表盘分了tab, 仪表盘的所有tab及tab下的图表
                 chartMargin: 4, // 图表之间的间隔
                 containerWidth: 980, // 图表列表容器的实际宽度
-                minContainerWidth: 980 // 图表列表容器的最小宽度
+                minContainerWidth: 980, // 图表列表容器的最小宽度
+                showAddChartModal: false, // 显示添加图表的弹框
+                largeChartType: LargeChartType.General.code, // 图表大分类
+                largeChartTypeList: Object.values(LargeChartType), // 图表大分类列表
+                tableKeyWord: '', // 工作表搜索关键词
+                searchedTableList: [], // 搜索到的工作表结果
+                externalReportUrl: '' //外部报表url
             }
         },
         computed: {
@@ -120,7 +186,20 @@
                     }
                 })
             },
-            clickTab () {
+            openAddChart () {
+                this.showAddChartModal = true
+                this.searchTable()
+            },
+            searchTable () {
+                listMyTbOwn({
+                    tbName: this.tableKeyWord,
+                    pageNo: 1,
+                    pageSize: 15
+                }).then(res => {
+                    this.searchedTableList = res.data.data
+                }).catch(this.$handleError)
+            },
+            submitExternalReport () {
 
             }
         },
@@ -155,11 +234,10 @@
         padding-right: 15px;
     }
 
-    .d-dash-container .filter {
+    .d-dash-container > .filter {
         height: 30px;
         padding-left: 15px;
         padding-right: 15px;
-        padding-bottom: 10px;
     }
 
     .d-dash-container .head .title {
@@ -209,5 +287,32 @@
     .d-dash-main .el-tabs .el-tabs__content .el-tab-pane {
         height: 100%;
         width: 100%;
+    }
+
+    .d-tb-panel {
+        height: 200px;
+        width: 100%;
+        overflow: auto;
+    }
+
+    .d-tb-item {
+        cursor: pointer;
+    }
+
+    .d-tb-item:hover {
+        background: #f5f7fa;
+    }
+
+    .d-tb-title {
+        margin-bottom: 4px;
+        color: rgba(0,0,0,.65);
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .d-tb-desc {
+        color: rgba(0,0,0,.45);
+        font-size: 12px;
+        line-height: 16px;
     }
 </style>
