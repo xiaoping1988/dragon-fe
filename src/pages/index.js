@@ -5,6 +5,7 @@ import Message from './message'
 import DataMap from './data-map'
 import DataVisual from './data-visual'
 import SSO from './sso'
+import AboutMe from './about-me'
 
 export default {
     Home: Home,
@@ -13,5 +14,6 @@ export default {
     Message: Message,
     DataMap: DataMap,
     DataVisual: DataVisual,
-    SSO: SSO
+    SSO: SSO,
+    AboutMe: AboutMe
 }
