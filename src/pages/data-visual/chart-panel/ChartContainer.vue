@@ -93,7 +93,7 @@
         </div>
         <div class="content d-box-middle" :style="chartContentStyle">
             <div v-if="chart.largeChartType === largeChartTypeObj.External.code"> <!-- 嵌套外部报表 -->
-                <iframe :src="chart.url" class="d-chart-external"></iframe>
+                <iframe v-if="visibled" :src="chart.url" class="d-chart-external"></iframe>
             </div>
             <div v-else-if="chart.largeChartType === largeChartTypeObj.GpsMap.code"><!-- 经纬度地图 -->
 
