@@ -263,6 +263,18 @@ i {
     color: rgba(10, 18, 32, 0.31);
 }
 
+.d-tag-input {
+    width: 90px;
+    vertical-align: bottom;
+}
+
+.d-tag-input-btn {
+    height: 24px;
+    line-height: 22px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 /** 滚动条样式开始 **/
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar

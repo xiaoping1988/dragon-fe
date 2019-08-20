@@ -81,11 +81,12 @@
                                 :key="index"
                                 closable
                                 :disable-transitions="false"
-                                size="mini"
+                                size="small"
                                 @close="delExternalReportTag(index)">
                             {{tag}}
                         </el-tag>
                         <el-input
+                                class="d-tag-input"
                                 v-if="externalReportTagInputVisible"
                                 v-model.trim="externalReportTagInputValue"
                                 ref="saveExternalReportTagInput"
@@ -93,10 +94,10 @@
                                 @blur="saveExternalReportTagConfirm"
                         >
                         </el-input>
-                        <el-button v-else size="mini" @click="showExternalReportTagInput">+ 添加标签</el-button>
+                        <el-button v-else size="mini" @click="showExternalReportTagInput" class="d-tag-input-btn">+ 添加标签</el-button>
                     </el-form-item>
                     <el-form-item label="描述" prop="remark">
-                        <el-input v-model="externalReportForm.remark"></el-input>
+                        <el-input v-model="externalReportForm.remark" type="textarea" :rows="3"></el-input>
                     </el-form-item>
                 </el-form>
 <!--                <el-row class="d-row">-->
@@ -294,6 +295,9 @@
                     this.externalReportTagInputVisible = false
                     this.externalReportTagInputValue = ''
                 }
+            },
+            delExternalReportTag (index) {
+                this.externalReportForm.tagList.splice(index, 1)
             }
         },
         watch: {

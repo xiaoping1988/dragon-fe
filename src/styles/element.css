@@ -51,6 +51,7 @@
     font-size: 14px;
 }
 
+.el-form-item__label,
 .el-dialog__body,
 .el-table,
 .el-tabs__item,
@@ -65,4 +66,8 @@
 
 .el-table td, .el-table th {
     padding: 8px 0px!important;
+}
+
+.el-tag {
+    margin-right: 10px;
 }
