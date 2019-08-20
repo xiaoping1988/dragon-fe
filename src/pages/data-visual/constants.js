@@ -368,6 +368,10 @@ export const GridAxisType = {
     }
 }
 
+/**
+ * 普通图表类型
+ * @type {{Funnel: {code: string, name: string}, Table: {code: string, name: string}, IndexCard: {code: string, name: string}, LineBar: {code: string, name: string}, Pie: {code: string, name: string}, Map: {code: string, name: string}, GisMap: {code: string, name: string}}}
+ */
 export const ChartType = {
     Table: {
         code: 'TABLE',

@@ -1,6 +1,6 @@
 <template>
     <div class="d-chart-container">
-        <div class="head">
+        <div class="head" v-if="chart.largeChartType !== largeChartTypeObj.External.code">
             <div class="left d-ellipsis">
                 <span class="title" v-if="chartMeta.chartType !== 'INDEX_CARD' || !showChart">{{chart.name}}</span>
                 <span style="margin-left: 10px;margin-right: 10px;">
@@ -91,15 +91,23 @@
                 </div>
             </div>
         </div>
-        <div class="content d-box-middle">
-            <DChartFactory v-if="showChart"
-                           :id="chart.id"
-                           :meta="chartMeta"
-                           :data="data"
-                           @sort="sortData"
-                           :resizeCount="resizeCount"></DChartFactory>
-            <div v-else class="tip">
-                {{tipMsg}}
+        <div class="content d-box-middle" :style="chartContentStyle">
+            <div v-if="chart.largeChartType === largeChartTypeObj.External.code"> <!-- 嵌套外部报表 -->
+                <iframe :src="chart.url" class="d-chart-external"></iframe>
+            </div>
+            <div v-else-if="chart.largeChartType === largeChartTypeObj.GpsMap.code"><!-- 经纬度地图 -->
+
+            </div>
+            <div v-else> <!-- 普通图表 -->
+                <DChartFactory v-if="showChart"
+                               :id="chart.id"
+                               :meta="chartMeta"
+                               :data="data"
+                               @sort="sortData"
+                               :resizeCount="resizeCount"></DChartFactory>
+                <div v-else class="tip">
+                    {{tipMsg}}
+                </div>
             </div>
         </div>
         <DLoading :loading="loading"></DLoading>
@@ -110,7 +118,7 @@
     import DChartFactory from '../chart-factory'
     import DFilterList from '../chart-filter/FilterList'
     import {queryData} from '../../../services/data-visual/chart'
-    import {ChartType} from '../constants'
+    import {ChartType, LargeChartType} from '../constants'
     export default {
         name: 'DChartContainer',
         components: {DChartFactory, DFilterList},
@@ -123,8 +131,22 @@
             },
             visibled: Boolean // 是否在可视区域内
         },
+        computed: {
+            chartContentStyle () {
+                if (this.chart.largeChartType !== LargeChartType.External.code) {
+                    return {
+                        height: 'calc(100% - 32px)'
+                    }
+                } else {
+                    return {
+                        height: '100%'
+                    }
+                }
+            }
+        },
         data () {
             return {
+                largeChartTypeObj: LargeChartType,
                 chartTypeObj: ChartType,
                 chartMeta: {}, // chart图渲染用的配置
                 filterMeta: [], // 筛选项配置
@@ -299,8 +321,12 @@
 
     .d-chart-container .content {
         width: 100%;
-        height: calc(100% - 32px);
         cursor: default;
+    }
+
+    .d-chart-container .content > div {
+        width: 100%;
+        height: 100%;
     }
 
     .data-certified {
@@ -318,5 +344,11 @@
         z-index: 1000;
         box-shadow: 0 0 6px 0 rgba(0,0,0,.1), 0 10px 12px 0 rgba(170,182,206,.36);
         padding: 5px 0px 5px 10px;
+    }
+
+    .d-chart-external {
+        border: 0px;
+        width: 100%;
+        height: 100%;
     }
 </style>

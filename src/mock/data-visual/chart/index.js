@@ -2,7 +2,7 @@ import Mock from '@/mock'
 import DateUtils from '../../../utils/dateUtils'
 
 import {ApiUrl} from '../../../services/data-visual/chart'
-import {ChartType, SortType, ShowType, FilterControlType, TimeFreq} from '../../../pages/data-visual/constants'
+import {ChartType, SortType, ShowType, FilterControlType, TimeFreq, LargeChartType} from '../../../pages/data-visual/constants'
 import {DataType} from '../../../services/data-map/col-manage'
 import MetaDemo from './meta-demo'
 import {mockChartData} from './mockChartData'
@@ -101,7 +101,7 @@ export let ChartList = [
     {id: 29, name: '条形图', remark: '财务数据分析', sortNum: 1, dashId: 2, tabId: -1, sizeX: 6, sizeY: 4, row: 22, col: 0, config: '{}', meta: buildMeta(MetaDemo.BarStackTop), chartType: ChartType.LineBar.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
     {id: 30, name: '地图', remark: '财务数据分析', sortNum: 1, dashId: 2, tabId: -1, sizeX: 6, sizeY: 6, row: 22, col: 6, config: '{}', meta: buildMeta(MetaDemo.Map), chartType: ChartType.Map.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 0},
     {id: 31, name: '订单量', remark: '订单数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 2, sizeY: 2, row: 0, col: 0, config: '{}', meta: buildMeta(MetaDemo.IndexCardOne), chartType: ChartType.IndexCard.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
-    {id: 32, name: '地图', remark: '财务数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 8, sizeY: 4, row: 0, col: 2, config: '{}', meta: buildMeta(MetaDemo.Map), chartType: ChartType.Map.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 0},
+    {id: 32, name: '嵌套报表百度', remark: '财务数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 8, sizeY: 4, row: 0, col: 2, config: '{}', largeChartType: LargeChartType.External.code,url: 'https://www.baidu.com', meta: buildMeta(MetaDemo.Map), chartType: ChartType.Map.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 0},
     {id: 33, name: '用户量', remark: '用户数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 2, sizeY: 2, row: 0, col: 10, config: '{}', meta: buildMeta(MetaDemo.IndexCardOne), chartType: ChartType.IndexCard.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
     {id: 34, name: '交易量', remark: '交易数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 2, sizeY: 2, row: 2, col: 0, config: '{}', meta: buildMeta(MetaDemo.IndexCardOne), chartType: ChartType.IndexCard.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 0},
     {id: 35, name: '订单金额', remark: '财务数据分析', sortNum: 1, dashId: 3, tabId: -1, sizeX: 2, sizeY: 2, row: 2, col: 10, config: '{}', meta: buildMeta(MetaDemo.IndexCardOne), chartType: ChartType.IndexCard.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
