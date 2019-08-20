@@ -63,17 +63,64 @@
                 </el-radio-group>
             </el-row>
             <div v-if="largeChartType === 3">
-                <el-row class="d-row">
-                    外部报表URL
-                </el-row>
-                <el-row class="d-row">
-                    <el-input
-                            size="mini"
-                            clearable
-                            placeholder="请输入外部报表URL"
-                            v-model.trim="externalReportUrl">
-                    </el-input>
-                </el-row>
+                <el-form label-position="top"
+                         label-width="80px"
+                         :model="externalReportForm"
+                         :rules="externalReportFormRules"
+                         ref="externalReportForm"
+                         size="mini">
+                    <el-form-item label="名称" prop="name">
+                        <el-input v-model="externalReportForm.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="URL" prop="url">
+                        <el-input v-model="externalReportForm.url"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标签">
+                        <el-tag
+                                v-for="(tag,index) in externalReportForm.tagList"
+                                :key="index"
+                                closable
+                                :disable-transitions="false"
+                                size="mini"
+                                @close="delExternalReportTag(index)">
+                            {{tag}}
+                        </el-tag>
+                        <el-input
+                                v-if="externalReportTagInputVisible"
+                                v-model.trim="externalReportTagInputValue"
+                                ref="saveExternalReportTagInput"
+                                @keyup.enter.native="saveExternalReportTagConfirm"
+                                @blur="saveExternalReportTagConfirm"
+                        >
+                        </el-input>
+                        <el-button v-else size="mini" @click="showExternalReportTagInput">+ 添加标签</el-button>
+                    </el-form-item>
+                    <el-form-item label="描述" prop="remark">
+                        <el-input v-model="externalReportForm.remark"></el-input>
+                    </el-form-item>
+                </el-form>
+<!--                <el-row class="d-row">-->
+<!--                    外部报表URL-->
+<!--                </el-row>-->
+<!--                <el-row class="d-row">-->
+<!--                    <el-input-->
+<!--                            size="mini"-->
+<!--                            clearable-->
+<!--                            placeholder="请输入外部报表URL"-->
+<!--                            v-model.trim="externalReportUrl">-->
+<!--                    </el-input>-->
+<!--                </el-row>-->
+<!--                <el-row class="d-row">-->
+<!--                    报表名称-->
+<!--                </el-row>-->
+<!--                <el-row class="d-row">-->
+<!--                    <el-input-->
+<!--                            size="mini"-->
+<!--                            clearable-->
+<!--                            placeholder="请输入报表名称"-->
+<!--                            v-model.trim="externalReportUrl">-->
+<!--                    </el-input>-->
+<!--                </el-row>-->
                 <DSubmitCancel slot="footer" nohr @submit="submitExternalReport" @cancel="showAddChartModal = false" size="mini">
                 </DSubmitCancel>
             </div>
@@ -137,7 +184,28 @@
                 largeChartTypeList: Object.values(LargeChartType), // 图表大分类列表
                 tableKeyWord: '', // 工作表搜索关键词
                 searchedTableList: [], // 搜索到的工作表结果
-                externalReportUrl: '' //外部报表url
+                externalReportUrl: '', //外部报表url
+                externalReportForm: {
+                    url: '',
+                    name: '',
+                    tagList: [],
+                    remark: ''
+                },
+                externalReportFormRules: {
+                    name: [
+                        { required: true, message: '请输入名称', trigger: 'blur' },
+                        { max: 50, message: '长度最大50个字符', trigger: 'blur' }
+                    ],
+                    url: [
+                        { required: true, message: '请输入URL', trigger: 'blur' },
+                        { type: 'url', message: '请输入正确的URL', trigger: 'blur' }
+                    ],
+                    remark: [
+                        { required: true, message: '请输入描述', trigger: 'blur' }
+                    ]
+                },
+                externalReportTagInputValue: '',
+                externalReportTagInputVisible: false
             }
         },
         computed: {
@@ -201,6 +269,31 @@
             },
             submitExternalReport () {
 
+            },
+            showExternalReportTagInput () {
+                this.externalReportTagInputVisible = true
+                this.$nextTick(_ => {
+                    this.$refs.saveExternalReportTagInput.$refs.input.focus();
+                })
+            },
+            saveExternalReportTagConfirm () {
+                let inputValue = this.externalReportTagInputValue
+                let success = true
+                if (inputValue) {
+                    if (inputValue.length > 50) {
+                        this.$messageWarn('标签长度最大50个字符!')
+                        success = false
+                    } else if (this.externalReportForm.tagList.includes(inputValue)) {
+                        this.$messageWarn('标签已存在!')
+                        success = false
+                    } else {
+                        this.externalReportForm.tagList.push(inputValue)
+                    }
+                }
+                if (success) {
+                    this.externalReportTagInputVisible = false
+                    this.externalReportTagInputValue = ''
+                }
             }
         },
         watch: {
