@@ -82,7 +82,8 @@
                     <i class="fa fa-ellipsis-v"></i>
                     <ul class="d-chart-btn-more d-btn-list">
                         <li >导出EXCEL</li>
-                        <li v-if="chartMeta.chartType !== chartTypeObj.IndexCard.code && chartMeta.chartType !== chartTypeObj.Table.code">导出图片</li>
+                        <li v-if="chartMeta.chartType !== chartTypeObj.IndexCard.code && chartMeta.chartType !== chartTypeObj.Table.code"
+                            @click="exportImg">导出图片</li>
                         <li >刷新数据</li>
                         <li v-if="chart.editAuth">复制图表</li>
                         <li v-if="chart.editAuth">移动图表</li>
@@ -116,6 +117,7 @@
 
 <script>
     import DChartFactory from '../chart-factory'
+    import EchartsUtil from '../chart-factory/EchartsUtil'
     import DFilterList from '../chart-filter/FilterList'
     import {queryData} from '../../../services/data-visual/chart'
     import {ChartType, LargeChartType} from '../constants'
@@ -238,6 +240,9 @@
                 setTimeout(function () {
                     vue.setData()
                 }, 100)
+            },
+            exportImg () {
+                EchartsUtil.exportImg(this.chart.id, this.chart.name)
             }
         },
         watch: {

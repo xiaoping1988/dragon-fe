@@ -177,6 +177,70 @@ function formatTooltipValue (value, showType, unit, divisor) {
     return tempVal
 }
 
+function exportImg(chartId, chartName) {
+    let chart = getEchartsInstance(chartId)
+    let option
+    if (chart && (option = chart.getOption())) {
+        // 标题为空时，设置标题属性
+        if (!option.title) {
+            option.OriginalTitle = ''
+            option.title = {
+                text: chartName
+            }
+        } else if (!option.title[0].text || option.title[0].text === '') {
+            option.OriginalTitle = option.title[0].text
+            option.title[0].text = chartName
+        }
+        option.series.forEach(serie => {
+            if (serie.type !== 'funnel') {
+                serie.label.OriginalShow = serie.label.show
+                if (serie.type === 'pie') {
+                    serie.label.formatter = '{b}: {d}%\n{c}'
+                }
+                if (!serie.labelLine) {
+                    serie.labelLine = {
+                        show: false
+                    }
+                }
+                serie.labelLine.OriginalShow = serie.labelLine.show
+                serie.label.show = true
+                serie.labelLine.show = true
+            }
+        })
+
+        chart.setOption(option)
+        let imgUrl = chart.getDataURL({
+            pixelRatio: 2,
+            backgroundColor: '#fff'
+        })
+
+        // 还原显示
+        if (option.title.text) {
+            option.title.text = option.OriginalTitle
+        } else {
+            option.title[0].text = option.OriginalTitle
+        }
+        option.series.forEach(serie => {
+            if (serie.type !== 'funnel') {
+                serie.label.show = serie.label.OriginalShow
+                serie.labelLine.show = serie.labelLine.OriginalShow
+            }
+        })
+
+        chart.setOption(option)
+        // 下载图片
+        let a = document.createElement('a')
+        a.href = imgUrl
+        a.download = chartName + '.png'
+        let evt = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: false
+        })
+        a.dispatchEvent(evt)
+    }
+}
+
 export default {
     Legend: Legend,
     Grid: Grid,
@@ -186,5 +250,6 @@ export default {
     initChart: initChart,
     getChartDomId: getChartDomId,
     getEchartsInstance: getEchartsInstance,
-    formatTooltipValue: formatTooltipValue
+    formatTooltipValue: formatTooltipValue,
+    exportImg: exportImg
 }

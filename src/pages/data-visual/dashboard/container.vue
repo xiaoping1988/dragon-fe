@@ -53,6 +53,7 @@
         <el-dialog
                 :visible.sync="showAddChartModal"
                 title="添加图表"
+                top="30px"
                 width="360px">
             <el-row class="d-row">
                 选择图表类型
@@ -62,69 +63,11 @@
                     <el-radio v-for="(item, index) in largeChartTypeList" :label="item.code" :key="item.code">{{item.name}}</el-radio>
                 </el-radio-group>
             </el-row>
-            <div v-if="largeChartType === 3">
-                <el-form label-position="top"
-                         label-width="80px"
-                         :model="externalReportForm"
-                         :rules="externalReportFormRules"
-                         ref="externalReportForm"
-                         size="mini">
-                    <el-form-item label="名称" prop="name">
-                        <el-input v-model="externalReportForm.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="URL" prop="url">
-                        <el-input v-model="externalReportForm.url"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标签">
-                        <el-tag
-                                v-for="(tag,index) in externalReportForm.tagList"
-                                :key="index"
-                                closable
-                                :disable-transitions="false"
-                                size="small"
-                                @close="delExternalReportTag(index)">
-                            {{tag}}
-                        </el-tag>
-                        <el-input
-                                class="d-tag-input"
-                                v-if="externalReportTagInputVisible"
-                                v-model.trim="externalReportTagInputValue"
-                                ref="saveExternalReportTagInput"
-                                @keyup.enter.native="saveExternalReportTagConfirm"
-                                @blur="saveExternalReportTagConfirm"
-                        >
-                        </el-input>
-                        <el-button v-else size="mini" @click="showExternalReportTagInput" class="d-tag-input-btn">+ 添加标签</el-button>
-                    </el-form-item>
-                    <el-form-item label="描述" prop="remark">
-                        <el-input v-model="externalReportForm.remark" type="textarea" :rows="3"></el-input>
-                    </el-form-item>
-                </el-form>
-<!--                <el-row class="d-row">-->
-<!--                    外部报表URL-->
-<!--                </el-row>-->
-<!--                <el-row class="d-row">-->
-<!--                    <el-input-->
-<!--                            size="mini"-->
-<!--                            clearable-->
-<!--                            placeholder="请输入外部报表URL"-->
-<!--                            v-model.trim="externalReportUrl">-->
-<!--                    </el-input>-->
-<!--                </el-row>-->
-<!--                <el-row class="d-row">-->
-<!--                    报表名称-->
-<!--                </el-row>-->
-<!--                <el-row class="d-row">-->
-<!--                    <el-input-->
-<!--                            size="mini"-->
-<!--                            clearable-->
-<!--                            placeholder="请输入报表名称"-->
-<!--                            v-model.trim="externalReportUrl">-->
-<!--                    </el-input>-->
-<!--                </el-row>-->
-                <DSubmitCancel slot="footer" nohr @submit="submitExternalReport" @cancel="showAddChartModal = false" size="mini">
-                </DSubmitCancel>
-            </div>
+            <DExternalReportForm v-if="largeChartType === 3"
+                                 :data="externalReportForm"
+                                 @submit="submitExternalReport"
+                                 @cancel="showAddChartModal = false">
+            </DExternalReportForm>
             <div v-else>
                 <el-row class="d-row">
                     选择工作表
@@ -163,9 +106,10 @@
     } from '../../../services/data-map/tb-manage'
     import DChartList from '../chart-panel/ChartList.vue'
     import {LargeChartType} from '../constants'
+    import DExternalReportForm from './externalReportForm'
     export default {
         name: 'DDashContainer',
-        components: {DChartList},
+        components: {DChartList, DExternalReportForm},
         data () {
             return {
                 projId: '',
@@ -185,28 +129,12 @@
                 largeChartTypeList: Object.values(LargeChartType), // 图表大分类列表
                 tableKeyWord: '', // 工作表搜索关键词
                 searchedTableList: [], // 搜索到的工作表结果
-                externalReportUrl: '', //外部报表url
                 externalReportForm: {
                     url: '',
                     name: '',
                     tagList: [],
                     remark: ''
-                },
-                externalReportFormRules: {
-                    name: [
-                        { required: true, message: '请输入名称', trigger: 'blur' },
-                        { max: 50, message: '长度最大50个字符', trigger: 'blur' }
-                    ],
-                    url: [
-                        { required: true, message: '请输入URL', trigger: 'blur' },
-                        { type: 'url', message: '请输入正确的URL', trigger: 'blur' }
-                    ],
-                    remark: [
-                        { required: true, message: '请输入描述', trigger: 'blur' }
-                    ]
-                },
-                externalReportTagInputValue: '',
-                externalReportTagInputVisible: false
+                }
             }
         },
         computed: {
@@ -258,6 +186,12 @@
             openAddChart () {
                 this.showAddChartModal = true
                 this.searchTable()
+                this.externalReportForm = {
+                    url: '',
+                    name: '',
+                    tagList: [],
+                    remark: ''
+                }
             },
             searchTable () {
                 listMyTbOwn({
@@ -268,36 +202,8 @@
                     this.searchedTableList = res.data.data
                 }).catch(this.$handleError)
             },
-            submitExternalReport () {
+            submitExternalReport (formData) {
 
-            },
-            showExternalReportTagInput () {
-                this.externalReportTagInputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.saveExternalReportTagInput.$refs.input.focus();
-                })
-            },
-            saveExternalReportTagConfirm () {
-                let inputValue = this.externalReportTagInputValue
-                let success = true
-                if (inputValue) {
-                    if (inputValue.length > 50) {
-                        this.$messageWarn('标签长度最大50个字符!')
-                        success = false
-                    } else if (this.externalReportForm.tagList.includes(inputValue)) {
-                        this.$messageWarn('标签已存在!')
-                        success = false
-                    } else {
-                        this.externalReportForm.tagList.push(inputValue)
-                    }
-                }
-                if (success) {
-                    this.externalReportTagInputVisible = false
-                    this.externalReportTagInputValue = ''
-                }
-            },
-            delExternalReportTag (index) {
-                this.externalReportForm.tagList.splice(index, 1)
             }
         },
         watch: {
