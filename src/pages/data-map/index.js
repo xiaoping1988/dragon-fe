@@ -1,12 +1,12 @@
 import DataMap from './index.vue'
 import MyTb from './my-tb'
-import DsManager from './ds-manage'
-import DbManager from './db-manage'
-import TbManager from './tb-manage'
+import DsManage from './ds-manage'
+import DbManage from './db-manage'
+import TbManage from './tb-manage'
 
 DataMap.MyTb = MyTb
-DataMap.DsManager = DsManager
-DataMap.DbManager = DbManager
-DataMap.TbManager = TbManager
+DataMap.DsManage = DsManage
+DataMap.DbManage = DbManage
+DataMap.TbManage = TbManage
 
 export default DataMap

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Pages from '../pages'
+// import Pages from '../pages'
+import Pages from './pageComponent'
 
 Vue.use(Router)
 
@@ -27,10 +28,10 @@ let router = new Router({
             path: '/auth',
             component: Pages.Auth,
             children: [
-                {path: 'resource', component: Pages.Auth.Resource},
-                {path: 'role', component: Pages.Auth.Role},
-                {path: 'user', component: Pages.Auth.User},
-                {path: 'console', component: Pages.Auth.Console}
+                {path: 'resource', component: Pages.AuthResource},
+                {path: 'role', component: Pages.AuthRole},
+                {path: 'user', component: Pages.AuthUser},
+                {path: 'console', component: Pages.AuthConsole}
             ],
             redirect: '/auth/console'
         },
@@ -42,8 +43,8 @@ let router = new Router({
             path: '/message',
             component: Pages.Message,
             children: [
-                {path: 'onsite', component: Pages.Message.Onsite},
-                {path: 'receive-manage', component: Pages.Message.ReceiveManage}
+                {path: 'onsite', component: Pages.MessageOnsite},
+                {path: 'receive-manage', component: Pages.MessageReceiveManage}
             ],
             redirect: '/message/onsite'
         },
@@ -53,19 +54,19 @@ let router = new Router({
             children: [
                 {
                     path: 'my-tb',
-                    component: Pages.DataMap.MyTb,
+                    component: Pages.DataMapMyTb,
                     children: [
-                        {path: 'own', component: Pages.DataMap.MyTb.Own},
-                        {path: 'manage', component: Pages.DataMap.MyTb.Manage},
-                        {path: 'auth', component: Pages.DataMap.MyTb.Auth}
+                        {path: 'own', component: Pages.DataMapMyTbOwn},
+                        {path: 'manage', component: Pages.DataMapMyTbManage},
+                        {path: 'auth', component: Pages.DataMapMyTbAuth}
                     ],
                     redirect: '/data-map/my-tb/own'
                 },
-                {path: 'ds-manage', component: Pages.DataMap.DsManager},
-                {path: 'ds-manage/:id', component: Pages.DataMap.DsManager.Detail},
-                {path: 'db-manage/:id', component: Pages.DataMap.DbManager.Detail},
-                {path: 'tb-manage', component: Pages.DataMap.TbManager},
-                {path: 'tb-manage/:id', component: Pages.DataMap.TbManager.Detail}
+                {path: 'ds-manage', component: Pages.DataMapDsManage},
+                {path: 'ds-manage/:id', component: Pages.DataMapDsManageDetail},
+                {path: 'db-manage/:id', component: Pages.DataMapDbManageDetail},
+                {path: 'tb-manage', component: Pages.DataMapTbManage},
+                {path: 'tb-manage/:id', component: Pages.DataMapTbManageDetail}
             ],
             redirect: '/data-map/my-tb/own'
         },
@@ -75,34 +76,34 @@ let router = new Router({
             children: [
                 {
                     path: 'dashboard',
-                    component: Pages.DataVisual.Dashboard,
+                    component: Pages.DataVisualDashboard,
                     children: [
-                        {path: ':projId/:dashId', component: Pages.DataVisual.Dashboard.Container}
+                        {path: ':projId/:dashId', component: Pages.DataVisualDashboardContainer}
                     ]
                 },
                 {
                     path: 'chart-demo',
-                    component: Pages.DataVisual.ChartDemo,
+                    component: Pages.DataVisualChartDemo,
                     children: [
-                        {path: 'indexcard', component: Pages.DataVisual.ChartDemo.IndexCard},
-                        {path: 'table', component: Pages.DataVisual.ChartDemo.Table},
-                        {path: 'line-bar', component: Pages.DataVisual.ChartDemo.LineBar},
-                        {path: 'line-bar-not-date', component: Pages.DataVisual.ChartDemo.LineBarNotDate},
-                        {path: 'line', component: Pages.DataVisual.ChartDemo.Line},
-                        {path: 'line-not-date', component: Pages.DataVisual.ChartDemo.LineNotDate},
-                        {path: 'bar', component: Pages.DataVisual.ChartDemo.Bar},
-                        {path: 'bar-stack', component: Pages.DataVisual.ChartDemo.BarStack},
-                        {path: 'bar-stack-top', component: Pages.DataVisual.ChartDemo.BarStackTop},
-                        {path: 'bar-top', component: Pages.DataVisual.ChartDemo.BarTop},
-                        {path: 'bar-not-date', component: Pages.DataVisual.ChartDemo.BarNotDate},
-                        {path: 'area', component: Pages.DataVisual.ChartDemo.Area},
-                        {path: 'area-not-date', component: Pages.DataVisual.ChartDemo.AreaNotDate},
-                        {path: 'pie', component: Pages.DataVisual.ChartDemo.Pie},
-                        {path: 'pie-ring', component: Pages.DataVisual.ChartDemo.PieRing},
-                        {path: 'funnel', component: Pages.DataVisual.ChartDemo.Funnel},
-                        {path: 'funnel-dim', component: Pages.DataVisual.ChartDemo.FunnelDim},
-                        {path: 'map', component: Pages.DataVisual.ChartDemo.Map},
-                        {path: 'filter', component: Pages.DataVisual.ChartDemo.ChartFilter}
+                        {path: 'indexcard', component: Pages.DataVisualChartDemoIndexCard},
+                        {path: 'table', component: Pages.DataVisualChartDemoTable},
+                        {path: 'line-bar', component: Pages.DataVisualChartDemoLineBar},
+                        {path: 'line-bar-not-date', component: Pages.DataVisualChartDemoLineBarNotDate},
+                        {path: 'line', component: Pages.DataVisualChartDemoLine},
+                        {path: 'line-not-date', component: Pages.DataVisualChartDemoLineNotDate},
+                        {path: 'bar', component: Pages.DataVisualChartDemoBar},
+                        {path: 'bar-stack', component: Pages.DataVisualChartDemoBarStack},
+                        {path: 'bar-stack-top', component: Pages.DataVisualChartDemoBarStackTop},
+                        {path: 'bar-top', component: Pages.DataVisualChartDemoBarTop},
+                        {path: 'bar-not-date', component: Pages.DataVisualChartDemoBarNotDate},
+                        {path: 'area', component: Pages.DataVisualChartDemoArea},
+                        {path: 'area-not-date', component: Pages.DataVisualChartDemoAreaNotDate},
+                        {path: 'pie', component: Pages.DataVisualChartDemoPie},
+                        {path: 'pie-ring', component: Pages.DataVisualChartDemoPieRing},
+                        {path: 'funnel', component: Pages.DataVisualChartDemoFunnel},
+                        {path: 'funnel-dim', component: Pages.DataVisualChartDemoFunnelDim},
+                        {path: 'map', component: Pages.DataVisualChartDemoMap},
+                        {path: 'filter', component: Pages.DataVisualChartDemoChartFilter}
                     ],
                     redirect: '/data-visual/chart-demo/indexcard'
                 }
