@@ -8,6 +8,10 @@ export const ApiUrl = {
         api: ApiBase + '/query-data',
         name: '查询数据'
     },
+    getChart: {
+        api: ApiBase + '/get',
+        name: '获取一个图表的详情'
+    },
     addOrUpdateGeneralChart: {
         api: ApiBase + '/add-or-update-general',
         name: '新增或者修改一个普通图表配置'
@@ -39,6 +43,7 @@ export const ApiUrl = {
 }
 
 export const queryData = (params) => {return post(ApiUrl.queryData.api, params)}
+export const getChart = (params) => {return post(ApiUrl.getChart.api, params)}
 export const addOrUpdateGeneralChart = (params) => {return post(ApiUrl.addOrUpdateGeneralChart.api, params)}
 export const addOrUpdateGpsMap = (params) => {return post(ApiUrl.addOrUpdateGpsMap.api, params)}
 export const addOrUpdateExternalChart = (params) => {return post(ApiUrl.addOrUpdateExternalChart.api, params)}

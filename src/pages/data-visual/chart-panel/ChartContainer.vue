@@ -1,41 +1,41 @@
 <template>
     <div class="d-chart-container">
-        <div class="head" v-if="chart.largeChartType !== largeChartTypeObj.External.code">
+        <div class="head">
             <div class="left d-ellipsis">
-                <span class="title" v-if="chartMeta.chartType !== 'INDEX_CARD' || !showChart">{{chart.name}}</span>
+                <span class="title" v-if="chartMeta.chartType !== 'INDEX_CARD' || !showChart">{{chartObj.name}}</span>
                 <span style="margin-left: 10px;margin-right: 10px;">
                     <el-tooltip placement="bottom" effect="light">
                         <div slot="content" style="width: 300px; max-height: 400px;overflow: auto">
                             <el-row :gutter="24" style="margin: 0px">
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-detail">
-                                            <h4>{{chart.isCertified === 1 ? '数据部门已认证,数据质量可靠' : '未经过数据部门认证'}}</h4>
+                                            <h4>{{chartObj.isCertified === 1 ? '数据部门已认证,数据质量可靠' : '未经过数据部门认证'}}</h4>
                                         </div>
                                     </el-col>
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-term">标签</div>
                                         <div class="d-desclist-index-detail d-tag-group">
-                                            <el-tag v-for="tag in chart.tagList" :key="tag.id" size="mini">{{tag.name}}</el-tag>
+                                            <el-tag v-for="tag in chartObj.tagList" :key="tag.id" size="mini">{{tag.name}}</el-tag>
                                         </div>
                                     </el-col>
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-term">描述</div>
-                                        <div class="d-desclist-index-detail">{{chart.remark}}</div>
+                                        <div class="d-desclist-index-detail">{{chartObj.remark}}</div>
                                     </el-col>
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-term">负责人</div>
-                                        <div class="d-desclist-index-detail">{{chart.creatorCn}}({{chart.creator}})</div>
+                                        <div class="d-desclist-index-detail">{{chartObj.creatorCn}}({{chartObj.creator}})</div>
                                     </el-col>
                                     <el-col class="d-desclist-index">
                                         <div class="d-desclist-index-term">负责部门</div>
-                                        <div class="d-desclist-index-detail">{{chart.departmentName}}</div>
+                                        <div class="d-desclist-index-detail">{{chartObj.departmentName}}</div>
                                     </el-col>
                             </el-row>
                         </div>
-                      <i class="fa fa-trophy grey-icon" :class="{'data-certified': chart.isCertified === 1}"></i>
+                      <i class="fa fa-trophy grey-icon" :class="{'data-certified': chartObj.isCertified === 1}"></i>
                     </el-tooltip>
                 </span>
-                <span>
+                <span v-if="chart.largeChartType !== largeChartTypeObj.External.code">
                     <el-tooltip placement="bottom-start" effect="light" :visible-arrow="false">
                         <div slot="content" style="width: 300px; max-height: 400px;overflow: auto">
                             <el-row :gutter="24" style="margin: 0px">
@@ -63,22 +63,29 @@
             <div class="right">
                 <div v-if="chart.editAuth"
                      title="编辑报表"
-                     class="btn">
+                     class="btn"
+                     @click="openChartEdit">
                     <i class="fa fa-pencil"></i>
                 </div>
-                <div v-if="filterMeta.length" class="btn filter-btn" @mouseenter="mouseEnterFilterBtn" @mouseleave="mouseLeaveFilterBtn">
+                <div v-if="filterMeta.length && chart.largeChartType !== largeChartTypeObj.External.code"
+                     class="btn filter-btn"
+                     @mouseenter="mouseEnterFilterBtn"
+                     @mouseleave="mouseLeaveFilterBtn">
                     <i class="fa fa-filter"></i>
                     <div class="d-chart-filter-panel" :id="'filter_panel_' + chart.id">
                         <DFilterList :data="filterMeta" @inited="initedFilterList" @change="changeCondition"></DFilterList>
                     </div>
                 </div>
-                <div class="btn">
+                <div class="btn" title="图类型切换" v-if="chart.largeChartType === largeChartTypeObj.General.code">
                     <i class="fa fa-line-chart"></i>
                 </div>
-                <div class="btn">
+                <div class="btn" title="维度指标切换" v-if="chart.largeChartType === largeChartTypeObj.General.code">
                     <i class="fa fa-sliders"></i>
                 </div>
-                <div class="btn more-btn">
+                <div class="btn" title="全屏">
+                    <i class="fa fa-expand"></i>
+                </div>
+                <div class="btn more-btn" v-if="chart.largeChartType !== largeChartTypeObj.External.code">
                     <i class="fa fa-ellipsis-v"></i>
                     <ul class="d-chart-btn-more d-btn-list">
                         <li >导出EXCEL</li>
@@ -92,9 +99,9 @@
                 </div>
             </div>
         </div>
-        <div class="content d-box-middle" :style="chartContentStyle" :id="'chart_content_' + chart.id">
+        <div class="content d-box-middle" :id="'chart_content_' + chart.id">
             <div v-if="chart.largeChartType === largeChartTypeObj.External.code"> <!-- 嵌套外部报表 -->
-                <iframe v-if="visibled" :src="chart.url" class="d-chart-external"></iframe>
+                <iframe v-if="visibled" :src="chartObj.url" class="d-chart-external"></iframe>
             </div>
             <div v-else-if="chart.largeChartType === largeChartTypeObj.GpsMap.code"><!-- 经纬度地图 -->
 
@@ -112,6 +119,20 @@
             </div>
         </div>
         <DLoading :loading="loading"></DLoading>
+        <el-dialog
+                v-if="chart.largeChartType === largeChartTypeObj.External.code"
+                :visible.sync="showEditChartModal"
+                title="编辑图表"
+                top="30px"
+                width="360px"
+                append-to-body
+                :close-on-click-modal="false"
+                :close-on-press-escape="false">
+            <DExternalReportForm :data="externalReportForm"
+                                 @submit="submitExternalReport"
+                                 @cancel="showEditChartModal = false">
+            </DExternalReportForm>
+        </el-dialog>
     </div>
 </template>
 
@@ -119,11 +140,12 @@
     import DChartFactory from '../chart-factory'
     import EchartsUtil from '../chart-factory/EchartsUtil'
     import DFilterList from '../chart-filter/FilterList'
-    import {queryData} from '../../../services/data-visual/chart'
+    import {queryData, addOrUpdateExternalChart, getChart} from '../../../services/data-visual/chart'
     import {ChartType, LargeChartType} from '../constants'
+    import DExternalReportForm from '../external-report/form'
     export default {
         name: 'DChartContainer',
-        components: {DChartFactory, DFilterList},
+        components: {DChartFactory, DFilterList, DExternalReportForm},
         props: {
             chart: Object,
             globalFilterValue: String,
@@ -133,21 +155,9 @@
             },
             visibled: Boolean // 是否在可视区域内
         },
-        computed: {
-            chartContentStyle () {
-                if (this.chart.largeChartType !== LargeChartType.External.code) {
-                    return {
-                        height: 'calc(100% - 32px)'
-                    }
-                } else {
-                    return {
-                        height: '100%'
-                    }
-                }
-            }
-        },
         data () {
             return {
+                chartObj: this.chart,
                 largeChartTypeObj: LargeChartType,
                 chartTypeObj: ChartType,
                 chartMeta: {}, // chart图渲染用的配置
@@ -163,7 +173,15 @@
                 conditionValueArr: [], // 筛选项列表的值
                 showLabelArr: [], // 筛选项列表值的显示
                 filterInited: false, // 筛选列表是否初始化完
-                filterOperating: false // 是否正在操作筛选
+                filterOperating: false, // 是否正在操作筛选
+                showEditChartModal: false, // 显示添加图表的弹框
+                externalReportForm: {
+                    id: '',
+                    url: '',
+                    name: '',
+                    tagList: [],
+                    remark: ''
+                }
             }
         },
         methods: {
@@ -248,6 +266,36 @@
             },
             exportImg () {
                 EchartsUtil.exportImg(this.chart.id, this.chart.name)
+            },
+            openChartEdit () {
+                if (this.chart.largeChartType === LargeChartType.General.code) { // 普通报表
+
+                } else if (this.chart.largeChartType === LargeChartType.GpsMap.code) { // 经纬度地图
+
+                } else if (this.chart.largeChartType === LargeChartType.External.code) { // 外部报表
+                    this.showEditChartModal = true
+                    this.externalReportForm = {
+                        id: this.chartObj.id,
+                        name: this.chartObj.name,
+                        url: this.chartObj.url,
+                        remark: this.chartObj.remark,
+                        tagList: this.chartObj.tagList
+                    }
+                }
+            },
+            submitExternalReport (formData) {
+                addOrUpdateExternalChart(formData).then(res => {
+                    this.activeChartId = res.data
+                    this.showEditChartModal = false
+                    this.setChartObj(res.data)
+                }).catch(this.$handleError)
+            },
+            setChartObj (chartId) {
+                getChart({
+                    id: chartId
+                }).then(res => {
+                    this.chartObj = res.data
+                }).catch(this.$handleError)
             }
         },
         watch: {
@@ -331,6 +379,7 @@
 
     .d-chart-container .content {
         width: 100%;
+        height: calc(100% - 32px);
         cursor: default;
     }
 
@@ -360,5 +409,19 @@
         border: 0px;
         width: 100%;
         height: 100%;
+    }
+
+    .d-chart-filter-tip .item {
+        padding-right: 10px;
+    }
+
+    .d-chart-filter-tip .item .label {
+        font-weight: 100;
+        color: #ccc;
+        padding-right: 5px;
+    }
+
+    .d-chart-filter-tip .item .value {
+        font-weight: 100;
     }
 </style>

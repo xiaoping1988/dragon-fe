@@ -109,6 +109,10 @@ let router = new Router({
                 }
             ],
             redirect: '/data-visual/dashboard'
+        },
+        {
+            path: '/chart-design',
+            component: Pages.DataVisualChartDesign
         }
     ]
 })

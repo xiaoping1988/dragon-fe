@@ -43,5 +43,6 @@ export default {
     DataVisualChartDemoFunnelDim: () => import('../pages/data-visual/chart-demo/FunnelDim.vue'),
     DataVisualChartDemoMap: () => import('../pages/data-visual/chart-demo/Map.vue'),
     DataVisualChartDemoChartFilter: () => import('../pages/data-visual/chart-demo/ChartFilter.vue'),
-    AboutMe: () => import('../pages/about-me/index.vue')
+    AboutMe: () => import('../pages/about-me/index.vue'),
+    DataVisualChartDesign: () => import('../pages/data-visual/chart-design/index.vue')
 }

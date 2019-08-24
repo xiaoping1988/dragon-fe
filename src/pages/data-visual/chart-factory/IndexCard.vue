@@ -112,6 +112,10 @@
         font-size: 24px;
     }
 
+    .d-chart-full-screen .d-indexcard .index-name {
+        font-size: 38px;
+    }
+
     .d-chart-full-screen .d-indexcard .index-name,
     .d-chart-full-screen .d-indexcard .advanced-value {
         height: 38px;

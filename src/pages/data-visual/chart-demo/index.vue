@@ -41,5 +41,7 @@
 <style>
     .d-chart-full-screen {
         background: #fff;
+        width: 100%;
+        height: 100%;
     }
 </style>

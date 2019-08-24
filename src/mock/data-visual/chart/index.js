@@ -117,15 +117,24 @@ export let ChartList = [
     {id: 45, name: '订单金额', remark: '财务数据分析', dashId: 4, tabId: -1, sizeX: 2, sizeY: 2, row: 2, col: 10, config: '{}', meta: buildMeta(MetaDemo.IndexCardOne), chartType: ChartType.IndexCard.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
     {id: 47, name: 'top图数据', remark: '财务数据分析', dashId: 4, tabId: -1, sizeX: 6, sizeY: 4, row: 4, col: 0, config: '{}', meta: buildMeta(MetaDemo.BarTop), chartType: ChartType.LineBar.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 0},
     {id: 48, name: 'top图数据', remark: '财务数据分析', dashId: 4, tabId: -1, sizeX: 6, sizeY: 4, row: 4, col: 6, config: '{}', meta: buildMeta(MetaDemo.BarTop), chartType: ChartType.LineBar.code, creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
+    {id: 49, name: '嵌套报表百度', remark: '财务数据分析', dashId: 9, tabId: -1, sizeX: 12, sizeY: 5, row: 0, col: 0, config: '{}', largeChartType: LargeChartType.External.code,url: 'https://www.baidu.com', meta: '{}', chartType: '', creator: 'xiaoyi', creatorCn: '小一', departmentId: 1, departmentName: '数据智能-数据仓库', isCertified: 1},
 ]
 export let ChartTagList = [
     {id: 1, chartId: 1, name: '订单'},
     {id: 2, chartId: 1, name: '用户'},
     {id: 3, chartId: 1, name: '交易'},
-    {id: 4, chartId: 1, name: '财务'}
+    {id: 4, chartId: 1, name: '财务'},
+    {id: 5, chartId: 49, name: '百度'}
 ]
 export default {
     bootstrap (mock) {
+        Mock.post(mock, ApiUrl.getChart.name, ApiUrl.getChart.api, function (params) {
+            let chart = ChartList.filter(c => c.id === params.id)[0]
+            chart.tagList = ChartTagList.filter(t => t.chartId === chart.id)
+            chart.editAuth = true
+            return chart
+        })
+
         Mock.post(mock, ApiUrl.addOrUpdateExternalChart.name, ApiUrl.addOrUpdateExternalChart.api, function (params) {
             let id = params.id
             if (id) { // 修改
@@ -156,7 +165,7 @@ export default {
                 let sizeY = 4
                 let col = 0
                 let row = 0
-                ChartList.filter(c => c.tabId === Number(params.tabId)).forEach(c => {
+                ChartList.filter(c => c.dashId === Number(params.dashId) && c.tabId === Number(params.tabId)).forEach(c => {
                     if ((c.row + c.sizeY) > row) {
                         row = c.row + c.sizeY
                     }

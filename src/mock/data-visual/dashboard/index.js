@@ -15,7 +15,7 @@ export let DashList = [
     {id: 6, name: '用户数据分析', remark: '用户数据分析', sortNum: 1, projId: 2},
     {id: 7, name: '交易数据分析', remark: '交易数据分析', sortNum: 1, projId: 2},
     {id: 8, name: '财务数据分析', remark: '财务数据分析', sortNum: 1, projId: 2},
-    {id: 9, name: '用户数据分析(无Tab)', remark: '用户数据分析', sortNum: 1, projId: 1},
+    {id: 9, name: '嵌套报表', remark: '用户数据分析', sortNum: 1, projId: 1},
     {id: 10, name: '交易数据分析', remark: '交易数据分析', sortNum: 1, projId: 1},
     {id: 11, name: '财务数据分析', remark: '财务数据分析', sortNum: 1, projId: 1},
     {id: 12, name: '订单数据分析', remark: '订单数据分析', sortNum: 1, projId: 2},

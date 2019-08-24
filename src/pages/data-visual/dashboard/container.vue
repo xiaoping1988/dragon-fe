@@ -54,7 +54,9 @@
                 :visible.sync="showAddChartModal"
                 title="添加图表"
                 top="30px"
-                width="360px">
+                width="360px"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false">
             <el-row class="d-row">
                 选择图表类型
             </el-row>
@@ -63,7 +65,7 @@
                     <el-radio v-for="(item, index) in largeChartTypeList" :label="item.code" :key="item.code">{{item.name}}</el-radio>
                 </el-radio-group>
             </el-row>
-            <DExternalReportForm v-if="largeChartType === 3"
+            <DExternalReportForm v-if="largeChartType === largeChartTypeObj.External.code"
                                  :data="externalReportForm"
                                  @submit="submitExternalReport"
                                  @cancel="showAddChartModal = false">
@@ -82,7 +84,7 @@
     } from '../../../services/data-visual/chart'
     import DChartList from '../chart-panel/ChartList.vue'
     import {LargeChartType} from '../constants'
-    import DExternalReportForm from './externalReportForm'
+    import DExternalReportForm from '../external-report/form'
     import DWorkTableSelect from './workTableSelect'
     export default {
         name: 'DDashContainer',
@@ -102,7 +104,8 @@
                 containerWidth: 980, // 图表列表容器的实际宽度
                 minContainerWidth: 980, // 图表列表容器的最小宽度
                 showAddChartModal: false, // 显示添加图表的弹框
-                largeChartType: LargeChartType.General.code, // 图表大分类
+                largeChartTypeObj: LargeChartType, // 图表大分类
+                largeChartType: LargeChartType.General.code, // 普通图表
                 largeChartTypeList: Object.values(LargeChartType), // 图表大分类列表
                 externalReportForm: {
                     url: '',
@@ -151,6 +154,9 @@
                     } else if (vue.dash.tabList && vue.dash.tabList.length) {
                         vue.chartList = vue.dash.tabList[0].chartList
                     }
+                    if (!vue.hasTab) {
+                        vue.activeTabId = -1
+                    }
                 }).catch(vue.$handleError)
             },
             setContainerWidth () {
@@ -171,7 +177,18 @@
                 }
             },
             selectTable (table) {
+                if (this.largeChartType === LargeChartType.General.code) { // 普通报表
+                    this.$router.push({
+                        path: '/chart-design',
+                        query: {
+                            tbId: table.id,
+                            dashId: this.dashId,
+                            tabId: this.activeTabId
+                        }
+                    })
+                } else if (this.largeChartType === LargeChartType.GpsMap.code) { // 经纬度地图
 
+                }
             },
             submitExternalReport (formData) {
                 formData.tabId = this.activeTabId
@@ -180,7 +197,7 @@
                     this.activeChartId = res.data
                     this.showAddChartModal = false
                     this.renderDash()
-                }).catch(this.$handleError())
+                }).catch(this.$handleError)
             }
         },
         watch: {

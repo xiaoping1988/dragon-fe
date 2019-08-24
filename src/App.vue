@@ -11,7 +11,7 @@
         components: {},
         data () {
             return {
-                paths: ['/sso/login', '/']
+                paths: ['/sso/login', '/chart-design', '/']
             }
         },
         computed: {
