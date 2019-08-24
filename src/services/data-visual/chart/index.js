@@ -8,9 +8,17 @@ export const ApiUrl = {
         api: ApiBase + '/query-data',
         name: '查询数据'
     },
-    addOrUpdateChart: {
-        api: ApiBase + '/add-or-update',
-        name: '新增或者修改一个图表配置'
+    addOrUpdateGeneralChart: {
+        api: ApiBase + '/add-or-update-general',
+        name: '新增或者修改一个普通图表配置'
+    },
+    addOrUpdateGpsMap: {
+        api: ApiBase + '/add-or-update-gpsmap',
+        name: '新增或者修改一个经纬度地图配置'
+    },
+    addOrUpdateExternalChart: {
+        api: ApiBase + '/add-or-update-external',
+        name: '新增或者修改一个外部图表配置'
     },
     deleteChart: {
         api: ApiBase + '/delete',
@@ -31,7 +39,9 @@ export const ApiUrl = {
 }
 
 export const queryData = (params) => {return post(ApiUrl.queryData.api, params)}
-export const addOrUpdateChart = (params) => {return post(ApiUrl.addOrUpdateChart.api, params)}
+export const addOrUpdateGeneralChart = (params) => {return post(ApiUrl.addOrUpdateGeneralChart.api, params)}
+export const addOrUpdateGpsMap = (params) => {return post(ApiUrl.addOrUpdateGpsMap.api, params)}
+export const addOrUpdateExternalChart = (params) => {return post(ApiUrl.addOrUpdateExternalChart.api, params)}
 export const deleteChart = (params) => {return post(ApiUrl.deleteChart.api, params)}
 export const moveChart = (params) => {return post(ApiUrl.moveChart.api, params)}
 export const copyChart = (params) => {return post(ApiUrl.copyChart.api, params)}

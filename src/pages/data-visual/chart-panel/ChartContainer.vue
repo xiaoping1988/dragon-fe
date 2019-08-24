@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <div class="content d-box-middle" :style="chartContentStyle">
+        <div class="content d-box-middle" :style="chartContentStyle" :id="'chart_content_' + chart.id">
             <div v-if="chart.largeChartType === largeChartTypeObj.External.code"> <!-- 嵌套外部报表 -->
                 <iframe v-if="visibled" :src="chart.url" class="d-chart-external"></iframe>
             </div>
@@ -168,11 +168,13 @@
         },
         methods: {
             handleMeta () {
-                let meta = JSON.parse(this.chart.meta)
-                this.chartMeta = meta.chartMeta
-                this.filterMeta = meta.filterMeta ? meta.filterMeta : []
-                if (this.filterMeta.length === 0) {
-                    this.filterInited = true
+                if (this.chart.largeChartType !== LargeChartType.External.code) {
+                    let meta = JSON.parse(this.chart.meta)
+                    this.chartMeta = meta.chartMeta
+                    this.filterMeta = meta.filterMeta ? meta.filterMeta : []
+                    if (this.filterMeta.length === 0) {
+                        this.filterInited = true
+                    }
                 }
             },
             sortData (key, sortType) {
@@ -181,7 +183,10 @@
                 this.setData()
             },
             setData () {
-                if (!this.visibled || !this.filterInited || this.lastChartFilterValue === this.chartFilterValue) {
+                if (!this.visibled ||
+                    !this.filterInited ||
+                    this.lastChartFilterValue === this.chartFilterValue ||
+                    this.chart.largeChartType === LargeChartType.External.code) {
                     return
                 }
                 this.loading = true

@@ -68,31 +68,7 @@
                                  @submit="submitExternalReport"
                                  @cancel="showAddChartModal = false">
             </DExternalReportForm>
-            <div v-else>
-                <el-row class="d-row">
-                    选择工作表
-                </el-row>
-                <el-row class="d-row">
-                    <el-input
-                            size="mini"
-                            clearable
-                            placeholder="搜索工作表"
-                            suffix-icon="el-icon-search"
-                            v-model.trim="tableKeyWord"
-                            @change="searchTable">
-                    </el-input>
-                </el-row>
-                <el-row class="d-row">
-                    <div class="d-tb-panel">
-                        <ul class="d-tb-list">
-                            <li v-for="(item, index) in searchedTableList" :key="index" class="d-tb-item">
-                                <h4 class="d-tb-title d-ellipsis" :title="item.dbName + '.' + item.tbName">{{item.dbName}}.{{item.tbName}}</h4>
-                                <div class="d-tb-desc d-ellipsis" :title="item.tbNameCn">{{item.tbNameCn}}</div>
-                            </li>
-                        </ul>
-                    </div>
-                </el-row>
-            </div>
+            <DWorkTableSelect v-else @select="selectTable"></DWorkTableSelect>
         </el-dialog>
     </div>
 </template>
@@ -102,14 +78,15 @@
         getDashMetaForShow
     } from '../../../services/data-visual/dashboard'
     import {
-        listMyTbOwn
-    } from '../../../services/data-map/tb-manage'
+        addOrUpdateExternalChart
+    } from '../../../services/data-visual/chart'
     import DChartList from '../chart-panel/ChartList.vue'
     import {LargeChartType} from '../constants'
     import DExternalReportForm from './externalReportForm'
+    import DWorkTableSelect from './workTableSelect'
     export default {
         name: 'DDashContainer',
-        components: {DChartList, DExternalReportForm},
+        components: {DChartList, DExternalReportForm, DWorkTableSelect},
         data () {
             return {
                 projId: '',
@@ -127,8 +104,6 @@
                 showAddChartModal: false, // 显示添加图表的弹框
                 largeChartType: LargeChartType.General.code, // 图表大分类
                 largeChartTypeList: Object.values(LargeChartType), // 图表大分类列表
-                tableKeyWord: '', // 工作表搜索关键词
-                searchedTableList: [], // 搜索到的工作表结果
                 externalReportForm: {
                     url: '',
                     name: '',
@@ -149,12 +124,15 @@
             }
         },
         methods: {
-            renderDash () {
+            setActiveIds () {
                 let vue = this
                 vue.projId = vue.$route.params.projId
                 vue.dashId = vue.$route.params.dashId
                 vue.activeChartId = vue.$route.query.chartId
                 vue.activeTabId = vue.$route.query.tabId
+            },
+            renderDash () {
+                let vue = this
                 vue.loading = true
                 vue.hasTab = false
                 vue.chartList = []
@@ -185,7 +163,6 @@
             },
             openAddChart () {
                 this.showAddChartModal = true
-                this.searchTable()
                 this.externalReportForm = {
                     url: '',
                     name: '',
@@ -193,26 +170,28 @@
                     remark: ''
                 }
             },
-            searchTable () {
-                listMyTbOwn({
-                    tbName: this.tableKeyWord,
-                    pageNo: 1,
-                    pageSize: 15
-                }).then(res => {
-                    this.searchedTableList = res.data.data
-                }).catch(this.$handleError)
+            selectTable (table) {
+
             },
             submitExternalReport (formData) {
-
+                formData.tabId = this.activeTabId
+                formData.dashId = this.dashId
+                addOrUpdateExternalChart(formData).then(res => {
+                    this.activeChartId = res.data
+                    this.showAddChartModal = false
+                    this.renderDash()
+                }).catch(this.$handleError())
             }
         },
         watch: {
             '$route.path': function () {
+                this.setActiveIds()
                 this.renderDash()
             }
         },
         mounted () {
             let vue = this
+            vue.setActiveIds()
             vue.renderDash()
             vue.setContainerWidth()
             window.addEventListener('resize', function () {
@@ -290,32 +269,5 @@
     .d-dash-main .el-tabs .el-tabs__content .el-tab-pane {
         height: 100%;
         width: 100%;
-    }
-
-    .d-tb-panel {
-        height: 200px;
-        width: 100%;
-        overflow: auto;
-    }
-
-    .d-tb-item {
-        cursor: pointer;
-    }
-
-    .d-tb-item:hover {
-        background: #f5f7fa;
-    }
-
-    .d-tb-title {
-        margin-bottom: 4px;
-        color: rgba(0,0,0,.65);
-        font-size: 12px;
-        line-height: 16px;
-    }
-
-    .d-tb-desc {
-        color: rgba(0,0,0,.45);
-        font-size: 12px;
-        line-height: 16px;
     }
 </style>

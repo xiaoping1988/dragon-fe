@@ -20,6 +20,7 @@
 <script>
     import DChartContainer from './ChartContainer.vue'
     import clickoutside from '../../../directives/clickoutside'
+    import {getElPos} from '../../../utils/assist'
     export default {
         name: 'DChartItem',
         components: {DChartContainer},
@@ -66,14 +67,25 @@
                 document.documentElement.addEventListener('mousemove', vue.mouseMoveResize)
                 document.documentElement.addEventListener('mouseup', vue.mouseUpResize)
             },
+            isInConentDiv(e) { // 判断鼠标是否在chart 的content div内
+                let x = e.clientX
+                let y = e.clientY
+                let contentDom = document.getElementById('chart_content_' + this.chart.id)
+                let pos = getElPos(contentDom)
+                let cx1 = pos.left
+                let cy1 = pos.top
+                let cx2 = cx1 + contentDom.offsetWidth
+                let cy2 = cy1 + contentDom.offsetHeight
+                return ( x > cx1 && x < cx2 && y > cy1 && y < cy2)
+            },
             mouseDownDrag (e) { // 拖动图表的鼠标按下事件
                 let vue = this
-                if (vue.isResizing || !vue.chart.editAuth) {
+                if (vue.isResizing || !vue.chart.editAuth || this.isInConentDiv(e)) {
                     return
                 }
+                vue.dom = document.getElementById('chart_' + this.chart.id)
                 vue.chart.dragStartX = e.clientX // 鼠标按下拖动时的位置 x
                 vue.chart.dragStartY = e.clientY // 鼠标按下拖动时的位置 y
-                vue.dom = document.getElementById('chart_' + this.chart.id)
                 vue.chart.dragStartLeft = vue.dom.offsetLeft // 鼠标按下拖动时,图表的left位置
                 vue.chart.dragStartTop = vue.dom.offsetTop // 鼠标按下拖动时,图表的top位置
                 document.documentElement.addEventListener('mousemove', vue.mouseMoveDrag)
