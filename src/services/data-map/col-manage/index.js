@@ -6,7 +6,11 @@ const ApiBase = Domain.dataMap.be + '/api/col'
 export const ApiUrl = {
     listTbCol: {
         api: ApiBase + '/list-by-tb',
-        name: '获取某张表的字段信息'
+        name: '获取某张表的原始字段信息'
+    },
+    listTbLogicCol: {
+        api: ApiBase + '/list-logic-by-tb',
+        name: '获取某张表的逻辑字段(计算字段、分组字段等)'
     }
 }
 
@@ -58,3 +62,4 @@ export const DataType = {
 }
 
 export const listTbCol = (params) => {return post(ApiUrl.listTbCol.api, params)}
+export const listTbColAndLogic = (params) => {return post(ApiUrl.listTbColAndLogic.api, params)}

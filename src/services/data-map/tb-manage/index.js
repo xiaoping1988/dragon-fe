@@ -35,6 +35,10 @@ export const ApiUrl = {
     deleteTbUser: {
         api: ApiBase + '/delete-user',
         name: '给某张表删除一个用户'
+    },
+    listTbAppData: {
+        api: ApiBase + '/list-app-data',
+        name: '获取某张表的应用数据'
     }
 }
 
@@ -46,3 +50,4 @@ export const getTb = (params) => {return post(ApiUrl.getTb.api, params)}
 export const previewTbData = (params) => {return post(ApiUrl.previewTbData.api, params)}
 export const addTbUser = (params) => {return post(ApiUrl.addTbUser.api, params)}
 export const deleteTbUser = (params) => {return post(ApiUrl.deleteTbUser.api, params)}
+export const listTbAppData = (params) => {return post(ApiUrl.listTbAppData.api, params)}

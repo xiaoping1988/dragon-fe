@@ -81,36 +81,14 @@ export let ColList = [
 
 export default {
     bootstrap (mock) {
-        Mock.post(mock, ApiUrl.searchTb.name, ApiUrl.searchTb.api, function (params) {
-            let pageNo = params.pageNo
-            let pageSize = params.pageSize
-            let data = TbList.filter(t => {
-                if (params.dbId) {
-                    if (t.dbId === params.dbId) {
-                        if (params.tbName) {
-                            if (t.tbName.includes(params.tbName.toLowerCase()) || t.remark.includes(params.tbName)) {
-                                return true
-                            }
-                            return false
-                        }
-                        return true
-                    }
-                    return false
-                } else {
-                    if (params.tbName) {
-                        if (t.tbName.includes(params.tbName.toLowerCase()) || t.remark.includes(params.tbName)) {
-                            return true
-                        }
-                        return false
-                    }
-                }
-                return true
-            })
-            let res = {
-                total: data.length,
-                data: pageSearch(data, pageNo, pageSize)
-            }
+        Mock.post(mock, ApiUrl.listTbCol.name, ApiUrl.listTbCol.api, function (params) {
+            let res = ColList.filter(c => c.tbId === Number(params.tbId))
             return res
+        })
+
+        Mock.post(mock, ApiUrl.listTbLogicCol.name, ApiUrl.listTbLogicCol.api, function (params) {
+            // let res = ColList.filter(c => c.tbId === Number(params.tbId))
+            return []
         })
     }
 }

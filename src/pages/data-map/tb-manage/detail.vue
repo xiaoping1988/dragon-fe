@@ -72,29 +72,25 @@
                             <div v-if="!tb.hasAuth" class="d-no-data-tip">
                                 暂无权限查看数据,可点击左上角按钮申请权限
                             </div>
-                            <div v-else-if="previewData">
-                                <div class="head">
-                                    显示最新
-                                    <span class="d-strong-count">{{previewData.data.length}}</span>
-                                    条数据
-                                </div>
-                                <el-table :data="previewData.data"
-                                          height="500" width="100%">
-                                    <el-table-column
-                                            v-for="col in previewData.colList"
-                                            :key="col.colName"
-                                            :prop="col.colName"
-                                            :label="col.colLabel"
-                                            :width="col.colLabel.length > 10 ? col.colLabel.length * 16 + 20 : 150">
-                                        <template slot="header" slot-scope="scope">
-                                            <i class="d-icon fa" :class="'fa-' + dataTypeObj[colObj[scope.column.property].dataType].icon"></i><span>{{ scope.column.label }}</span>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </div>
+                            <DPreviewTable v-else-if="showPreview" :tbId="tbId"></DPreviewTable>
                         </el-tab-pane>
                         <el-tab-pane label="应用追溯" name="app">
-
+                            <el-table :data="appData">
+                                <el-table-column
+                                        type="index"
+                                        label="序号"
+                                        width="50">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="appName"
+                                        label="应用系统"
+                                        width="200">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="appCarrier"
+                                        label="应用载体">
+                                </el-table-column>
+                            </el-table>
                         </el-tab-pane>
                     </el-tabs>
                 </el-card>
@@ -106,15 +102,18 @@
 <script>
     import {
         getTb,
-        previewTbData
+        listTbAppData
     } from '../../../services/data-map/tb-manage'
     import {
         DataType
     } from '../../../services/data-map/col-manage'
+    import DPreviewTable from './PreviewTable'
     export default {
         name: 'DTbDetail',
+        components: {DPreviewTable},
         data () {
             return {
+                tbId: this.$route.params.id,
                 tb: {},
                 dataTypeObj: DataType,
                 detailColumns: [
@@ -126,38 +125,34 @@
                     {key: 'queryEngineTypeList', title: '支持引擎类型'},
                 ],
                 activeTab: 'column',
-                previewData: null,
-                colObj: {}
+                showPreview: false,
+                appData: []
             }
         },
         methods: {
             setTb () {
                 getTb({
-                    id: this.$route.params.id
+                    id: this.tbId
                 }).then(res => {
                     this.tb = res.data
                 }).catch(this.$handleError)
             },
             clickTab (tab, event) {
                 if (tab.paneName === 'preivewData') {
-                    this.setPreviewData()
+                    this.showPreview = true
                 }
             },
-            setPreviewData () {
-                if (this.tb.hasAuth && !this.previewData) {
-                    previewTbData({
-                        id: this.$route.params.id
-                    }).then(res => {
-                        this.previewData = res.data
-                        this.previewData.colList.forEach(c => {
-                            this.colObj[c.colName] = c
-                        })
-                    }).catch(this.$handleError)
-                }
+            setAppData () {
+                listTbAppData({
+                    id: this.tbId
+                }).then(res => {
+                    this.appData = res.data
+                }).catch(this.$handleError)
             }
         },
         mounted () {
             this.setTb()
+            this.setAppData()
         }
     }
 </script>

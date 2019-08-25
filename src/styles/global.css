@@ -300,3 +300,10 @@ i {
     background-color: #cccc;
 }
 /** 滚动条样式结尾 **/
+
+.module-title {
+    padding-left: 20px;
+    height: 32px;
+    line-height: 32px;
+    font-weight: 700;
+}

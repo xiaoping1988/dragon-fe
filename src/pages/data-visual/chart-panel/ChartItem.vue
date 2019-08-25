@@ -128,7 +128,7 @@
     }
 
     .d-chart-item.active {
-        border: 3px solid #409eff;
+        border: 2px solid #409eff;
         box-sizing: border-box;
     }
 
