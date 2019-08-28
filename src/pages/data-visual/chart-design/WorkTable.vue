@@ -21,7 +21,7 @@
                     字段
                 </div>
                 <div class="col-btn">
-                    <i class="fa fa-plus"></i>
+                    <i class="el-icon-plus"></i>
                     <ul class="d-btn-list">
                         <li >添加计算字段</li>
                     </ul>

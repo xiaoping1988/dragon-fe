@@ -14,7 +14,7 @@
                 <DWorkTable :tbId="tbId"></DWorkTable>
             </div>
             <div class="d-chart-design-main">
-                <div class="d-chart-dim"></div>
+                <DDimModule></DDimModule>
                 <div class="d-chart-index"></div>
                 <div></div>
             </div>
@@ -38,9 +38,10 @@
 
 <script>
     import DWorkTable from './WorkTable'
+    import DDimModule from './DimModule'
     export default {
         name: 'DChartDesign',
-        components: {DWorkTable},
+        components: {DWorkTable, DDimModule},
         data () {
             return {
                 tbId: '',
