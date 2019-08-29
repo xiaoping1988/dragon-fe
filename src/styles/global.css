@@ -307,3 +307,17 @@ i {
     line-height: 32px;
     font-weight: 700;
 }
+
+.el-radio-group .vertical {
+    height: 28px;
+    line-height: 28px;
+}
+
+.d-form-item {
+    display: flex;
+    line-height: 28px;
+}
+
+.d-form-item .input {
+    /*flex-grow: 1;*/
+}

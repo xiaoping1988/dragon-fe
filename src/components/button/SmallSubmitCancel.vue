@@ -14,6 +14,16 @@
 <script>
   export default {
     name: 'DSmallSubmitCancel',
+    props: {
+      submitText: {
+        type: String,
+        default: '保存'
+      },
+      cacelText: {
+        type: String,
+        default: '取消'
+      }
+    },
     methods: {
       clickSubmit () {
         this.$emit('submit')

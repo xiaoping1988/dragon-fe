@@ -1,8 +1,8 @@
 <template>
   <div class="d-submit-cancel">
     <hr v-if="!nohr">
-    <el-button @click="cancel" :size="size">取消</el-button>
-    <el-button type="primary" @click="submit" :size="size">保存</el-button>
+    <el-button @click="cancel" :size="size">{{cacelText}}</el-button>
+    <el-button type="primary" @click="submit" :size="size">{{submitText}}</el-button>
     <slot></slot>
   </div>
 </template>
@@ -15,6 +15,14 @@
       size: {
         type: String,
         default: ''
+      },
+      submitText: {
+        type: String,
+        default: '保存'
+      },
+      cacelText: {
+        type: String,
+        default: '取消'
       }
     },
     methods: {

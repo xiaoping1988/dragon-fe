@@ -43,9 +43,9 @@
                          :title="col.colName"
                          @click="toggleShowTimeFreq(col)"
                          draggable="true">
-                        <div class="pre-angle">
-                            <i v-if="col.dataType === dataTypeObj.date.code" class="fa" :class="[col.showTimeFreq ? 'fa-angle-down' : 'fa-angle-right']"></i>
-                        </div>
+                        <!--<div class="pre-angle">-->
+                            <!--<i v-if="col.dataType === dataTypeObj.date.code" class="fa" :class="[col.showTimeFreq ? 'fa-angle-down' : 'fa-angle-right']"></i>-->
+                        <!--</div>-->
                         <div class="pre-icon">
                             <i class="fa" :class="'fa-' + dataTypeObj[col.dataType].icon"></i>
                         </div>
@@ -53,14 +53,14 @@
                             {{col.colLabel}}
                         </div>
                     </div>
-                    <ul v-if="col.dataType === dataTypeObj.date.code" v-show="col.showTimeFreq" class="time-freq-list">
-                        <li v-for="(item, index) in timeFreqList"
-                            :key="index"
-                            class="time-freq-item"
-                            draggable="true">
-                            <span>{{item.name}}</span>
-                        </li>
-                    </ul>
+                    <!--<ul v-if="col.dataType === dataTypeObj.date.code" v-show="col.showTimeFreq" class="time-freq-list">-->
+                        <!--<li v-for="(item, index) in timeFreqList"-->
+                            <!--:key="index"-->
+                            <!--class="time-freq-item"-->
+                            <!--draggable="true">-->
+                            <!--<span>{{item.name}}</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
                 </li>
             </ul>
         </div>
