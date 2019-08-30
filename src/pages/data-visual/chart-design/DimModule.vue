@@ -3,31 +3,23 @@
         <div class="d-dim-container">
             <div class="label">
                 <span>维度</span>
-                <i class="fa fa-pencil" title="批量添加"></i>
+                <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(0)"></i>
             </div>
-            <ul class="drag-container">
-                <li v-for="(item, index) in dimList" :key="index" class="drag-item">
-                    <div class="tag-item" @click="openConfig(item)">
-                        <div>
-                            <span>{{item.dimConfig.showName}}</span>
-                            <span v-if="item.dimConfig.timeFreq">(按{{timeFreqObj[item.dimConfig.timeFreq].name}})</span>
-                        </div>
-                        <div class="btn">
-                            <i class="fa fa-times-circle" title="移除字段" @click="removeDim(index)"></i>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            <DDimDragContainer :data="dimList" @change="changeDimStore" @click-item="openConfig"></DDimDragContainer>
             <div v-if="!hasContrast" class="right-btn" @click="addContrast"><span>添加对比</span></div>
         </div>
         <div v-if="hasContrast" class="d-dim-container">
-            <div class="label">对比</div>
-            <ul class="drag-container"></ul>
+            <div class="label">
+                <span>对比</span>
+                <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(1)"></i>
+            </div>
+            <DDimDragContainer :data="contrastDimList" @change="changeDimStore" @click-item="openConfig"></DDimDragContainer>
             <div class="right-btn" @click="removeContrast"><span>移除对比</span></div>
         </div>
         <el-dialog :visible.sync="configModalVisible"
                    :close-on-click-modal="false"
-                   :close-on-press-escape="false" width="400px">
+                   :close-on-press-escape="false"
+                   width="400px">
             <div slot="title">
                  <span>
                    <span style="color: #1c2438;font-weight: 700;">维度配置:</span>
@@ -71,37 +63,32 @@
                            submitText="确定">
             </DSubmitCancel>
         </el-dialog>
+        <el-dialog :visible.sync="batchAddModalVisible"
+                   :close-on-click-modal="false"
+                   :close-on-press-escape="false" width="400px">
+
+            <DSubmitCancel slot="footer"
+                           nohr
+                           size="mini"
+                           @submit="submitConfigForm"
+                           @cancel="configModalVisible = false"
+                           submitText="确定">
+            </DSubmitCancel>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import {TimeFreq} from '../constants'
+    import DDimDragContainer from './DimDragContainer'
     export default {
         name: 'DDimModule',
+        components: {DDimDragContainer},
         data () {
             return {
                 timeFreqObj: TimeFreq,
                 timeFreqList: Object.values(TimeFreq),
-                dimList: [
-                    {
-                        colLabel: 'xxx',
-                        dimConfig: {
-                            key: 'col_1',
-                            showName: '订单类型',
-                            timeFreq: '',
-                            sortType: '0'
-                        }
-                    },
-                    {
-                        colLabel: 'yyy',
-                        dimConfig: {
-                            key: 'col_1',
-                            showName: '日期',
-                            timeFreq: TimeFreq.day.code,
-                            sortType: '0'
-                        }
-                    }
-                ], // 维度集合
+                dimList: [], // 维度集合
                 hasContrast: false, // 是否添加对比
                 contrastDimList: [], // 对比维度
                 configModalVisible: false, // 配置框可见
@@ -118,7 +105,10 @@
                         sortType: ''
                     }
                 }, // 当前正在配置中的维度字段对象
-                activeConfigTab: ''
+                activeConfigTab: '',
+                batchAddModalVisible: false, // 批量添加的窗口
+                batchAddTargetType: 0, // 批量添加的容器对象,维度0对比1
+                allColList: []
             }
         },
         methods: {
@@ -128,9 +118,6 @@
             removeContrast () {
                 this.hasContrast = false
                 this.contrastDimList = []
-            },
-            removeDim (index) {
-                this.dimList.splice(index, 1)
             },
             openConfig (dim) {
                 this.currentConfigDim = dim
@@ -155,6 +142,12 @@
                     this.currentConfigDim.dimConfig.showName = this.currentConfigDim.colLabel
                 }
                 this.configModalVisible = false
+            },
+            changeDimStore () {
+
+            },
+            openBatchAdd () {
+
             }
         }
     }
@@ -170,11 +163,12 @@
     }
 
     .d-dim-container .label {
-        width: 48px;
+        width: 58px;
     }
 
     .d-dim-container .label i {
         margin-left: 10px;
+        margin-right: 10px;
         cursor: pointer;
     }
 
@@ -184,7 +178,7 @@
     }
 
     .d-dim-container .drag-container {
-        width: calc(100% - 103px);
+        width: calc(100% - 113px);
         display: flex;
         flex-flow: wrap;
     }
@@ -237,6 +231,6 @@
     }
 
     .dim-bs-form-input {
-        width: 200px;
+        width: 300px;
     }
 </style>

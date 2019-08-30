@@ -103,6 +103,9 @@
         left: 220px;
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
+        padding-left: 10px;
+        padding-right: 10px;
+        box-sizing: border-box;
     }
 
     .d-chart-design-right {

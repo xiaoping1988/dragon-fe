@@ -200,7 +200,7 @@ li {
 
 .d-no-data-tip {
     text-align: center;
-    color: rgba(0,0,0,.65);
+    color: rgba(0,0,0,.38);
     line-height: 20px;
     word-wrap: break-word;
 }

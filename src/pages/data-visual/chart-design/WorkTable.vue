@@ -42,7 +42,9 @@
                     <div class="col-item"
                          :title="col.colName"
                          @click="toggleShowTimeFreq(col)"
-                         draggable="true">
+                         draggable="true"
+                         @dragstart="dragColStart($event, col)"
+                         @dragover="allowDrop($event)">
                         <!--<div class="pre-angle">-->
                             <!--<i v-if="col.dataType === dataTypeObj.date.code" class="fa" :class="[col.showTimeFreq ? 'fa-angle-down' : 'fa-angle-right']"></i>-->
                         <!--</div>-->
@@ -157,6 +159,12 @@
                     col.showTimeFreq = !col.showTimeFreq
                     this.$forceUpdate()
                 }
+            },
+            allowDrop (e) {
+                e.preventDefault()
+            },
+            dragColStart (e, col) {
+                e.dataTransfer.setData('dragingCol', JSON.stringify(col))
             }
         },
         watch: {
