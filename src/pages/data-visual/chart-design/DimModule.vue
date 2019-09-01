@@ -8,6 +8,45 @@
             <DDimDragContainer :data="dimList" @change="changeDimStore" @click-item="openConfig"></DDimDragContainer>
             <div v-if="!hasContrast" class="right-btn" @click="addContrast"><span>添加对比</span></div>
         </div>
+        <!--<DDraggable v-model="dimList">-->
+            <!--<template slot-scope="{item, index}">-->
+                <!--<div class="tag-item" style="margin-top: 5px">-->
+                    <!--<div >-->
+                        <!--<span>{{item.dimConfig.showName}}</span>-->
+                        <!--<span v-if="item.dimConfig.timeFreq">(按{{timeFreqObj[item.dimConfig.timeFreq].name}})</span>-->
+                    <!--</div>-->
+                    <!--<div class="btn">-->
+                        <!--<i class="fa fa-times-circle" title="移除字段"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</template>-->
+        <!--</DDraggable>-->
+        <!--<DDraggable v-model="dimList" style="display: flex">-->
+            <!--<template slot-scope="{item, index}">-->
+                <!--<div class="tag-item" style="margin-top: 5px">-->
+                    <!--<div >-->
+                        <!--<span>{{item.dimConfig.showName}}</span>-->
+                        <!--<span v-if="item.dimConfig.timeFreq">(按{{timeFreqObj[item.dimConfig.timeFreq].name}})</span>-->
+                    <!--</div>-->
+                    <!--<div class="btn">-->
+                        <!--<i class="fa fa-times-circle" title="移除字段"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</template>-->
+        <!--</DDraggable>-->
+        <DraggableContainer v-model="dimList" style="width: 180px">
+            <template slot-scope="{item, index}">
+                <div class="tag-item" style="margin-top: 5px; width: 100%">
+                    <div >
+                        <span>{{item.dimConfig.showName}}</span>
+                        <span v-if="item.dimConfig.timeFreq">(按{{timeFreqObj[item.dimConfig.timeFreq].name}})</span>
+                    </div>
+                    <div class="btn">
+                        <i class="fa fa-times-circle" title="移除字段"></i>
+                    </div>
+                </div>
+            </template>
+        </DraggableContainer>
         <div v-if="hasContrast" class="d-dim-container">
             <div class="label">
                 <span>对比</span>
@@ -67,38 +106,9 @@
                    :visible.sync="batchAddModalVisible"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false"
+                   :show-close="false"
                    width="600px">
-            <el-row  class="d-row">
-                <el-col :span="8">
-                    <el-input suffix-icon="el-icon-search"
-                              size="small"
-                              clearable
-                              v-model.trim="searchColKey"
-                              placeholder="请输入关键字搜索"></el-input>
-                </el-col>
-            </el-row>
-            <el-row v-for="(item, i) in searchedColList" :key="i"  class="d-row">
-                <el-col :span="5">
-                    <el-checkbox v-model="dataTypeChecked[item.code]" @change="(value) => changeDataTypeChecked(value, item)">
-                        <i class="fa d-icon" :class="'fa-' + item.icon"></i><span>{{item.name}}</span>
-                    </el-checkbox>
-                </el-col>
-                <el-col :span="19">
-                    <el-checkbox-group v-model="checkedColList"
-                                       @change="(value) => {changeCheckedCol(value, item)}">
-                        <el-checkbox v-for="(city, j) in item.colList"
-                                     :key="j"
-                                     :label="city.colName">{{city.colLabel}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-col>
-            </el-row>
-            <DSubmitCancel slot="footer"
-                           nohr
-                           size="mini"
-                           @submit="submitBatchAdd"
-                           @cancel="batchAddModalVisible = false"
-                           submitText="确定">
-            </DSubmitCancel>
+            <DBatchAddCol @submit="submitBatchAdd" @cancel="batchAddModalVisible = false"></DBatchAddCol>
         </el-dialog>
     </div>
 </template>
@@ -107,9 +117,11 @@
     import {TimeFreq} from '../constants'
     import DDimDragContainer from './DimDragContainer'
     import {DataType} from '../../../services/data-map/col-manage'
+    import DBatchAddCol from './BatchAddCol'
+    import DraggableContainer from '../../../components/draggable/DraggableContainer'
     export default {
         name: 'DDimModule',
-        components: {DDimDragContainer},
+        components: {DDimDragContainer, DBatchAddCol, DraggableContainer},
         data () {
             return {
                 timeFreqObj: TimeFreq,
@@ -133,16 +145,7 @@
                 }, // 当前正在配置中的维度字段对象
                 activeConfigTab: '',
                 batchAddModalVisible: false, // 批量添加的窗口
-                batchAddTargetType: 0, // 批量添加的容器对象,维度0对比1
-                allColList: [
-                    {colName: 'id', colLabel: '订单ID', dataType: DataType.text.code},
-                    {colName: 'date', colLabel: '创建时间', dataType: DataType.date.code},
-                    {colName: 'amt', colLabel: '订单金额', dataType: DataType.num.code}
-                ], // 所有原始字段
-                searchedColList: [], // 批量添加，搜索出来的字段
-                searchColKey: '', // 搜索关键字
-                checkedColList: [],
-                dataTypeChecked: {}
+                batchAddTargetType: 0 // 批量添加的容器对象,维度0对比1
             }
         },
         methods: {
@@ -151,7 +154,14 @@
             },
             removeContrast () {
                 this.hasContrast = false
+                let update = false
+                if (this.contrastDimList.length) {
+                    update = true
+                }
                 this.contrastDimList = []
+                if (update) {
+                    this.changeDimStore()
+                }
             },
             openConfig (dim) {
                 this.currentConfigDim = dim
@@ -175,121 +185,40 @@
                 } else {
                     this.currentConfigDim.dimConfig.showName = this.currentConfigDim.colLabel
                 }
+                this.changeDimStore()
                 this.configModalVisible = false
             },
             changeDimStore () {
-
+                let store = this.$store
+                this.$store.commit('GeneralChart/updateDimConfig', {
+                    main: this.dimList,
+                    contrast: this.contrastDimList
+                })
             },
             openBatchAdd (batchAddTargetType) {
                 this.batchAddModalVisible = true
                 this.batchAddTargetType = batchAddTargetType
-                this.checkedColList = []
-                this.dataTypeChecked = {}
-                this.searchColKey = ''
-                this.searchColList()
             },
-            submitBatchAdd () {
-                this.checkedColList.forEach(colName => {
-                    let col = this.allColList.filter(c => c.colName === colName)[0]
-                    let tmpCol = JSON.parse(JSON.stringify(col))
-                    tmpCol.dimConfig = {
-                        key: tmpCol.colName + '_' + new Date().getTime(),
-                        showName: tmpCol.colLabel,
+            submitBatchAdd (checkedColList) {
+                checkedColList.forEach(col => {
+                    col.dimConfig = {
+                        key: col.colName + '_' + new Date().getTime(),
+                        showName: col.colLabel,
                         sortType: '0',
-                        timeFreq: tmpCol.dataType === DataType.date.code ? TimeFreq.day.code : ''
+                        timeFreq: col.dataType === DataType.date.code ? TimeFreq.day.code : ''
                     }
                     if (this.batchAddTargetType === 0) { // 维度
-                        this.dimList.push(tmpCol)
+                        this.dimList.push(col)
                     } else { // 对比
-                        this.contrastDimList.push(tmpCol)
+                        this.contrastDimList.push(col)
                     }
                 })
+                this.changeDimStore()
                 this.batchAddModalVisible = false
-            },
-            searchColList () {
-                let dateList = [] // 日期
-                let textList = [] // 文本
-                let numberList = [] // 数值
-                let tmpColList = []
-                if (this.searchColKey) {
-                    tmpColList = this.allColList.filter(c => c.colName.includes(this.searchColKey.toLowerCase()) || c.colLabel.includes(this.searchColKey))
-                } else {
-                    tmpColList = this.allColList
-                }
-                tmpColList.forEach(c => {
-                    if (c.dataType === DataType.date.code) {
-                        dateList.push(c)
-                    } else if (c.dataType === DataType.num.code) {
-                        numberList.push(c)
-                    } else {
-                        textList.push(c)
-                    }
-                })
-                let tmpSearchedColList = []
-                if (dateList.length) {
-                    tmpSearchedColList.push({
-                        code: DataType.date.code,
-                        name: '日期',
-                        icon: DataType.date.icon,
-                        colList: dateList
-                    })
-                }
-                if (textList.length) {
-                    tmpSearchedColList.push({
-                        code: DataType.text.code,
-                        name: '文本',
-                        icon: DataType.text.icon,
-                        colList: textList
-                    })
-                }
-                if (numberList.length) {
-                    tmpSearchedColList.push({
-                        code: DataType.num.code,
-                        name: '数值',
-                        icon: DataType.num.icon,
-                        colList: numberList
-                    })
-                }
-                this.searchedColList = tmpSearchedColList
-            },
-            setDataTypeChecked (dataType) {
-                this.dataTypeChecked[dataType.code] = true
-                for (let i in dataType.colList) {
-                    if (!this.checkedColList.includes(dataType.colList[i].colName)) {
-                        this.dataTypeChecked[dataType.code] = false
-                        break
-                    }
-                }
-            },
-            changeCheckedCol (value, dataType) {
-                this.setDataTypeChecked(dataType)
-                this.$forceUpdate()
-            },
-            changeDataTypeChecked (value, dataType) {
-                if (value) {
-                    dataType.colList.forEach(c => {
-                        if (!this.checkedColList.includes(c.colName)) {
-                            this.checkedColList.push(c.colName)
-                        }
-                    })
-                } else {
-                    let delIndex = []
-                    this.checkedColList.forEach((colName, i) => {
-                        let j = dataType.colList.findIndex(c => c.colName === colName)
-                        if (j >= 0) {
-                            delIndex.push(i)
-                        }
-                    })
-                    delIndex.forEach((d, i) => {
-                        this.checkedColList.splice(d - i, 1)
-                    })
-                }
             }
         },
-        watch: {
-            searchColKey () {
-                this.searchColList()
-            }
+        mounted () {
+            this.dimList = [{"id":47,"tbId":2,"colName":"col_3","colComment":"字段描述信息","colLabel":"创建时间","originalDataType":"DATETIME","dataType":"date","dimConfig":{"key":"col_3_1567243144843","showName":"创建时间","sortType":"0","timeFreq":"day"}},{"id":2,"tbId":2,"colName":"col_1","colComment":"字段描述信息","colLabel":"订单ID","originalDataType":"VARCHAR","dataType":"text","dimConfig":{"key":"col_1_1567243144843","showName":"订单ID","sortType":"0","timeFreq":""}},{"id":25,"tbId":2,"colName":"col_2","colComment":"字段描述信息","colLabel":"订单金额","originalDataType":"BIGINT","dataType":"num","dimConfig":{"key":"col_2_1567243144844","showName":"订单金额","sortType":"0","timeFreq":""}}]
         }
     }
 </script>
@@ -328,43 +257,6 @@
         cursor: pointer;
         width: 55px;
         text-align: center;
-    }
-
-    .drag-container .drag-item {
-        padding: 0px;
-        margin-top: 5px;
-        cursor: pointer;
-    }
-
-    .tag-item {
-        width: fit-content;
-        height: 28px;
-        color: #FFF;
-        background-color: #5182E4;
-        margin-right: 5px;
-        border-top-right-radius:10px;
-        display: flex;
-        line-height: 28px;
-        padding: 0px 8px;
-    }
-
-    .tag-item .btn {
-        width: 18px;
-        text-align: center;
-        line-height: 30px;
-    }
-
-    .tag-item .btn i {
-        font-size: 14px;
-        display: none;
-    }
-
-    .tag-item:hover .btn i {
-        display: inline-block;
-    }
-
-    .tag-item .btn i:hover {
-        color: #cccccc;
     }
 
     .dim-bs-form-label {

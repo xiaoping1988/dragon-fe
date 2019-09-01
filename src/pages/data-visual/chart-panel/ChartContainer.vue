@@ -187,7 +187,7 @@
         methods: {
             handleMeta () {
                 if (this.chart.largeChartType !== LargeChartType.External.code) {
-                    let meta = JSON.parse(this.chart.meta)
+                    let meta = JSON.parse(this.chart.renderMeta)
                     this.chartMeta = meta.chartMeta
                     this.filterMeta = meta.filterMeta ? meta.filterMeta : []
                     if (this.filterMeta.length === 0) {

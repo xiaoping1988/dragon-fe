@@ -318,6 +318,40 @@ i {
     line-height: 28px;
 }
 
-.d-form-item .input {
-    /*flex-grow: 1;*/
+.drag-container .drag-item {
+    padding: 0px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.tag-item {
+    width: fit-content;
+    height: 28px;
+    color: #FFF;
+    background-color: #5182E4;
+    margin-right: 5px;
+    border-top-right-radius:10px;
+    display: flex;
+    line-height: 28px;
+    padding-left: 8px;
+    padding-right: 0px;
+}
+
+.tag-item .btn {
+    width: 22px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.tag-item .btn i {
+    font-size: 14px;
+    display: none;
+}
+
+.tag-item:hover .btn i {
+    display: inline-block;
+}
+
+.tag-item .btn i:hover {
+    color: #cccccc;
 }

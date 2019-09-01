@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
@@ -18,8 +19,9 @@ Mock.bootstrap()
 // }
 
 let app = new Vue({
-  render: h => h(App),
-    router: router
+    render: h => h(App),
+    router: router,
+    store: store
 }).$mount('#app')
 
 export default app

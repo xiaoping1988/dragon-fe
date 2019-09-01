@@ -125,9 +125,13 @@
                     id: this.tbId
                 }).then(res => {
                     this.tbInfo = res.data
+                    this.updateWorkTableStore()
                     this.loading = false
                     this.searchColList()
                 }).catch(this.$handleError)
+            },
+            updateWorkTableStore () {
+                this.$store.commit('GeneralChart/updateWorkTable', this.tbInfo)
             },
             setTbLogicCol () {
 
