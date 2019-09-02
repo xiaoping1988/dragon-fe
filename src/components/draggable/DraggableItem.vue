@@ -37,6 +37,6 @@
     .draggable-item {
         cursor: pointer;
         padding: 0px;
-        margin: 0px;
+        margin: 5px 0px 0px;
     }
 </style>

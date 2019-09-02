@@ -330,11 +330,12 @@ i {
     color: #FFF;
     background-color: #5182E4;
     margin-right: 5px;
-    border-top-right-radius:10px;
+    /*border-top-right-radius:10px;*/
     display: flex;
     line-height: 28px;
     padding-left: 8px;
     padding-right: 0px;
+    box-sizing: border-box;
 }
 
 .tag-item .btn {

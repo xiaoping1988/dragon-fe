@@ -12,7 +12,7 @@
 
 <script>
     import DraggableItem from './DraggableItem'
-    import {overLapArea} from './utils'
+    import {overLapArea, rectArea} from './utils'
     export default {
         name: 'DraggableContainer', // 拖拽容器
         components: {DraggableItem},
@@ -36,9 +36,7 @@
                     mousemove: 'handleMove',
                     mouseup: 'handleUp'
                 },
-                activeNode: null, // 当前正在拖动的element对象
-                activeNodeRect: null, // 当前正在拖动的element对象矩形
-                activeNodeRectArea: 0 // 当前正在拖动的element对象矩形面积
+                activeNode: null // 当前正在拖动的element对象
             }
         },
         methods: {
@@ -59,8 +57,6 @@
             initHelper () { //
                 this.helper = this.activeNode.cloneNode(true)
                 let nodeRect = this.activeNode.getBoundingClientRect()
-                this.activeNodeRect = nodeRect
-                this.activeNodeRectArea = nodeRect.width * nodeRect.height
                 this.helper.style.position = 'fixed'
                 this.helper.style.top = nodeRect.top + 'px'
                 this.helper.style.left = nodeRect.left + 'px'
@@ -129,23 +125,31 @@
                 let maxArea = 0
                 let targetPreIndex = -1
                 for (let i = 0; i < this.itemRefs.length; i++) {
+                    let nodeRect
                     if (this.itemRefs[i].sortableInfo.oldIndex === this.activeNode.sortableInfo.oldIndex) {
-                        continue
+                        nodeRect = this.placeholder.getBoundingClientRect()
+                    } else {
+                        nodeRect = this.itemRefs[i].getBoundingClientRect()
                     }
-                    let nodeRect = this.itemRefs[i].getBoundingClientRect()
-                    let activeNodeRect = this.activeNode.getBoundingClientRect()
-                    let area = overLapArea(activeNodeRect, nodeRect)
-                    if (area > 0) {
-                        if (area > maxArea) {
-                            maxArea = area
+                    let activeNodeRect = this.helper.getBoundingClientRect()
+                    let joinArea = overLapArea(activeNodeRect, nodeRect)
+                    if (joinArea > 0) {
+                        let targetRectArea = rectArea(nodeRect)
+                        console.log('targetRectArea:' + targetRectArea)
+                        console.log('joinArea:' + joinArea)
+                        if (targetRectArea/joinArea < 2) {
                             targetPreIndex = i
                         }
                     }
                 }
-                console.log('tttt: ' + targetPreIndex)
                 if (targetPreIndex >= 0) {
+                    console.log('ttt:' + targetPreIndex)
                     this.containerRef.removeChild(this.placeholder)
-                    this.containerRef.insertBefore(this.placeholder, this.itemRefs[targetPreIndex])
+                    if (targetPreIndex === this.itemRefs.length - 1) { // 最后一个
+                        this.containerRef.appendChild(this.placeholder)
+                    } else {
+                        this.containerRef.insertBefore(this.placeholder, this.itemRefs[targetPreIndex])
+                    }
                 }
             },
             handleUp (e) {

@@ -201,7 +201,7 @@ export default {
 
         Mock.post(mock, ApiUrl.queryData.name, ApiUrl.queryData.api, function (params) {
             let chart = ChartList.filter(c => c.id === Number(params.id))[0]
-            let meta = JSON.parse(chart.meta)
+            let meta = JSON.parse(chart.renderMeta)
             let res = mockChartData(meta.chartMeta)
             if (params.sortFieldKey) {
                 let isStr = false

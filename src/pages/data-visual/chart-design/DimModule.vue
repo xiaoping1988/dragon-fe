@@ -36,7 +36,7 @@
         <!--</DDraggable>-->
         <DraggableContainer v-model="dimList" style="width: 180px">
             <template slot-scope="{item, index}">
-                <div class="tag-item" style="margin-top: 5px; width: 100%">
+                <div class="tag-item" style="width: 100%">
                     <div >
                         <span>{{item.dimConfig.showName}}</span>
                         <span v-if="item.dimConfig.timeFreq">(按{{timeFreqObj[item.dimConfig.timeFreq].name}})</span>
