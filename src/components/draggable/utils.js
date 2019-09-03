@@ -1,22 +1,21 @@
 export const overLapArea = function (selfRect, targetRect) {
-    let leftTopX,leftTopY // 重叠区域的左上角点
-    leftTopX = selfRect.left >= targetRect.left ? selfRect.left : targetRect.left
-    leftTopY = selfRect.top <= targetRect.top ? selfRect.top : targetRect.top
-    // console.log('self左上角点,x:' + selfRect.left + ',y:' + selfRect.top)
-    // console.log('target左上角点,x:' + targetRect.left + ',y:' + targetRect.top)
-    // console.log('左上角,x:' + leftTopX + ',y:' + leftTopY)
-    let rightBottomX,rightBottomY // 重叠区域的右下角点
-    rightBottomX = selfRect.left + selfRect.width <= targetRect.left + targetRect.width ? selfRect.left  + selfRect.width : targetRect.left + targetRect.width
-    rightBottomY = selfRect.top + selfRect.height >= targetRect.top + targetRect.height ? selfRect.top + selfRect.height : targetRect.top + targetRect.height
-    // console.log('self右下角点,x:' + (selfRect.left + selfRect.width) + ',y:' + (selfRect.top + selfRect.height))
-    // console.log('target右下角点,x:' + (targetRect.left + targetRect.width) + ',y:' + (targetRect.top + targetRect.height))
-    // console.log('右下角,x:' + rightBottomX + ',y:' + rightBottomY)
-    // console.log('=====================================================')
 
-    if(rightBottomX > leftTopX && rightBottomY > leftTopY){
-        return (rightBottomY - leftTopY) * (rightBottomX - leftTopX)
-    }else{
+    let x11 = selfRect.left
+    let x12 = selfRect.right
+    let y11 = selfRect.top
+    let y12 = selfRect.bottom
+
+    let x21 = targetRect.left
+    let x22 = targetRect.right
+    let y21 = targetRect.top
+    let y22 = targetRect.bottom
+
+    if (y22 <= y11 || y21 >= y12 || x22 <= x11 || x21 >= x12) { // 没有交集
         return 0
+    } else {
+        let width = Math.min(x12, x22) - Math.max(x11, x21)
+        let height = Math.min(y12, y22) - Math.max(y11, y21)
+        return width * height
     }
 }
 

@@ -36,7 +36,8 @@
                     mousemove: 'handleMove',
                     mouseup: 'handleUp'
                 },
-                activeNode: null // 当前正在拖动的element对象
+                activeNode: null, // 当前正在拖动的element对象
+                newIndex: 0
             }
         },
         methods: {
@@ -122,8 +123,9 @@
                 this.handleMovePlaceholder(e)
             },
             handleMovePlaceholder (e) { // 移动占位
-                let maxArea = 0
                 let targetPreIndex = -1
+                let newIndex = this.activeNode.sortableInfo.oldIndex
+                let lastJoinArea = 0
                 for (let i = 0; i < this.itemRefs.length; i++) {
                     let nodeRect
                     if (this.itemRefs[i].sortableInfo.oldIndex === this.activeNode.sortableInfo.oldIndex) {
@@ -133,6 +135,10 @@
                     }
                     let activeNodeRect = this.helper.getBoundingClientRect()
                     let joinArea = overLapArea(activeNodeRect, nodeRect)
+                    if (joinArea > 0) {
+
+                    }
+
                     if (joinArea > 0) {
                         let targetRectArea = rectArea(nodeRect)
                         console.log('targetRectArea:' + targetRectArea)
@@ -150,6 +156,7 @@
                     } else {
                         this.containerRef.insertBefore(this.placeholder, this.itemRefs[targetPreIndex])
                     }
+                    this.newIndex = targetPreIndex
                 }
             },
             handleUp (e) {
@@ -161,7 +168,14 @@
                 this.removePlaceholder()
             },
             handleSortEnd (e) {
-
+                this.containerRef.removeChild(this.activeNode)
+                this.containerRef.insertBefore(this.activeNode, this.itemRefs[this.newIndex])
+                this.activeNode.style.display = 'block'
+                this.itemRefs.splice(this.newIndex, 1, this.activeNode)
+                this.value.splice(0, this.itemRefs.length)
+                this.itemRefs.forEach((el, index) => {
+                    this.value.push(el.sortableInfo.item)
+                })
             }
         },
         mounted () {
