@@ -1,20 +1,20 @@
 <template>
-    <div class="d-chart-dim">
+    <div class="d-chart-measure">
         <div class="d-col-container">
             <div class="label">
-                <span>维度</span>
+                <span>数值</span>
                 <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(0)"></i>
             </div>
-            <DDimDragContainer v-model="dimList" @change="changeDimStore" @click-item="openConfig"></DDimDragContainer>
-            <div v-if="!hasContrast" class="right-btn" @click="addContrast"><span>添加对比</span></div>
+            <DMeasureDragContainer v-model="measureList" @change="changeMeasureStore" @click-item="openConfig"></DMeasureDragContainer>
+            <div v-if="!hasSecond" class="right-btn" @click="addSecond"><span>添加次轴</span></div>
         </div>
-        <div v-if="hasContrast" class="d-col-container">
+        <div v-if="hasSecond" class="d-col-container">
             <div class="label">
                 <span>对比</span>
                 <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(1)"></i>
             </div>
-            <DDimDragContainer v-model="contrastDimList" @change="changeDimStore" @click-item="openConfig"></DDimDragContainer>
-            <div class="right-btn" @click="removeContrast"><span>移除对比</span></div>
+            <DMeasureDragContainer v-model="contrastMeasureList" @change="changeMeasureStore" @click-item="openConfig"></DMeasureDragContainer>
+            <div class="right-btn" @click="removeSecond"><span>移除次轴</span></div>
         </div>
         <el-dialog :visible.sync="configModalVisible"
                    :close-on-click-modal="false"
@@ -22,7 +22,7 @@
                    width="400px">
             <div slot="title">
                  <span>
-                   <span style="color: #1c2438;font-weight: 700;">维度配置:</span>
+                   <span style="color: #1c2438;font-weight: 700;">指标配置:</span>
                    <span style="color: #be3330">{{currentConfigCol.colConfig.showName}}</span>
                    <span style="color: #1c2438;font-weight: 700;margin-left: 10px">原始名称:</span>
                    <span style="color: #be3330">{{currentConfigCol.colLabel}}</span>
@@ -63,7 +63,7 @@
                            submitText="确定">
             </DSubmitCancel>
         </el-dialog>
-        <el-dialog :title="'批量添加' + (batchAddTargetType === 0 ? '维度' : '对比') + '字段'"
+        <el-dialog :title="'批量添加指标字段'"
                    :visible.sync="batchAddModalVisible"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false"
@@ -75,20 +75,18 @@
 </template>
 
 <script>
-    import {TimeFreq} from '../constants'
-    import DDimDragContainer from './DimDragContainer'
+    import {AggFunc} from '../constants'
+    import DMeasureDragContainer from './MeasureDragContainer'
     import {DataType} from '../../../services/data-map/col-manage'
     import DBatchAddCol from './BatchAddCol'
     export default {
-        name: 'DDimModule',
-        components: {DDimDragContainer, DBatchAddCol},
+        name: 'DMeasureModule',
+        components: {DMeasureDragContainer, DBatchAddCol},
         data () {
             return {
-                timeFreqObj: TimeFreq,
-                timeFreqList: Object.values(TimeFreq),
-                dimList: [], // 维度集合
-                hasContrast: false, // 是否添加对比
-                contrastDimList: [], // 对比维度
+                measureList: [], // 维度集合
+                hasSecond: false, // 是否添加对比
+                contrastMeasureList: [], // 对比维度
                 configModalVisible: false, // 配置框可见
                 configForm: { // 维度配置表单数据
                     timeFreq: '',
@@ -109,18 +107,18 @@
             }
         },
         methods: {
-            addContrast () {
-                this.hasContrast = true
+            addSecond () {
+                this.hasSecond = true
             },
-            removeContrast () {
-                this.hasContrast = false
+            removeSecond () {
+                this.hasSecond = false
                 let update = false
-                if (this.contrastDimList.length) {
+                if (this.contrastMeasureList.length) {
                     update = true
                 }
-                this.contrastDimList = []
+                this.contrastMeasureList = []
                 if (update) {
-                    this.changeDimStore()
+                    this.changeMeasureStore()
                 }
             },
             openConfig (dim) {
@@ -145,14 +143,14 @@
                 } else {
                     this.currentConfigCol.colConfig.showName = this.currentConfigCol.colLabel
                 }
-                this.changeDimStore()
+                this.changeMeasureStore()
                 this.configModalVisible = false
             },
-            changeDimStore () {
+            changeMeasureStore () {
                 let store = this.$store
-                this.$store.commit('GeneralChart/updateDimConfig', {
-                    main: this.dimList,
-                    contrast: this.contrastDimList
+                this.$store.commit('GeneralChart/updateMeasureConfig', {
+                    main: this.measureList,
+                    contrast: this.contrastMeasureList
                 })
             },
             openBatchAdd (batchAddTargetType) {
@@ -165,15 +163,18 @@
                         key: col.colName + '_' + new Date().getTime(),
                         showName: col.colLabel,
                         sortType: '0',
-                        timeFreq: col.dataType === DataType.date.code ? TimeFreq.day.code : ''
+                        aggFunction: col.dataType === DataType.num.code ? AggFunc.sum.code : AggFunc.count.code,
+                        unit: '', // 单位
+                        divisor: 1, // 除数
+                        showType: 'num' // 显示类型,text 文本 num 数字 amt 金额 rate 百分比
                     }
-                    if (this.batchAddTargetType === 0) { // 维度
-                        this.dimList.push(col)
-                    } else { // 对比
-                        this.contrastDimList.push(col)
+                    if (this.batchAddTargetType === 0) { // 主轴
+                        this.measureList.push(col)
+                    } else { // 次轴
+                        this.contrastMeasureList.push(col)
                     }
                 })
-                this.changeDimStore()
+                this.changeMeasureStore()
                 this.batchAddModalVisible = false
             }
         },
@@ -184,11 +185,5 @@
 </script>
 
 <style>
-    .dim-bs-form-label {
-        width: 60px;
-    }
 
-    .dim-bs-form-input {
-        width: 300px;
-    }
 </style>

@@ -318,10 +318,39 @@ i {
     line-height: 28px;
 }
 
-.drag-container .drag-item {
-    padding: 0px;
-    margin-top: 5px;
+.d-col-container {
+    line-height: 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-flow: row;
+    padding: 5px 5px;
+}
+
+.d-col-container .label {
+    width: 58px;
+}
+
+.d-col-container .label i {
+    margin-left: 10px;
+    margin-right: 10px;
     cursor: pointer;
+}
+
+.d-col-container .right-btn,
+.d-col-container .label i:hover {
+    color: #3a8ee6;
+}
+
+.d-col-container .d-drag-container {
+    width: calc(100% - 113px);
+    display: flex;
+    flex-flow: wrap;
+}
+
+.d-col-container .right-btn {
+    cursor: pointer;
+    width: 55px;
+    text-align: center;
 }
 
 .tag-item {

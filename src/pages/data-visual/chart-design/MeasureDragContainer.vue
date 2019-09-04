@@ -1,5 +1,5 @@
 <template>
-    <DDraggableContainer v-model="dimList"
+    <DDraggableContainer v-model="measureList"
                         horizontal
                         disabled
                          noDataText="从左侧字段列表拖拽字段到这里"
@@ -9,7 +9,7 @@
             <div class="tag-item" v-if="item">
                 <div @click="openConfig(item)">
                     <span>{{item.colConfig.showName}}</span>
-                    <span v-if="item.colConfig.timeFreq">(按{{timeFreqObj[item.colConfig.timeFreq].name}})</span>
+                    <span>({{aggFuncObj[item.colConfig.aggFunction].name}})</span>
                 </div>
                 <div class="btn">
                     <i class="fa fa-times-circle" title="移除字段" @click="removeCol(index)"></i>
@@ -20,10 +20,10 @@
 </template>
 
 <script>
-    import {TimeFreq} from '../constants'
+    import {AggFunc} from '../constants'
     import {DataType} from '../../../services/data-map/col-manage'
     export default {
-        name: 'DDimDragContainer',
+        name: 'DMeasureDragContainer',
         props: {
             value: {
                 type: Array,
@@ -34,13 +34,13 @@
         },
         data () {
             return {
-                dimList: this.value,
-                timeFreqObj: TimeFreq
+                measureList: this.value,
+                aggFuncObj: AggFunc
             }
         },
         watch: {
             value () {
-                this.dimList = this.value
+                this.measureList = this.value
             }
         },
         methods: {
@@ -48,16 +48,16 @@
                 this.$emit('click-item', item)
             },
             removeCol (index) {
-                this.dimList.splice(index, 1)
-                this.$emit('change', this.dimList)
+                this.measureList.splice(index, 1)
+                this.$emit('change', this.measureList)
             },
             allowDrop (e) {
                 e.preventDefault()
             },
             dragDropCol (e) { // 从左侧字段列表拖入字段释放
                 let dragingCol = this.getDragingCol(e)
-                this.dimList.push(dragingCol)
-                this.$emit('change', this.dimList)
+                this.measureList.push(dragingCol)
+                this.$emit('change', this.measureList)
             },
             getDragingCol (e) {
                 let dragingCol = e.dataTransfer.getData('dragingCol')
@@ -66,7 +66,10 @@
                     key: dragingCol.colName + '_' + new Date().getTime(),
                     showName: dragingCol.colLabel,
                     sortType: '0',
-                    timeFreq: dragingCol.dataType === DataType.date.code ? TimeFreq.day.code : ''
+                    aggFunction: dragingCol.dataType === DataType.num.code ? AggFunc.sum.code : AggFunc.count.code,
+                    unit: '', // 单位
+                    divisor: 1, // 除数
+                    showType: 'num' // 显示类型,text 文本 num 数字 amt 金额 rate 百分比
                 }
                 return dragingCol
             }

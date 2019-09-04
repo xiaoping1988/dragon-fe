@@ -425,6 +425,42 @@ export const FilterControlType = {
         name: '文本框筛选'
     }
 }
+/**
+ * 聚合函数
+ * @type {{min: {code: string, name: string, pattern: string}, avg: {code: string, name: string, pattern: string}, max: {code: string, name: string, pattern: string}, count_distinct: {code: string, name: string, pattern: string}, count: {code: string, name: string, pattern: string}, sum: {code: string, name: string, pattern: string}}}
+ */
+export const AggFunc = {
+    sum: {
+        code: 'sum',
+        name: '求和',
+        pattern: 'sum({})'
+    },
+    count: {
+        code: 'count',
+        name: '计数',
+        pattern: 'count({})'
+    },
+    count_distinct: {
+        code: 'count_distinct',
+        name: '去重计数',
+        pattern: 'count(distinct {})'
+    },
+    max: {
+        code: 'max',
+        name: '最大值',
+        pattern: 'max({})'
+    },
+    min: {
+        code: 'min',
+        name: '最小值',
+        pattern: 'min({})'
+    },
+    avg: {
+        code: 'avg',
+        name: '平均值',
+        pattern: 'avg({})'
+    }
+}
 
 export const proviceCitys = [
     {

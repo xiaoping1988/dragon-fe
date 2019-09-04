@@ -1,5 +1,8 @@
 <template>
-    <ul class="draggable-container">
+    <ul class="draggable-container"
+        :style="containerStyle"
+        @dragover="allowDrop($event)"
+        @drop="drop($event)">
         <DraggableItem v-for="(item, index) in value"
                        :key="index"
                        :index="index"
@@ -7,6 +10,9 @@
                        :itemRefs="itemRefs">
             <slot :item="item" :index="index"></slot>
         </DraggableItem>
+        <li v-if="!value.length" class="no-data-tip">
+            {{noDataText}}
+        </li>
     </ul>
 </template>
 
@@ -20,7 +26,10 @@
             value: { // 拖拽对象数组
                 type: Array,
                 required: true
-            }
+            },
+            disabled: Boolean,
+            horizontal: Boolean,
+            noDataText: String
         },
         data () {
             return {
@@ -40,10 +49,23 @@
                 newIndex: 0
             }
         },
+        computed: {
+            containerStyle () {
+                if (this.horizontal) {
+                    return {
+                        display: 'flex',
+                        'flex-wrap': 'wrap'
+                    }
+                }
+                return {}
+            }
+        },
         methods: {
             init () {
                 this.containerRef = this.$el
-                this.addEvents()
+                if (!this.disabled) {
+                    this.addEvents()
+                }
             },
             addEvents () {
                 Object.keys(this.events).forEach(eventName => {
@@ -176,6 +198,12 @@
                 this.itemRefs.forEach((el, index) => {
                     this.value.push(el.sortableInfo.item)
                 })
+            },
+            allowDrop (e) {
+                e.preventDefault()
+            },
+            drop (e) {
+                this.$emit('drop', e)
             }
         },
         mounted () {
@@ -186,3 +214,13 @@
         }
     }
 </script>
+
+<style>
+    .no-data-tip {
+        width: 100%;
+        text-align: center;
+        color: rgba(0,0,0,.38);
+        line-height: 20px;
+        word-wrap: break-word;
+    }
+</style>
