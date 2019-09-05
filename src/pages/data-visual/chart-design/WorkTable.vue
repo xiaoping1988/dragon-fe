@@ -64,6 +64,20 @@
                         <!--</li>-->
                     <!--</ul>-->
                 </li>
+                <li v-for="(col, index) in searchedLogicColList" :key="index">
+                    <div class="col-item"
+                         :title="col.colName"
+                         draggable="true"
+                         @dragstart="dragColStart($event, col)"
+                         @dragover="allowDrop($event)">
+                        <div class="pre-icon new-col">
+                            <i class="fa" :class="'fa-' + dataTypeObj[col.dataType].icon"></i>
+                        </div>
+                        <div class="col-label d-ellipsis">
+                            {{col.colLabel}}
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
         <DLoading :loading="loading"></DLoading>
@@ -72,7 +86,7 @@
                 title="预览数据"
                 top="30px"
                 width="70%">
-            <DPreviewTable v-if="showPreviewed" :tbId="tbId"></DPreviewTable>
+            <DPreviewTable v-if="showPreviewModal" :tbId="this.currentTbId"></DPreviewTable>
         </el-dialog>
         <el-dialog
                 :visible.sync="showExchangeModal"
@@ -101,6 +115,7 @@
         data () {
             return {
                 loading: false,
+                currentTbId: this.tbId,
                 timeFreqList: Object.values(TimeFreq),
                 dataTypeObj: DataType,
                 showPreviewModal: false, // 显示预览数据弹窗
@@ -122,7 +137,7 @@
             setTbInfo () {
                 this.loading = true
                 getTb({
-                    id: this.tbId
+                    id: this.currentTbId
                 }).then(res => {
                     this.tbInfo = res.data
                     this.updateWorkTableStore()
@@ -134,7 +149,18 @@
                 this.$store.commit('GeneralChart/updateWorkTable', this.tbInfo)
             },
             setTbLogicCol () {
-
+                this.logicColList = [
+                    {
+                        colId: 1,
+                        colName: 'newcol',
+                        colLabel: '北京订单金额',
+                        dataType: DataType.num.code,
+                        formula: 'sum(col_2)',
+                        formulaShow: 'sum([订单金额])',
+                        isNewCol: true
+                    }
+                ]
+                this.searchLogicColList()
             },
             searchColList () {
                 if (this.colKeyword === '') {
@@ -144,7 +170,11 @@
                 }
             },
             searchLogicColList () {
-
+                if (this.colKeyword === '') {
+                    this.searchedLogicColList = this.logicColList
+                } else {
+                    this.searchedLogicColList = this.logicColList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
+                }
             },
             openPreviewTable () {
                 this.showPreviewModal = true
@@ -156,7 +186,7 @@
             },
             exchangeTable (table) {
                 this.showExchangeModal = false
-                this.tbId = table.id
+                this.currentTbId = table.id
             },
             toggleShowTimeFreq (col) {
                 if (col.dataType === DataType.date.code) {
@@ -173,7 +203,10 @@
         },
         watch: {
             tbId () {
-                if (this.tbId) {
+                this.currentTbId = this.tbId
+            },
+            currentTbId () {
+                if (this.currentTbId) {
                     this.initData()
                 }
             },
@@ -310,6 +343,10 @@
     .d-work-table .column .col-list .col-item .pre-icon {
         width: 18px;
         color: #3a8ee6;
+    }
+
+    .d-work-table .column .col-list .col-item .new-col {
+        color: #e4b117!important;
     }
 
     .d-work-table .column .col-list .col-item .col-label {

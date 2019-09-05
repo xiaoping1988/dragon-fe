@@ -9,7 +9,7 @@
             <div class="tag-item" v-if="item">
                 <div @click="openConfig(item)">
                     <span>{{item.colConfig.showName}}</span>
-                    <span>({{aggFuncObj[item.colConfig.aggFunction].name}})</span>
+                    <span>({{item.isNewCol ? '计算字段' : aggFuncObj[item.colConfig.aggFunction].name}})</span>
                 </div>
                 <div class="btn">
                     <i class="fa fa-times-circle" title="移除字段" @click="removeCol(index)"></i>
@@ -22,6 +22,7 @@
 <script>
     import {AggFunc} from '../constants'
     import {DataType} from '../../../services/data-map/col-manage'
+    import {getMeasureColCofig} from './utils'
     export default {
         name: 'DMeasureDragContainer',
         props: {
@@ -62,15 +63,7 @@
             getDragingCol (e) {
                 let dragingCol = e.dataTransfer.getData('dragingCol')
                 dragingCol = JSON.parse(dragingCol)
-                dragingCol.colConfig = {
-                    key: dragingCol.colName + '_' + new Date().getTime(),
-                    showName: dragingCol.colLabel,
-                    sortType: '0',
-                    aggFunction: dragingCol.dataType === DataType.num.code ? AggFunc.sum.code : AggFunc.count.code,
-                    unit: '', // 单位
-                    divisor: 1, // 除数
-                    showType: 'num' // 显示类型,text 文本 num 数字 amt 金额 rate 百分比
-                }
+                dragingCol.colConfig = getMeasureColCofig(dragingCol)
                 return dragingCol
             }
         }

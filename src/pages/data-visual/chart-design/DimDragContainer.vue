@@ -22,6 +22,7 @@
 <script>
     import {TimeFreq} from '../constants'
     import {DataType} from '../../../services/data-map/col-manage'
+    import {getDimColCofig} from './utils'
     export default {
         name: 'DDimDragContainer',
         props: {
@@ -62,12 +63,7 @@
             getDragingCol (e) {
                 let dragingCol = e.dataTransfer.getData('dragingCol')
                 dragingCol = JSON.parse(dragingCol)
-                dragingCol.colConfig = {
-                    key: dragingCol.colName + '_' + new Date().getTime(),
-                    showName: dragingCol.colLabel,
-                    sortType: '0',
-                    timeFreq: dragingCol.dataType === DataType.date.code ? TimeFreq.day.code : ''
-                }
+                dragingCol.colConfig = getDimColCofig(dragingCol)
                 return dragingCol
             }
         }

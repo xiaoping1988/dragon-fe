@@ -38,9 +38,9 @@
                 </el-tab-pane>
                 <el-tab-pane label="字段设置" name="bs">
                     <el-row class="d-row d-form-item">
-                        <div class="dim-bs-form-label"><span>字段别名</span></div>
+                        <div class="dim-bs-form-label"><span>显示名称</span></div>
                         <div class="dim-bs-form-input">
-                            <el-input size="mini" v-model="configForm.showName"></el-input>
+                            <el-input size="mini" v-model="configForm.showName" :placeholder="currentConfigCol.colLabel"></el-input>
                         </div>
                     </el-row>
                     <el-row class="d-row d-form-item">
@@ -77,8 +77,8 @@
 <script>
     import {TimeFreq} from '../constants'
     import DDimDragContainer from './DimDragContainer'
-    import {DataType} from '../../../services/data-map/col-manage'
     import DBatchAddCol from './BatchAddCol'
+    import {getDimColCofig} from './utils'
     export default {
         name: 'DDimModule',
         components: {DDimDragContainer, DBatchAddCol},
@@ -149,10 +149,13 @@
                 this.configModalVisible = false
             },
             changeDimStore () {
-                let store = this.$store
                 this.$store.commit('GeneralChart/updateDimConfig', {
-                    main: this.dimList,
-                    contrast: this.contrastDimList
+                    main: {
+                        colList: this.dimList
+                    },
+                    contrast: {
+                        colList: this.contrastDimList
+                    }
                 })
             },
             openBatchAdd (batchAddTargetType) {
@@ -161,12 +164,7 @@
             },
             submitBatchAdd (checkedColList) {
                 checkedColList.forEach(col => {
-                    col.colConfig = {
-                        key: col.colName + '_' + new Date().getTime(),
-                        showName: col.colLabel,
-                        sortType: '0',
-                        timeFreq: col.dataType === DataType.date.code ? TimeFreq.day.code : ''
-                    }
+                    col.colConfig = getDimColCofig(col)
                     if (this.batchAddTargetType === 0) { // 维度
                         this.dimList.push(col)
                     } else { // 对比
@@ -186,6 +184,7 @@
 <style>
     .dim-bs-form-label {
         width: 60px;
+        font-weight: 700;
     }
 
     .dim-bs-form-input {

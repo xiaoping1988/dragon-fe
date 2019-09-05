@@ -74,6 +74,12 @@
                 }).catch(this.$handleError)
             }
         },
+        watch: {
+            tbId () {
+                this.previewData = null
+                this.preview()
+            }
+        },
         mounted () {
             this.preview()
         }
