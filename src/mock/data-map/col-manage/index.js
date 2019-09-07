@@ -79,6 +79,33 @@ export let ColList = [
     {id: 72, tbId: 23, colName: 'col_8', colComment: '字段描述信息', colLabel: '年', originalDataType: 'VARCHAR', dataType: DataType.text_year.code}
 ]
 
+export let LogicColList = [
+    {id: 1, tbId: 1, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 2, tbId: 2, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 3, tbId: 3, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 4, tbId: 4, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 5, tbId: 5, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 6, tbId: 6, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 7, tbId: 7, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 8, tbId: 8, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 9, tbId: 9, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 10, tbId: 10, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 11, tbId: 11, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 12, tbId: 12, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 13, tbId: 13, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 14, tbId: 14, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 15, tbId: 15, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 16, tbId: 16, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 17, tbId: 17, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 18, tbId: 18, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 19, tbId: 19, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 20, tbId: 20, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 21, tbId: 21, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 22, tbId: 22, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 23, tbId: 23, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'},
+    {id: 24, tbId: 24, colName: 'newcol', colLabel: '北京订单金额', dataType: DataType.num.code, formula: 'sum(col_2)', formulaShow: 'sum([订单金额])'}
+]
+
 export default {
     bootstrap (mock) {
         Mock.post(mock, ApiUrl.listTbCol.name, ApiUrl.listTbCol.api, function (params) {
@@ -88,7 +115,16 @@ export default {
 
         Mock.post(mock, ApiUrl.listTbLogicCol.name, ApiUrl.listTbLogicCol.api, function (params) {
             // let res = ColList.filter(c => c.tbId === Number(params.tbId))
-            return []
+            return [
+                {
+                    id: 1,
+                    colName: 'newcol',
+                    colLabel: '北京订单金额',
+                    dataType: DataType.num.code,
+                    formula: 'sum(col_2)',
+                    formulaShow: 'sum([订单金额])'
+                }
+            ]
         })
     }
 }

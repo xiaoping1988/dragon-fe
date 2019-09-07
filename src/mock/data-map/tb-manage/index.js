@@ -1,7 +1,7 @@
 import Mock from '@/mock'
 import DateUtils from '../../../utils/dateUtils'
 import {pageSearch} from '../../../utils/assist'
-import {ColList} from '../col-manage'
+import {ColList, LogicColList} from '../col-manage'
 import {DbList} from '../db-manage'
 import {DsList, DsOwnerList} from '../ds-manage'
 import {ApiUrl} from '../../../services/data-map/tb-manage'
@@ -144,6 +144,7 @@ export default {
             let tb = TbList.filter(t => t.id === Number(params.id))[0]
             let res = JSON.parse(JSON.stringify(tb))
             res.colList = ColList.filter(c => c.tbId === res.id)
+            res.logicColList = LogicColList.filter(c => c.tbId === res.id)
             res.lastDataModifiedTime = DateUtils.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss')
             let db = DbList.filter(d => d.id === res.dbId)[0]
             res.dbName = db.dbName

@@ -62,4 +62,4 @@ export const DataType = {
 }
 
 export const listTbCol = (params) => {return post(ApiUrl.listTbCol.api, params)}
-export const listTbColAndLogic = (params) => {return post(ApiUrl.listTbColAndLogic.api, params)}
+export const listTbLogicCol = (params) => {return post(ApiUrl.listTbLogicCol.api, params)}

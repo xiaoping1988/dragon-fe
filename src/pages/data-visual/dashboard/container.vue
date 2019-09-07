@@ -1,5 +1,5 @@
 <template>
-    <div class="d-dash-container">
+    <div class="d-dash-container" :class="{'d-dash-full-screen': fullScreen}">
         <div class="head">
             <h2 class="title">{{dash.name}}</h2>
             <div class="btn">
@@ -12,8 +12,11 @@
                 <el-button type="text" size="mini" v-if="dash.editAuth">
                     <i class="fa fa-bookmark-o d-icon"></i>添加页签
                 </el-button>
-                <el-button type="text" size="mini">
+                <el-button v-if="!fullScreen" type="text" size="mini" @click="toggleFullScreen">
                     <i class="fa fa-expand d-icon"></i>全屏
+                </el-button>
+                <el-button v-else type="text" size="mini" @click="toggleFullScreen">
+                    <i class="fa fa-compress d-icon"></i>退出全屏
                 </el-button>
                 <el-button type="text" size="mini" v-if="dash.editAuth">
                     <i class="fa fa-filter d-icon"></i>全局筛选
@@ -112,7 +115,8 @@
                     name: '',
                     tagList: [],
                     remark: ''
-                }
+                },
+                fullScreen: false // 是否全屏
             }
         },
         computed: {
@@ -198,6 +202,10 @@
                     this.showAddChartModal = false
                     this.renderDash()
                 }).catch(this.$handleError)
+            },
+            toggleFullScreen () {
+                this.fullScreen = !this.fullScreen
+                this.setContainerWidth()
             }
         },
         watch: {
@@ -224,6 +232,14 @@
         height: 100%;
         position: relative;
         box-sizing: border-box;
+        background: #f0f2f5;
+    }
+
+    .d-dash-full-screen {
+        position: fixed!important;
+        top: 0px;
+        left: 0px;
+        z-index: 1000;
     }
 
     .d-dash-container .head {

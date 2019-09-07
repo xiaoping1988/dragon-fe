@@ -22,9 +22,6 @@ export const getMeasureColCofig = function (orginalCol) {
         showType: ShowType.num.code, // 显示类型,text 文本 num 数字 amt 金额 rate 百分比
         THB: [], // 同环比
         THBValueType: '', // 同环比的数值类型
-        THBTimeCol: {
-            type: '',
-            colName: ''
-        } // 同环比基准日期字段
+        THBTimeCol: '' // 同环比基准日期字段
     }
 }

@@ -132,7 +132,6 @@
         methods: {
             initData () {
                 this.setTbInfo()
-                this.setTbLogicCol()
             },
             setTbInfo () {
                 this.loading = true
@@ -140,6 +139,7 @@
                     id: this.currentTbId
                 }).then(res => {
                     this.tbInfo = res.data
+                    this.tbInfo.logicColList.forEach(c => c.isNewCol = true)
                     this.updateWorkTableStore()
                     this.loading = false
                     this.searchColList()
@@ -148,32 +148,13 @@
             updateWorkTableStore () {
                 this.$store.commit('GeneralChart/updateWorkTable', this.tbInfo)
             },
-            setTbLogicCol () {
-                this.logicColList = [
-                    {
-                        colId: 1,
-                        colName: 'newcol',
-                        colLabel: '北京订单金额',
-                        dataType: DataType.num.code,
-                        formula: 'sum(col_2)',
-                        formulaShow: 'sum([订单金额])',
-                        isNewCol: true
-                    }
-                ]
-                this.searchLogicColList()
-            },
             searchColList () {
                 if (this.colKeyword === '') {
                     this.searchedColList = this.tbInfo.colList
+                    this.searchedLogicColList = this.tbInfo.logicColList
                 } else {
                     this.searchedColList = this.tbInfo.colList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
-                }
-            },
-            searchLogicColList () {
-                if (this.colKeyword === '') {
-                    this.searchedLogicColList = this.logicColList
-                } else {
-                    this.searchedLogicColList = this.logicColList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
+                    this.searchedLogicColList = this.tbInfo.logicColList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
                 }
             },
             openPreviewTable () {
@@ -212,7 +193,6 @@
             },
             colKeyword () {
                 this.searchColList()
-                this.searchLogicColList()
             }
         }
     }

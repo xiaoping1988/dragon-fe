@@ -5,7 +5,19 @@
                 <span>数值</span>
                 <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(0)"></i>
             </div>
-            <DMeasureDragContainer v-model="measureList" @change="changeMeasureStore" @click-item="openConfig"></DMeasureDragContainer>
+            <div v-if="hasSecond" class="axis-type">
+                <el-select v-model="mainType"
+                           size="mini"
+                           class="d-visual-input"
+                           @change="changeMainType">
+                    <el-option value="line" label="折线"></el-option>
+                    <el-option value="bar" label="柱状"></el-option>
+                </el-select>
+            </div>
+            <DMeasureDragContainer v-model="mainMeasureList"
+                                   @change="changeMeasureStore"
+                                   @click-item="openConfig"
+                                   :style="dragContainerStyle"></DMeasureDragContainer>
             <div v-if="!hasSecond" class="right-btn" @click="addSecond"><span>添加次轴</span></div>
         </div>
         <div v-if="hasSecond" class="d-col-container">
@@ -13,13 +25,25 @@
                 <span>数值</span>
                 <i class="fa fa-pencil" title="批量添加" @click="openBatchAdd(1)"></i>
             </div>
-            <DMeasureDragContainer v-model="contrastMeasureList" @change="changeMeasureStore" @click-item="openConfig"></DMeasureDragContainer>
+            <div v-if="hasSecond" class="axis-type">
+                <el-select v-model="secondType"
+                           size="mini"
+                           class="d-visual-input"
+                           @change="changeSecondType">
+                    <el-option value="line" label="折线"></el-option>
+                    <el-option value="bar" label="柱状"></el-option>
+                </el-select>
+            </div>
+            <DMeasureDragContainer v-model="secondMeasureList"
+                                   @change="changeMeasureStore"
+                                   @click-item="openConfig"
+                                   :style="dragContainerStyle"></DMeasureDragContainer>
             <div class="right-btn" @click="removeSecond"><span>移除次轴</span></div>
         </div>
         <el-dialog :visible.sync="configModalVisible"
                    :close-on-click-modal="false"
                    :close-on-press-escape="false"
-                   width="500px">
+                   width="530px">
             <div slot="title">
                  <span>
                    <span style="color: #1c2438;font-weight: 700;">指标配置:</span>
@@ -84,18 +108,20 @@
                 </el-tab-pane>
                 <el-tab-pane label="同环比" name="thb">
                     <el-row class="d-row d-form-item">
-                        <div class="measure-bs-form-label"><span>日期字段</span></div>
+                        <div class="measure-bs-form-label">
+                            <el-tooltip class="item" effect="dark" content="所选日期字段必须出现在图内筛选、默认过滤器或者维度列中" placement="top">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip><span>日期字段</span></div>
                         <div class="measure-bs-form-input">
-                            <el-select v-model="configForm.divisor" size="mini" style="width: 100%">
-                                <el-option v-for="item in divisorList" :value="item.code" :key="item.code" :label="item.name"></el-option>
+                            <el-select v-model="configForm.THBTimeCol" size="mini" style="width: 100%">
+                                <el-option v-for="item in dateColList" :value="item.colName" :key="item.colName" :label="item.colLabel"></el-option>
                             </el-select>
                         </div>
                     </el-row>
                     <el-row class="d-row d-form-item">
                         <div class="measure-bs-form-label"><span>对比类型</span></div>
                         <div class="measure-bs-form-input">
-                            <el-checkbox-group v-model="configForm.THB"
-                                               @change="changeCheckedThb()">
+                            <el-checkbox-group v-model="configForm.THB">
                                 <el-checkbox v-for="(item, j) in THBList"
                                              :key="j"
                                              :label="item.code">{{item.name}}</el-checkbox>
@@ -147,9 +173,11 @@
                 showTypeList: Object.values(ShowType),
                 THBList: Object.values(THB),
                 THBValueTypeList: Object.values(THBValueType),
-                measureList: [], // 指标集合
-                hasSecond: false, // 是否添加对比
-                contrastMeasureList: [], // 对比维度
+                mainMeasureList: [], // 主轴指标集合
+                mainType: 'line', // 双轴图主轴类型
+                hasSecond: false, // 是否添加次轴
+                secondMeasureList: [], // 次轴指标集合
+                secondType: 'bar', // 双轴图次轴类型
                 configModalVisible: false, // 配置框可见
                 configForm: { // 配置表单数据
                     aggFunction: '',
@@ -160,10 +188,7 @@
                     customDivisor: 1, // 自定义除数
                     THB: [], // 同环比
                     THBValueType: '', // 同环比的数值类型
-                    THBTimeCol: {
-                        type: '',
-                        colName: ''
-                    } // 同环比基准日期字段
+                    THBTimeCol: '' // 同环比基准日期字段
                 },
                 currentConfigCol: {
                     colLabel: '',
@@ -183,7 +208,18 @@
                     {code: 10000, name: '万'},
                     {code: 1000000, name: '百万'},
                     {code: 0, name: '自定义'}
-                ]
+                ],
+                dateColList: []
+            }
+        },
+        computed: {
+            dragContainerStyle () {
+                if (this.hasSecond) {
+                    return {
+                        width: 'calc(100% - 188px)'
+                    }
+                }
+                return {}
             }
         },
         methods: {
@@ -193,10 +229,10 @@
             removeSecond () {
                 this.hasSecond = false
                 let update = false
-                if (this.contrastMeasureList.length) {
+                if (this.secondMeasureList.length) {
                     update = true
                 }
-                this.contrastMeasureList = []
+                this.secondMeasureList = []
                 if (update) {
                     this.changeMeasureStore()
                 }
@@ -216,14 +252,14 @@
                     THBTimeCol: col.colConfig.THBTimeCol // 同环比基准日期字段
                 }
                 this.activeConfigTab = 'bs'
+                this.dateColList = this.$store.state.GeneralChart.workTableColList.filter(c => c.dataType !== DataType.num.code && c.dataType !== DataType.text.code && !c.isNewCol).map(c => JSON.parse(JSON.stringify(c)))
                 this.configModalVisible = true
             },
             submitConfigForm () {
-                this.currentConfigCol.colConfig.timeFreq = this.configForm.timeFreq
-                this.currentConfigCol.colConfig.sortType = this.configForm.sortType
-                if (this.configForm.showName) {
-                    this.currentConfigCol.colConfig.showName = this.configForm.showName
-                } else {
+                Object.keys(this.configForm).forEach(key => {
+                    this.currentConfigCol.colConfig[key] = this.configForm[key]
+                })
+                if (!this.configForm.showName) {
                     this.currentConfigCol.colConfig.showName = this.currentConfigCol.colLabel
                 }
                 this.changeMeasureStore()
@@ -232,12 +268,12 @@
             changeMeasureStore () {
                 this.$store.commit('GeneralChart/updateMeasureConfig', {
                     main: {
-                        type: '',
-                        colList: this.measureList
+                        type: this.mainType,
+                        colList: this.mainMeasureList
                     },
-                    contrast: {
-                        type: '',
-                        colList: this.contrastMeasureList
+                    second: {
+                        type: this.secondType,
+                        colList: this.secondMeasureList
                     }
                 })
             },
@@ -249,16 +285,23 @@
                 checkedColList.forEach(col => {
                     col.colConfig = getMeasureColCofig(col)
                     if (this.batchAddTargetType === 0) { // 主轴
-                        this.measureList.push(col)
+                        this.mainMeasureList.push(col)
                     } else { // 次轴
-                        this.contrastMeasureList.push(col)
+                        this.secondMeasureList.push(col)
                     }
                 })
                 this.changeMeasureStore()
                 this.batchAddModalVisible = false
             },
-            changeCheckedThb () {
-
+            changeMainType () {
+                if (this.mainMeasureList.length) {
+                    this.changeMeasureStore()
+                }
+            },
+            changeSecondType () {
+                if (this.secondMeasureList.length) {
+                    this.changeMeasureStore()
+                }
             }
         },
         mounted () {
@@ -269,7 +312,7 @@
 
 <style>
     .measure-bs-form-label {
-        width: 60px;
+        width: 90px;
         text-align: right;
         padding-right: 12px;
         box-sizing: border-box;
@@ -278,5 +321,9 @@
 
     .measure-bs-form-input {
         width: 400px;
+    }
+
+    .axis-type {
+        width: 75px;
     }
 </style>
