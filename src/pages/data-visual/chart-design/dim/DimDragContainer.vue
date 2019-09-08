@@ -20,9 +20,9 @@
 </template>
 
 <script>
-    import {TimeFreq} from '../constants'
-    import {DataType} from '../../../services/data-map/col-manage'
-    import {getDimColCofig} from './utils'
+    import {TimeFreq} from '../../constants'
+    import {DataType} from '../../../../services/data-map/col-manage'
+    import {getDimColCofig} from './../utils'
     export default {
         name: 'DDimDragContainer',
         props: {

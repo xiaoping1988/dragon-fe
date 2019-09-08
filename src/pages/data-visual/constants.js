@@ -320,7 +320,34 @@ export const TimeFreq = {
     hour: {
         code: 'hour',
         name: '时',
-        advancedCompute: [THB.hb]
+        advancedCompute: [THB.hb],
+        range: [
+            {dateNum: 1, name: '上一小时'},
+            {dateNum: 0, name: '当前小时'},
+            {dateNum: 6, name: '近6小时'},
+            {dateNum: 12, name: '近12小时'},
+            {dateNum: 24, name: '近24小时'}
+        ],
+        rangeDefaultDateNum: 1,
+        pattern: 'yyyy-MM-dd hh:mm:ss',
+        getDateStr (dateNum, isRange) {
+            let dateStr = ''
+            // let currentDay = DateUtils.getYesterday()
+            // if (isRange) { // 区间
+            //     if (dateNum === 0) {
+            //         let today = DateUtils.formatDate(new Date(), this.pattern)
+            //         dateStr = today + ',' + today
+            //     } else if (dateNum === 1) {
+            //         dateStr = currentDay + ',' + currentDay
+            //     } else {
+            //         dateStr = DateUtils.addDate(currentDay, 1 - dateNum, 'yyyy-MM-dd') + ',' + currentDay
+            //     }
+            //     dateStr = dateStr + ' 23:59:59'
+            // } else {
+            //     dateStr = DateUtils.addDate(currentDay, 1 - dateNum, 'yyyy-MM-dd')
+            // }
+            return dateStr
+        }
     },
     minute: {
         code: 'minute',
@@ -425,6 +452,41 @@ export const FilterControlType = {
         name: '文本框筛选'
     }
 }
+
+/**
+ * 筛选面板类型,默认筛选的配置页
+ * @type {{condition: {code: string, name: string}, accurate: {code: string, name: string}, time: {code: string, name: string}}}
+ */
+export const FilterPanelType = {
+    time: {
+        code: 'time',
+        name: '时间筛选'
+    },
+    accurate: {
+        code: 'accurate',
+        name: '精确筛选'
+    },
+    condition: {
+        code: 'condition',
+        name: '条件筛选'
+    }
+}
+
+/**
+ * 条件拼接类型 and or
+ * @type {{or: {code: string, name: string}, and: {code: string, name: string}}}
+ */
+export const ConditionSpliceType = {
+    and: {
+        code: 'and',
+        name: '满足所有条件'
+    },
+    or: {
+        code: 'or',
+        name: '满足任一条件'
+    }
+}
+
 /**
  * 聚合函数
  * @type {{min: {code: string, name: string, pattern: string}, avg: {code: string, name: string, pattern: string}, max: {code: string, name: string, pattern: string}, count_distinct: {code: string, name: string, pattern: string}, count: {code: string, name: string, pattern: string}, sum: {code: string, name: string, pattern: string}}}

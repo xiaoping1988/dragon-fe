@@ -158,11 +158,11 @@
 </template>
 
 <script>
-    import {AggFunc, ShowType, THB, THBValueType} from '../constants'
+    import {AggFunc, ShowType, THB, THBValueType} from '../../constants'
     import DMeasureDragContainer from './MeasureDragContainer'
-    import {DataType} from '../../../services/data-map/col-manage'
-    import DBatchAddCol from './BatchAddCol'
-    import {getMeasureColCofig} from './utils'
+    import {DataType} from '../../../../services/data-map/col-manage'
+    import DBatchAddCol from '../BatchAddCol'
+    import {getMeasureColCofig} from '../utils'
     export default {
         name: 'DMeasureModule',
         components: {DMeasureDragContainer, DBatchAddCol},

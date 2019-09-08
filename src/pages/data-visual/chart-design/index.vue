@@ -16,7 +16,10 @@
             <div class="d-chart-design-main">
                 <DDimModule></DDimModule>
                 <DMeasureModule></DMeasureModule>
-                <div></div>
+                <div class="bottom">
+                    <DDefaultFilterModule></DDefaultFilterModule>
+                    <DChartPreviewModule></DChartPreviewModule>
+                </div>
             </div>
             <div class="d-chart-design-right">
                 <div class="module-title">
@@ -38,11 +41,13 @@
 
 <script>
     import DWorkTable from './WorkTable'
-    import DDimModule from './DimModule'
-    import DMeasureModule from './MeasureModule'
+    import DDimModule from './dim/DimModule'
+    import DMeasureModule from './measure/MeasureModule'
+    import DDefaultFilterModule from './default-filter/DefaultFilterModule'
+    import DChartPreviewModule from './ChartPreviewModule'
     export default {
         name: 'DChartDesign',
-        components: {DWorkTable, DDimModule, DMeasureModule},
+        components: {DWorkTable, DDimModule, DMeasureModule, DDefaultFilterModule, DChartPreviewModule},
         data () {
             return {
                 tbId: '',
@@ -107,6 +112,12 @@
         padding-left: 10px;
         padding-right: 10px;
         box-sizing: border-box;
+    }
+
+    .d-chart-design-main .bottom {
+        display: table;
+        min-height: calc(100% - 88px);
+        width: 100%;
     }
 
     .d-chart-design-right {

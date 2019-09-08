@@ -20,9 +20,8 @@
 </template>
 
 <script>
-    import {AggFunc} from '../constants'
-    import {DataType} from '../../../services/data-map/col-manage'
-    import {getMeasureColCofig} from './utils'
+    import {AggFunc} from '../../constants'
+    import {getMeasureColCofig} from './../utils'
     export default {
         name: 'DMeasureDragContainer',
         props: {

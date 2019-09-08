@@ -22,7 +22,9 @@ export const DataType = {
     date: {
         code: 'date',
         name: '日期',
-        icon: 'calendar-o'
+        icon: 'calendar-o',
+        timeFreq: ['year','quarter','month','week','day','hour','minute','second'],
+        defaultTimeFreq: 'day'
     },
     num: {
         code: 'num',
@@ -37,27 +39,37 @@ export const DataType = {
     text_day_10: {
         code: 'text_day_10',
         name: '文本_日_YYYY-MM-DD',
-        icon: 'calendar'
+        icon: 'calendar',
+        timeFreq: ['day'],
+        defaultTimeFreq: 'day'
     },
     text_day_8: {
         code: 'text_day_8',
         name: '文本_日_YYYYMMDD',
-        icon: 'calendar'
+        icon: 'calendar',
+        timeFreq: ['day'],
+        defaultTimeFreq: 'day'
     },
     text_month_7: {
         code: 'text_month_7',
         name: '文本_月_YYYY-MM',
-        icon: 'calendar'
+        icon: 'calendar',
+        timeFreq: ['month'],
+        defaultTimeFreq: 'month'
     },
     text_month_6: {
         code: 'text_month_6',
         name: '文本_月_YYYYMM',
-        icon: 'calendar'
+        icon: 'calendar',
+        timeFreq: ['month'],
+        defaultTimeFreq: 'month'
     },
     text_year: {
         code: 'text_year',
         name: '文本_年',
-        icon: 'calendar'
+        icon: 'calendar',
+        timeFreq: ['year'],
+        defaultTimeFreq: 'year'
     }
 }
 

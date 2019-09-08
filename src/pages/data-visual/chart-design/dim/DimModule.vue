@@ -75,10 +75,10 @@
 </template>
 
 <script>
-    import {TimeFreq} from '../constants'
+    import {TimeFreq} from '../../constants'
     import DDimDragContainer from './DimDragContainer'
-    import DBatchAddCol from './BatchAddCol'
-    import {getDimColCofig} from './utils'
+    import DBatchAddCol from '../BatchAddCol'
+    import {getDimColCofig} from '../utils'
     export default {
         name: 'DDimModule',
         components: {DDimDragContainer, DBatchAddCol},
