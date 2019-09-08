@@ -74,19 +74,19 @@ export const Operator = {
     },
     like: {
         code: 'like',
-        name: '包含'
+        name: '包含字符'
     },
     notlike: {
         code: 'notlike',
-        name: '不包含'
+        name: '不包含字符'
     },
     startlike: {
         code: 'startlike',
-        name: '开头包含'
+        name: '开头包含字符'
     },
     endlike: {
         code: 'endlike',
-        name: '结尾包含'
+        name: '结尾包含字符'
     }
 }
 

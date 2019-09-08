@@ -22,12 +22,19 @@
                 </div>
                 <div v-show="item.colConfig.showCondition" class="filter-condition-list">
                     <div v-if="item.colConfig.filterPanelType === 'condition'">
-                        {{}}
+                        <div>{{operatorObj[item.colConfig.oper].name}}</div>
                         <ul>
 
                         </ul>
                     </div>
-                    <div v-else-if="item.colConfig.filterPanelType === 'accurate'"></div>
+                    <div v-else-if="item.colConfig.filterPanelType === 'accurate'">
+                        <div>{{operatorObj[item.colConfig.oper].name}}</div>
+                        <ul>
+                            <li v-for="item in item.colConfig.value.split(',')" :key="item" class="d-ellipsis">
+                                {{item}}
+                            </li>
+                        </ul>
+                    </div>
                     <div v-else-if="item.colConfig.filterPanelType === 'time'">
                         {{item.colConfig.relativeTimeLabel}}
                     </div>
@@ -56,6 +63,10 @@
                                        :col="currentConfigCol"
                                        @submit="submitConfigForm"
                                        @cancel="configModalVisible = false"></DTimeFilterConfigForm>
+                <DAccurateFilterConfigForm v-if="filterPanelType === 'accurate'"
+                                       :col="currentConfigCol"
+                                       @submit="submitConfigForm"
+                                       @cancel="configModalVisible = false"></DAccurateFilterConfigForm>
             </el-row>
         </el-dialog>
     </div>
@@ -63,14 +74,17 @@
 
 <script>
     import {getDefaultFilterColConfig} from '../utils'
-    import {FilterPanelType} from '../../constants'
+    import {FilterPanelType, Operator, ConditionSpliceType} from '../../constants'
     import {DataType} from '../../../../services/data-map/col-manage'
     import DTimeFilterConfigForm from './TimeFilterConfigForm'
+    import DAccurateFilterConfigForm from './AccurateFilterConfigForm'
     export default {
         name: 'DDefaultFilterModule',
-        components: {DTimeFilterConfigForm},
+        components: {DTimeFilterConfigForm, DAccurateFilterConfigForm},
         data () {
             return {
+                operatorObj: Operator,
+                conditionSpliceTypeObj: ConditionSpliceType,
                 filterList: [],
                 currentConfigCol: null,
                 filterPanelTypeList: [],
