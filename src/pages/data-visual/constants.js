@@ -479,11 +479,11 @@ export const FilterPanelType = {
 export const ConditionSpliceType = {
     and: {
         code: 'and',
-        name: '满足所有条件'
+        name: '满足以下所有条件'
     },
     or: {
         code: 'or',
-        name: '满足任一条件'
+        name: '满足以下任一条件'
     }
 }
 
