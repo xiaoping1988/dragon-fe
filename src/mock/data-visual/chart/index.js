@@ -227,6 +227,33 @@ export default {
             return res
         })
 
+        Mock.post(mock, ApiUrl.previewData.name, ApiUrl.previewData.api, function (params) {
+            let chartMeta = JSON.parse(params.chartMeta)
+            let res = mockChartData(chartMeta)
+            if (params.sortFieldKey) {
+                let isStr = false
+                for (let i in meta.chartMeta.columns) {
+                    if (meta.chartMeta.columns[i].key === params.sortFieldKey) {
+                        isStr = meta.chartMeta.columns[i].showType === ShowType.text.code
+                    }
+                }
+                res.sort((a, b) => {
+                    if (isStr) {
+                        if (params.sortType === SortType.asc.code) {
+                            return compareStr(a[params.sortFieldKey], b[params.sortFieldKey])
+                        }
+                        return compareStr(b[params.sortFieldKey], a[params.sortFieldKey])
+                    } else {
+                        if (params.sortType === SortType.asc.code) {
+                            return a[params.sortFieldKey] - b[params.sortFieldKey]
+                        }
+                        return b[params.sortFieldKey] - a[params.sortFieldKey]
+                    }
+                })
+            }
+            return res
+        })
+
         Mock.post(mock, ApiUrl.updateChartPosition.name, ApiUrl.updateChartPosition.api, function (params) {
             let res = ''
             let posArr = JSON.parse(params.positions)

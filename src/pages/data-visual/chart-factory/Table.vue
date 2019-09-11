@@ -73,6 +73,11 @@
         methods: {
             handleMeta () { // 处理元数据
                 let tmpCols = []
+                let containerWidth = this.$el.clientWidth
+                let avgWidth = containerWidth / this.meta.columns.length
+                if (this.minColWidth < avgWidth) {
+                    this.minColWidth = avgWidth
+                }
                 this.meta.columns.forEach(c => {
                     let tmpC = JSON.parse(JSON.stringify(c))
                     if (tmpC.unit) {

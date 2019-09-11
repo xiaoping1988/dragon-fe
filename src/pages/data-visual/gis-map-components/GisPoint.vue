@@ -61,7 +61,7 @@
               this.data = res.result
               this.loading = false
             }).catch(error => {
-              this.handleError(error)
+              this.$handleError(error)
               this.loading = false
             })
           } else { // 配置页面
@@ -70,7 +70,7 @@
               this.data = res.result
               this.loading = false
             }).catch(error => {
-              this.handleError(error)
+              this.$handleError(error)
               this.loading = false
             })
           }

@@ -25,14 +25,27 @@
                 <div class="module-title">
                     图表名称
                 </div>
+                <div class="module-content">
+                    <el-input size="mini"
+                              placeholder="请输入图表名称"
+                              v-model.trim="basicProperties.name"></el-input>
+                </div>
                 <div class="module-title">
                     图表类型
                 </div>
+                <DChartSubType></DChartSubType>
                 <div class="module-title">
                     图内筛选
                 </div>
                 <div class="module-title">
                     图表备注
+                </div>
+                <div class="module-content">
+                    <el-input size="mini"
+                              type="textarea"
+                              rows="6"
+                              placeholder="请输入图表备注"
+                              v-model.trim="basicProperties.remark"></el-input>
                 </div>
             </div>
         </div>
@@ -45,24 +58,59 @@
     import DMeasureModule from './measure/MeasureModule'
     import DDefaultFilterModule from './default-filter/DefaultFilterModule'
     import DChartPreviewModule from './ChartPreviewModule'
+    import DChartSubType from './chart-sub-type'
     export default {
         name: 'DChartDesign',
-        components: {DWorkTable, DDimModule, DMeasureModule, DDefaultFilterModule, DChartPreviewModule},
+        components: {DWorkTable, DDimModule, DMeasureModule, DDefaultFilterModule, DChartPreviewModule, DChartSubType},
         data () {
             return {
                 tbId: '',
+                basicProperties: {
+                    dashId: '', // 仪表盘ID
+                    tabId: '', // 页签ID
+                    chartId: '', // 图表ID
+                    name: '', // 图表名称
+                    remark: '' // 描述
+                }
             }
         },
         methods: {
+            initData () {
+                this.tbId = this.$route.query.tbId
+                this.basicProperties.dashId = this.$route.query.dashId
+                this.basicProperties.tabId = this.$route.query.tabId
+                this.basicProperties.chartId = this.$route.query.chartId
+            },
             submit () {
-
+                if (this.validate()) {
+                    this.updateBasicPropertiesStore()
+                }
+            },
+            updateBasicPropertiesStore () {
+                this.$store.commit('GeneralChart/updateBasicProperties', this.basicProperties)
+            },
+            validate () {
+                if (this.basicProperties.name === '') {
+                    this.$messageWarn('未设置图表名称!')
+                    return false
+                }
+                if (this.basicProperties.name.length > 50) {
+                    this.$messageWarn('图表名称长度超过50个字符!')
+                    return false
+                }
+                let chartType = this.$store.state.GeneralChart.editConfig.chartStyle.type
+                if (!chartType) {
+                    this.$messageWarn('未选择任何图形!')
+                    return false
+                }
+                return true
             },
             cancel () {
                 this.$goBack()
             }
         },
         mounted () {
-            this.tbId = this.$route.query.tbId
+            this.initData()
         }
     }
 </script>
@@ -125,5 +173,6 @@
         width: 280px;
         height: 100%;
         right: 0px;
+        overflow: auto;
     }
 </style>

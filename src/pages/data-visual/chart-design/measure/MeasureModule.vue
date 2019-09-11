@@ -9,9 +9,14 @@
                 <el-select v-model="mainType"
                            size="mini"
                            class="d-visual-input"
-                           @change="changeMainType">
-                    <el-option value="line" label="折线"></el-option>
-                    <el-option value="bar" label="柱状"></el-option>
+                           @change="changeMainType"
+                           popper-class="measure-type">
+                    <el-option v-for="item in mainTypeList"
+                               :value="item.code"
+                               :key="item.code"
+                               :label="item.name" >
+                        <img width="25" :src="mainType === item.code?item.hoverIcon : item.icon"  alt="">
+                    </el-option>
                 </el-select>
             </div>
             <DMeasureDragContainer v-model="mainMeasureList"
@@ -29,9 +34,11 @@
                 <el-select v-model="secondType"
                            size="mini"
                            class="d-visual-input"
-                           @change="changeSecondType">
-                    <el-option value="line" label="折线"></el-option>
-                    <el-option value="bar" label="柱状"></el-option>
+                           @change="changeSecondType"
+                           popper-class="measure-type">
+                    <el-option v-for="item in secondTypeList" :value="item.code" :key="item.code" :label="item.name">
+                        <img width="25" :src="secondType === item.code?item.hoverIcon : item.icon"  alt="">
+                    </el-option>
                 </el-select>
             </div>
             <DMeasureDragContainer v-model="secondMeasureList"
@@ -163,6 +170,12 @@
     import {DataType} from '../../../../services/data-map/col-manage'
     import DBatchAddCol from '../BatchAddCol'
     import {getMeasureColCofig} from '../utils'
+    import lineD from '@/assets/chart/linedwhite.png'
+    import lineE from '@/assets/chart/linee.png'
+    import barD from '@/assets/chart/barwhite.png'
+    import barE from '@/assets/chart/bare.png'
+    import stackBarD from '@/assets/chart/stackbardwhite.png'
+    import stackBarE from '@/assets/chart/stackbare.png'
     export default {
         name: 'DMeasureModule',
         components: {DMeasureDragContainer, DBatchAddCol},
@@ -209,7 +222,17 @@
                     {code: 1000000, name: '百万'},
                     {code: 0, name: '自定义'}
                 ],
-                dateColList: []
+                dateColList: [],
+                mainTypeList: [
+                    {code: 'line', name: '折线', icon: lineE, hoverIcon: lineD},
+                    {code: 'bar', name: '柱状', icon: barE, hoverIcon: barD},
+                    {code: 'stackBar', name: '堆积', icon: stackBarE, hoverIcon: stackBarD}
+                ],
+                secondTypeList: [
+                    {code: 'line', name: '折线', icon: lineE, hoverIcon: lineD},
+                    {code: 'bar', name: '柱状', icon: barE, hoverIcon: barD},
+                    {code: 'stackBarSecond', name: '堆积', icon: stackBarE, hoverIcon: stackBarD}
+                ]
             }
         },
         computed: {
@@ -325,5 +348,9 @@
 
     .axis-type {
         width: 75px;
+    }
+
+    .measure-type .selected {
+        background: #3a8ee6!important;
     }
 </style>

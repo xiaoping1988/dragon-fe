@@ -363,10 +363,10 @@ export default {
                 {appName: '报表系统', appCarrier: '报表：集团核心数据>订单数据分析>订单量'},
                 {appName: '报表系统', appCarrier: '报表：集团核心数据>订单数据分析>订单量'},
                 {appName: '报表系统', appCarrier: '报表：集团核心数据>订单数据分析>订单量'},
-                {appName: '数据API', appCarrier: 'API：用户画像>获取用户数据'},
-                {appName: '数据API', appCarrier: 'API：用户画像>获取订单数据'},
-                {appName: '数据API', appCarrier: 'API：风控中心>获取订单数据'},
-                {appName: '数据API', appCarrier: 'API：风控中心>获取用户数据'}
+                {appName: '数据API', appCarrier: 'API：获取用户数据>用户画像'},
+                {appName: '数据API', appCarrier: 'API：获取用户数据>风控中心'},
+                {appName: '数据API', appCarrier: 'API：获取订单数据>用户画像'},
+                {appName: '数据API', appCarrier: 'API：获取订单数据>风控中心'}
             ]
             return res
         })

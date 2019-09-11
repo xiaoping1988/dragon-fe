@@ -242,7 +242,7 @@
                     if (this.meta.columns) {
                         this.meta.columns.forEach(c => {
                             if (!c.axis) { // 参考轴类型
-                                c.axis = c.dim ? EchartsUtil.GridAxis.DownX : EchartsUtil.GridAxis.LeftY
+                                c.axis = c.dim ? EchartsUtil.GridAxis.DownX.code : EchartsUtil.GridAxis.LeftY.code
                             }
                             if (this.meta.stack) {
                                 c.stack = 'all'
@@ -255,7 +255,7 @@
                                 c.stack = 'typeB';
                                 c.type = 'bar';
                             }
-                            if (!c.dim && !this.meta.dynamicLegend) { // 固定图例
+                            if (!c.dim && !this.meta.hasContrast) { // 固定图例
                                 this.legendData.push(c.name)
                                 this.indexColumns.push(c)
                             }
@@ -265,13 +265,13 @@
                             if (!c.dim && c.type === 'bar') {
                                 this.hasBar = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.UpX) {
+                            if (c.axis === EchartsUtil.GridAxis.UpX.code) {
                                 this.xAxisDouble = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.RightY) {
+                            if (c.axis === EchartsUtil.GridAxis.RightY.code) {
                                 this.yAxisDouble = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.UpX || c.axis === EchartsUtil.GridAxis.RightY) { // 上X轴,右Y轴
+                            if (c.axis === EchartsUtil.GridAxis.UpX.code || c.axis === EchartsUtil.GridAxis.RightY.code) { // 上X轴,右Y轴
                                 if (!c.dim && (!c.showType || c.showType !== 'rate')) {
                                     this.axisRate[1] = false
                                 }
@@ -283,14 +283,14 @@
                             this.columnsObj[c.name] = c
                         })
                     }
-                    if (this.meta.dynamicLegend) {
+                    if (this.meta.hasContrast) {
                         let i = this.meta.columns.findIndex(c => !c.dim)
                         if (i <= 0) {
                             this.axisRate[0] = false
                             this.axisRate[1] = false
                         }
                     }
-                    if (this.meta.dynamicLegend && this.data && this.data.length) { // 动态图例
+                    if (this.meta.hasContrast && this.data && this.data.length) { // 动态图例
                         this.hasBar = this.meta.type === 'bar'
                         if (this.data) {
                             this.data.forEach(d => {
@@ -298,7 +298,7 @@
                                     let name = !key ? '(空)' : key
                                     if (this.dimColumns.findIndex(c => c.key === key) === -1 && !this.legendData.includes(name)) {
                                         this.legendData.push(name)
-                                        this.indexColumns.push({key: key, name: name, axis: EchartsUtil.GridAxis.LeftY, type: this.meta.type, stack: (this.meta.stack ? 'all' : '')})
+                                        this.indexColumns.push({key: key, name: name, axis: EchartsUtil.GridAxis.LeftY.code, type: this.meta.type, stack: (this.meta.stack ? 'all' : '')})
                                     }
                                 })
                             })
@@ -312,7 +312,7 @@
                     let seriesObj = {} // 系列值
                     vue.category_1 = []
                     vue.category_2 = []
-                    if (vue.data) {
+                    if (vue.data && vue.data.length) {
                         let tempData = JSON.parse(JSON.stringify(vue.data))
                         let firstRow = tempData[0]
                         let dateStr = firstRow[vue.dimColumns[0].key]
@@ -337,7 +337,7 @@
                         tempData.forEach(d => {
                             // 设置类目值
                             vue.dimColumns.forEach(dimCol => {
-                                if (dimCol.axis === EchartsUtil.GridAxis.DownX || dimCol.axis === EchartsUtil.GridAxis.LeftY) { // 轴1的类目
+                                if (dimCol.axis === EchartsUtil.GridAxis.DownX.code || dimCol.axis === EchartsUtil.GridAxis.LeftY.code) { // 轴1的类目
                                     vue.category_1.push(d[dimCol.key])
                                 } else {
                                     vue.category_2.push(d[dimCol.key])
@@ -349,8 +349,8 @@
                                     seriesObj[indexCol.key] = {
                                         name: indexCol.name,
                                         type: indexCol.type ? indexCol.type : 'line',
-                                        xAxisIndex: indexCol.axis === EchartsUtil.GridAxis.DownX || indexCol.axis === EchartsUtil.GridAxis.LeftY || indexCol.axis === EchartsUtil.GridAxis.RightY ? 0 : 1,
-                                        yAxisIndex: indexCol.axis === EchartsUtil.GridAxis.LeftY || indexCol.axis === EchartsUtil.GridAxis.DownX || indexCol.axis === EchartsUtil.GridAxis.UpX ? 0 : 1,
+                                        xAxisIndex: indexCol.axis === EchartsUtil.GridAxis.DownX.code || indexCol.axis === EchartsUtil.GridAxis.LeftY.code || indexCol.axis === EchartsUtil.GridAxis.RightY.code ? 0 : 1,
+                                        yAxisIndex: indexCol.axis === EchartsUtil.GridAxis.LeftY.code || indexCol.axis === EchartsUtil.GridAxis.DownX.code || indexCol.axis === EchartsUtil.GridAxis.UpX.code ? 0 : 1,
                                         data: []
                                     }
                                     // 设置面积

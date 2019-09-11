@@ -302,10 +302,17 @@ i {
 /** 滚动条样式结尾 **/
 
 .module-title {
-    padding-left: 20px;
     height: 32px;
     line-height: 32px;
     font-weight: 700;
+}
+
+.module-title,
+.module-content {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .el-radio-group .vertical {
@@ -345,6 +352,8 @@ i {
     width: calc(100% - 113px);
     display: flex;
     flex-flow: wrap;
+    padding-left: 10px;
+    box-sizing: border-box;
 }
 
 .d-col-container .right-btn {

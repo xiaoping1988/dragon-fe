@@ -50,7 +50,7 @@
                             } else {
                                 this.$router.push('/auth')
                             }
-                        }).catch(this.handleError)
+                        }).catch(this.$handleError)
                     }
                 })
 

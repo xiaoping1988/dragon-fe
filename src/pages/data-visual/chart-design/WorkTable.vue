@@ -21,7 +21,7 @@
                     字段
                 </div>
                 <div class="col-btn">
-                    <i class="el-icon-plus"></i>
+                    <i class="fa fa-plus"></i>
                     <ul class="d-btn-list">
                         <li >添加计算字段</li>
                     </ul>
@@ -131,7 +131,9 @@
         },
         methods: {
             initData () {
-                this.setTbInfo()
+                if (this.currentTbId) {
+                    this.setTbInfo()
+                }
             },
             setTbInfo () {
                 this.loading = true
@@ -194,6 +196,9 @@
             colKeyword () {
                 this.searchColList()
             }
+        },
+        mounted () {
+            this.initData()
         }
     }
 </script>

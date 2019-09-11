@@ -48,7 +48,8 @@ const GeneralChartDesign = {
     namespaced: true,
     state:{
         workTableColList: [], // 工作表的所有字段,包括计算字段
-        configUpdateCount: 0, // 配置变化次数,图表自动渲染用
+        configUpdateCount: 0, // 配置变化次数,自动选择图表和生成图表元数据
+        chartMetaUpdateCount: 0, // 图表元数据变化次数
         editConfig: new GeneralChartEditConfig(),
         renderMeta: { // 图表渲染配置
             chartMeta: {}, // 图形渲染配置
@@ -100,6 +101,7 @@ const GeneralChartDesign = {
             state.renderMeta.chartMeta = chartMeta
             state.editConfig.chartStyle.type = chartMeta.chartType
             state.editConfig.chartStyle.subType = chartMeta.chartSubType
+            state.chartMetaUpdateCount++
             console.log(state)
         },
         updateChartFilterMeta (state, chartFilterMeta) {

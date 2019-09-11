@@ -6,7 +6,11 @@ const ApiBase = Domain.dataVisual.be + '/api/chart'
 export const ApiUrl = {
     queryData: {
         api: ApiBase + '/query-data',
-        name: '查询数据'
+        name: '查询图表数据'
+    },
+    previewData: {
+        api: ApiBase + '/preview-data',
+        name: '预览图表数据'
     },
     getChart: {
         api: ApiBase + '/get',
@@ -43,6 +47,7 @@ export const ApiUrl = {
 }
 
 export const queryData = (params) => {return post(ApiUrl.queryData.api, params)}
+export const previewData = (params) => {return post(ApiUrl.previewData.api, params)}
 export const getChart = (params) => {return post(ApiUrl.getChart.api, params)}
 export const addOrUpdateGeneralChart = (params) => {return post(ApiUrl.addOrUpdateGeneralChart.api, params)}
 export const addOrUpdateGpsMap = (params) => {return post(ApiUrl.addOrUpdateGpsMap.api, params)}

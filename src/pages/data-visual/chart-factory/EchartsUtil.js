@@ -111,8 +111,8 @@ const initChart = function (vue, buildOption) {
     })
     let option = buildOption()
     // if (process.env.NODE_ENV === 'development') {
-    //   console.log('id:', vue.id)
-    //   console.log(JSON.stringify(option))
+      console.log('id:', vue.id)
+      console.log(JSON.stringify(option))
     // }
     vue.chartInstance.setOption(option)
     vue.chartInstance.resize()

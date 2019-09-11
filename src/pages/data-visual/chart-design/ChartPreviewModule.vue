@@ -1,12 +1,80 @@
 <template>
     <div class="d-chart-preview">
-        <div class="d-chart-container"></div>
+        <div class="d-chart-container">
+            <DChartFactory id="previewChart"
+                           :meta="chartMeta"
+                           :data="chartData"
+                           @sort="sortData"></DChartFactory>
+        </div>
     </div>
 </template>
 
 <script>
+    import DChartFactory from '../chart-factory'
+    import {previewData} from '../../../services/data-visual/chart'
     export default {
-        name: 'DChartPreviewModule'
+        name: 'DChartPreviewModule',
+        components: {DChartFactory},
+        data () {
+            return {
+                loading: false,
+                chartMeta: {}, // 预览图表的chartMeta,切换指标维度会改这个值
+                chartData: [], // 图表数据
+                lastUpdateTime: new Date().getTime() // 上一次更新时间
+            }
+        },
+        watch: {
+            '$store.state.GeneralChart.chartMetaUpdateCount': function (newValue) {
+                this.updateChart()
+            }
+        },
+        methods: {
+            updateChart () {
+                let vue = this
+                let chartMeta = vue.$store.state.GeneralChart.renderMeta.chartMeta
+                if (chartMeta && chartMeta.chartType) {
+                    // 3秒后执行,防止用户操作太快,频繁刷新图表
+                    vue.loading = true
+                    let currentTime = new Date().getTime()
+                    vue.lastUpdateTime = currentTime
+                    let sTime = setTimeout(function () {
+                        vue.handleMeta()
+                        vue.setData(currentTime)
+                        clearTimeout(sTime)
+                    }, 3000)
+                } else {
+                    vue.clearData()
+                }
+            },
+            handleMeta () {
+                this.chartMeta = this.$store.state.GeneralChart.renderMeta.chartMeta
+            },
+            setData (updateTime) {
+                if (updateTime !== this.lastUpdateTime) {
+                    return
+                }
+                this.loading = true
+                let params = {
+                    editConfig: JSON.stringify(this.$store.state.GeneralChart.editConfig),
+                    chartMeta: JSON.stringify(this.$store.state.GeneralChart.renderMeta.chartMeta)
+                }
+                previewData(params).then(res => {
+                    this.chartData = res.data
+                    this.loading = false
+                }).catch(error => {
+                    this.$handleError(error)
+                    this.loading = false
+                })
+            },
+            clearData () {
+                this.meta = {}
+                this.chartData = []
+                this.loading = false
+            },
+            sortData () {
+
+            }
+        }
     }
 </script>
 
@@ -20,7 +88,7 @@
 
     .d-chart-container {
         width: 100%;
-        min-height: 400px;
+        height: 400px;
         background: #ffffff;
     }
 </style>
