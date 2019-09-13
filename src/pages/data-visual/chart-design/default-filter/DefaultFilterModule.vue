@@ -22,38 +22,39 @@
                 </div>
                 <div v-show="item.colConfig.showCondition" class="filter-condition-list">
                     <div v-if="item.colConfig.filterPanelType === 'condition'">
-                        <div>{{conditionSpliceTypeObj[item.colConfig.conditionSpliceType].name}}</div>
+                        <div class="head-label">{{conditionSpliceTypeObj[item.colConfig.conditionSpliceType].name}}</div>
                         <ul>
-                            <li v-for="(item, index) in item.colConfig.conditionList"
+                            <li v-for="(con, index) in item.colConfig.conditionList"
                                 :key="index"
-                                class="condition-item">
+                                class="condition-item condition-value"
+                                @click="openConfig(item)">
                                 <div class="oper-label">
-                                    {{operatorObj[item.oper].name}}
+                                    {{operatorObj[con.oper].name}}
                                 </div>
                                 <div class="oper-value">
-                                    {{item.value}}
+                                    {{con.value}}
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div v-else-if="item.colConfig.filterPanelType === 'accurate'">
-                        <div>{{operatorObj[item.colConfig.oper].name}}</div>
+                        <div class="head-label">{{operatorObj[item.colConfig.oper].name}}</div>
                         <ul>
-                            <li v-for="item in item.colConfig.value.split(',')" :key="item" class="d-ellipsis">
-                                {{item}}
+                            <li v-for="(val, i) in item.colConfig.value.split(',')"
+                                :key="i"
+                                class="d-ellipsis condition-value"
+                                @click="openConfig(item)">
+                                {{val}}
                             </li>
                         </ul>
                     </div>
-                    <div v-else-if="item.colConfig.filterPanelType === 'time'">
+                    <div v-else-if="item.colConfig.filterPanelType === 'time'" class="condition-value" @click="openConfig(item)">
                         {{item.colConfig.relativeTimeLabel}}
                     </div>
                 </div>
             </li>
             <li v-if="!filterList.length" class="d-no-data-tip">
                 从左侧字段列表拖拽字段到这里
-            </li>
-            <li style="height: 28px">
-
             </li>
         </ul>
         <el-dialog title="配置过滤器条件"
@@ -142,6 +143,7 @@
             openConfig (col) {
                 this.isAdd = false
                 this.currentConfigCol = col
+                this.filterPanelType = col.colConfig.filterPanelType
                 this.setFilterPanelTypeList()
                 this.configModalVisible = true
             },
@@ -174,11 +176,10 @@
     .d-default-filter {
         width: 180px;
         height: 100%;
-        display: table-cell;
+        position: absolute;
         vertical-align: top;
         overflow-y: auto;
         overflow-x: hidden;
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
         padding-right: 10px;
         box-sizing: border-box;
     }
@@ -187,6 +188,11 @@
         padding-left: 5px;
         padding-top: 10px;
         padding-bottom: 10px;
+    }
+
+    .filter-list {
+        height: calc(100% - 36px);
+        overflow: auto;
     }
 
     .filter-list .filter-item {
@@ -236,7 +242,11 @@
 
     .filter-condition-list {
         background: #ffffff;
-        padding: 10px;
+    }
+
+    .filter-condition-list .head-label {
+        line-height: 26px;
+        padding-left: 10px;
     }
 
     .default-filter-form {
@@ -255,5 +265,14 @@
     .condition-item .oper-value {
         padding-left: 10px;
         box-sizing: border-box;
+    }
+
+    .condition-value {
+        padding: 0px 10px;
+        line-height: 26px;
+    }
+
+    .condition-value:hover {
+        background: rgba(0, 0, 0, 0.1);
     }
 </style>

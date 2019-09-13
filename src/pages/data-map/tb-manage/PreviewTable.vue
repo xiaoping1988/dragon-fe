@@ -56,22 +56,32 @@
                 }).then(res => {
                     this.previewData = res.data
                     this.previewData.colList.forEach(c => {
-                        // c.width = this.minColWidth
                         this.colObj[c.colName] = c
+                        c.width = this.minColWidth
                     })
-                    // TODO 计算表格表头各列宽度
-                    // this.previewData.forEach(d => {
-                    //     this.previewData.colList.forEach(c => {
-                    //         if (c.width < this.maxColWidth) {
-                    //             let len = getByteLength(d[c.colName] + '')
-                    //             if (len * 6 > this.maxColWidth) {
-                    //                 c.width = this.maxColWidth
-                    //             }
-                    //         }
-                    //     })
-                    // })
+                    this.resizeColWidth()
                     this.loading = false
                 }).catch(this.$handleError)
+            },
+            resizeColWidth () {
+                this.$nextTick(function () {
+                    let containerWidth = this.$el.clientWidth
+                    let avgWidth = containerWidth / this.previewData.colList.length
+                    if (this.minColWidth < avgWidth) {
+                        this.minColWidth = avgWidth
+                    }
+                    this.previewData.colList.forEach(c => {
+                        c.width = this.computeColWidth(c.colName)
+                    })
+                    this.$forceUpdate()
+                })
+            },
+            computeColWidth (colName) { // 计算列宽度
+                let tmpWidth = this.minColWidth
+                if (colName.length * 20 > this.minColWidth) {
+                    tmpWidth = colName.length * 20
+                }
+                return tmpWidth
             }
         },
         watch: {

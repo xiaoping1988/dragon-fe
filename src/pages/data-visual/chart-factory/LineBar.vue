@@ -242,7 +242,7 @@
                     if (this.meta.columns) {
                         this.meta.columns.forEach(c => {
                             if (!c.axis) { // 参考轴类型
-                                c.axis = c.dim ? EchartsUtil.GridAxis.DownX.code : EchartsUtil.GridAxis.LeftY.code
+                                c.axis = c.dim ? EchartsUtil.GridAxis.DownX : EchartsUtil.GridAxis.LeftY
                             }
                             if (this.meta.stack) {
                                 c.stack = 'all'
@@ -265,13 +265,13 @@
                             if (!c.dim && c.type === 'bar') {
                                 this.hasBar = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.UpX.code) {
+                            if (c.axis === EchartsUtil.GridAxis.UpX) {
                                 this.xAxisDouble = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.RightY.code) {
+                            if (c.axis === EchartsUtil.GridAxis.RightY) {
                                 this.yAxisDouble = true
                             }
-                            if (c.axis === EchartsUtil.GridAxis.UpX.code || c.axis === EchartsUtil.GridAxis.RightY.code) { // 上X轴,右Y轴
+                            if (c.axis === EchartsUtil.GridAxis.UpX || c.axis === EchartsUtil.GridAxis.RightY) { // 上X轴,右Y轴
                                 if (!c.dim && (!c.showType || c.showType !== 'rate')) {
                                     this.axisRate[1] = false
                                 }
@@ -298,7 +298,7 @@
                                     let name = !key ? '(空)' : key
                                     if (this.dimColumns.findIndex(c => c.key === key) === -1 && !this.legendData.includes(name)) {
                                         this.legendData.push(name)
-                                        this.indexColumns.push({key: key, name: name, axis: EchartsUtil.GridAxis.LeftY.code, type: this.meta.type, stack: (this.meta.stack ? 'all' : '')})
+                                        this.indexColumns.push({key: key, name: name, axis: EchartsUtil.GridAxis.LeftY, type: this.meta.type, stack: (this.meta.stack ? 'all' : '')})
                                     }
                                 })
                             })
@@ -337,7 +337,7 @@
                         tempData.forEach(d => {
                             // 设置类目值
                             vue.dimColumns.forEach(dimCol => {
-                                if (dimCol.axis === EchartsUtil.GridAxis.DownX.code || dimCol.axis === EchartsUtil.GridAxis.LeftY.code) { // 轴1的类目
+                                if (dimCol.axis === EchartsUtil.GridAxis.DownX || dimCol.axis === EchartsUtil.GridAxis.LeftY) { // 轴1的类目
                                     vue.category_1.push(d[dimCol.key])
                                 } else {
                                     vue.category_2.push(d[dimCol.key])
@@ -349,8 +349,8 @@
                                     seriesObj[indexCol.key] = {
                                         name: indexCol.name,
                                         type: indexCol.type ? indexCol.type : 'line',
-                                        xAxisIndex: indexCol.axis === EchartsUtil.GridAxis.DownX.code || indexCol.axis === EchartsUtil.GridAxis.LeftY.code || indexCol.axis === EchartsUtil.GridAxis.RightY.code ? 0 : 1,
-                                        yAxisIndex: indexCol.axis === EchartsUtil.GridAxis.LeftY.code || indexCol.axis === EchartsUtil.GridAxis.DownX.code || indexCol.axis === EchartsUtil.GridAxis.UpX.code ? 0 : 1,
+                                        xAxisIndex: indexCol.axis === EchartsUtil.GridAxis.DownX || indexCol.axis === EchartsUtil.GridAxis.LeftY || indexCol.axis === EchartsUtil.GridAxis.RightY ? 0 : 1,
+                                        yAxisIndex: indexCol.axis === EchartsUtil.GridAxis.LeftY || indexCol.axis === EchartsUtil.GridAxis.DownX || indexCol.axis === EchartsUtil.GridAxis.UpX ? 0 : 1,
                                         data: []
                                     }
                                     // 设置面积

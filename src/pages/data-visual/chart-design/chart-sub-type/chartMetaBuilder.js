@@ -117,7 +117,7 @@ function handleColumnCommonProps (chartConfig, dimColumnMoreProperty, measureCol
   handleMeasure(chartConfig.measureConfig.main, true)
 
   // 处理次轴指标
-  handleMeasure(chartConfig.measureConfig.second, true)
+  handleMeasure(chartConfig.measureConfig.second, false)
 
   return {
     columns: columns
@@ -177,7 +177,7 @@ function ruleCheckLineOrBarOfSwitch (colCnt) {
 function getChartMetaOfLineOrBar (chartConfig, type, chartType, chartSubType, category, stack) {
   let result = handleColumnCommonProps(chartConfig,
     { // 添加的维度属性
-      // axis: GridAxisType.DownX.code
+      axis: GridAxisType.DownX.code
     },
     { // 添加的指标属性
       axis: GridAxisType.LeftY.code,
@@ -204,10 +204,10 @@ function getChartMetaOfLineOrBar (chartConfig, type, chartType, chartSubType, ca
  */
 function ruleCheckPieOrRingOfSwitch (colCnt) {
   if (colCnt.mainDimCnt && !colCnt.contrastDimCnt) { // 必须要有一个维度,不支持对比维度
-    if (colCnt.mainMeausreCnt === 1 && !colCnt.secondMeausreCnt) { // 主轴有一个指标,次轴没有指标
+    if (colCnt.mainMeasureCnt === 1 && !colCnt.secondMeasureCnt) { // 主轴有一个指标,次轴没有指标
       return true
     }
-    if (!colCnt.mainMeausreCnt && colCnt.secondMeausreCnt === 1) { // 主轴没有有指标,次轴有一个指标
+    if (!colCnt.mainMeasureCnt && colCnt.secondMeasureCnt === 1) { // 主轴没有有指标,次轴有一个指标
       return true
     }
   }
@@ -588,7 +588,8 @@ export default {
         })
       let chartMeta = {
         chartType: this.chartType.code,
-        chartSubType: this.code
+        chartSubType: this.code,
+        mapType: 'china'
       }
       Object.assign(chartMeta, result)
       return chartMeta

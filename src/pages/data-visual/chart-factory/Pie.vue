@@ -43,9 +43,9 @@
             },
             handleData () {
                 let vue = this
+                vue.legendData = []
+                vue.seriesData = []
                 if (!vue.data || !vue.data.length) {
-                    vue.legendData = []
-                    vue.seriesData = []
                     return
                 }
                 let dimCol = null

@@ -89,7 +89,9 @@
             },
             setAdvancedComputeNameWidth () {
                 let acn = document.getElementById('advancedComputeName')
-                this.advancedComputeNameWidth = acn.clientWidth
+                if (acn) {
+                    this.advancedComputeNameWidth = acn.clientWidth
+                }
             }
         },
         watch: {

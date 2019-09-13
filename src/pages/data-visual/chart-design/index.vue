@@ -14,12 +14,17 @@
                 <DWorkTable :tbId="tbId"></DWorkTable>
             </div>
             <div class="d-chart-design-main">
-                <DDimModule></DDimModule>
-                <DMeasureModule></DMeasureModule>
-                <div class="bottom">
-                    <DDefaultFilterModule></DDefaultFilterModule>
-                    <DChartPreviewModule></DChartPreviewModule>
+                <div class="container">
+                    <div class="cols">
+                        <DDimModule></DDimModule>
+                        <DMeasureModule></DMeasureModule>
+                    </div>
+                    <div class="bottom">
+                        <DDefaultFilterModule></DDefaultFilterModule>
+                        <DChartPreviewModule></DChartPreviewModule>
+                    </div>
                 </div>
+
             </div>
             <div class="d-chart-design-right">
                 <div class="module-title">
@@ -157,15 +162,26 @@
         left: 220px;
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .d-chart-design-main .container {
+        height: 100%;
+        width: 100%;
         padding-left: 10px;
         padding-right: 10px;
         box-sizing: border-box;
+        min-width: 800px;
+        position: relative;
     }
 
-    .d-chart-design-main .bottom {
-        display: table;
-        min-height: calc(100% - 88px);
+    .d-chart-design-main .container .cols {
         width: 100%;
+    }
+
+    .d-chart-design-main .container .bottom {
+        min-height: calc(100% - 88px);
+        width: calc(100% - 20px);
+        position: absolute;
     }
 
     .d-chart-design-right {

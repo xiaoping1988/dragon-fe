@@ -1,6 +1,7 @@
 <template>
     <div class="d-chart-preview">
-        <div class="d-chart-container">
+        <div></div>
+        <div class="d-chart-container d-chart-full-screen">
             <DChartFactory id="previewChart"
                            :meta="chartMeta"
                            :data="chartData"
@@ -81,14 +82,19 @@
 <style>
     .d-chart-preview {
         width: calc(100% - 180px);
-        display: table-cell;
-        vertical-align: top;
-        padding: 10px;
+        height:100%;
+        left: 180px;
+        padding: 10px 0px 10px 10px;
+        box-sizing: border-box;
+        position: absolute;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        overflow: auto;
     }
 
     .d-chart-container {
         width: 100%;
-        height: 400px;
+        height: calc(100% - 48px);
+        min-height: 400px;
         background: #ffffff;
     }
 </style>
