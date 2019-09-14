@@ -143,7 +143,7 @@ export default {
 
         Mock.post(mock, ApiUrl.getGeneralChartEditConfig.name, ApiUrl.getGeneralChartEditConfig.api, function (params) {
             let chart = ChartList.filter(c => c.id === Number(params.id))[0]
-            let dash = DashList.filter(d => d.id === chart.dashId)
+            let dash = DashList.filter(d => d.id === chart.dashId)[0]
             return {
                 editConfig: chart.editConfig,
                 dashId: chart.dashId,

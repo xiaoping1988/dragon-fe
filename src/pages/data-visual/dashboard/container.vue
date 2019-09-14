@@ -136,7 +136,9 @@
                 vue.projId = vue.$route.params.projId
                 vue.dashId = vue.$route.params.dashId
                 vue.activeChartId = vue.$route.query.chartId
-                vue.activeTabId = vue.$route.query.tabId
+                if (vue.$route.query.tabId) {
+                    vue.activeTabId = vue.$route.query.tabId + ''
+                }
             },
             renderDash () {
                 let vue = this
@@ -159,7 +161,7 @@
                         vue.chartList = vue.dash.tabList[0].chartList
                     }
                     if (!vue.hasTab) {
-                        vue.activeTabId = -1
+                        vue.activeTabId = '-1'
                     }
                 }).catch(vue.$handleError)
             },
