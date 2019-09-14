@@ -9,7 +9,7 @@
                 </DSubmitCancel>
             </div>
         </div>
-        <div class="panel">
+        <div class="panel" v-if="inited">
             <div class="d-chart-design-left">
                 <DWorkTable :tbId="tbId"></DWorkTable>
             </div>
@@ -64,7 +64,8 @@
     import DChartPreviewModule from './chart-preview'
     import DChartSubType from './chart-sub-type'
     import DChartInsideFilter from './chart-inside-filter'
-    import {addOrUpdateGeneralChart} from '../../../services/data-visual/chart'
+    import {addOrUpdateGeneralChart, getGeneralChartEditConfig} from '../../../services/data-visual/chart'
+    import {GeneralChartEditConfig} from '../../../store'
     export default {
         name: 'DChartDesign',
         components: {
@@ -79,22 +80,43 @@
         data () {
             return {
                 tbId: '',
+                chartId: '',
                 basicProperties: {
+                    projId: '', // 文件夹ID
                     dashId: '', // 仪表盘ID
                     tabId: '', // 页签ID
-                    chartId: '', // 图表ID
                     name: '', // 图表名称
                     remark: '' // 描述
                 },
-                loading: false
+                loading: false,
+                inited: false
             }
         },
         methods: {
             initData () {
-                this.tbId = this.$route.query.tbId
-                this.basicProperties.dashId = this.$route.query.dashId
-                this.basicProperties.tabId = this.$route.query.tabId
-                this.basicProperties.chartId = this.$route.query.chartId
+                this.chartId = this.$route.query.chartId
+                if (this.chartId) { // 编辑报表
+                    this.loading = true
+                    getGeneralChartEditConfig({
+                        id: this.chartId
+                    }).then(res => {
+                        this.$store.commit('GeneralChart/initEditConfig', JSON.parse(res.data))
+                        this.initDataFromVuexStore()
+                        this.loading = false
+                        this.inited = true
+                    }).catch(this.$handleError)
+                } else { // 新增报表
+                    this.$store.commit('GeneralChart/initEditConfig', new GeneralChartEditConfig())
+                    this.tbId = this.$route.query.tbId
+                    this.basicProperties.dashId = this.$route.query.dashId
+                    this.basicProperties.tabId = this.$route.query.tabId
+                    this.basicProperties.projId = this.$route.query.projId
+                    this.inited = true
+                }
+            },
+            initDataFromVuexStore () {
+                this.tbId = this.$store.state.GeneralChart.editConfig.workTable.tbId
+                this.basicProperties = this.$store.state.GeneralChart.editConfig.basicProperties
             },
             submit () {
                 if (this.validate()) {
@@ -114,9 +136,9 @@
             },
             backToDash (chartId) {
                 this.$router.push({
-                        path: '/data-visual/dashboard/' + this.$route.query.projId + '/' + this.$route.query.dashId,
+                        path: '/data-visual/dashboard/' + this.basicProperties.projId + '/' + this.basicProperties.dashId,
                         query: {
-                            tabId: this.$route.query.tabId,
+                            tabId: this.basicProperties.tabId,
                             chartId: chartId
                         }
                     }

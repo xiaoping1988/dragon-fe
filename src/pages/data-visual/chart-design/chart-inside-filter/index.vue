@@ -62,12 +62,18 @@
             },
             updateChartFilterMetaStore () {
                 this.$store.commit('GeneralChart/updateChartFilterMeta', this.filterList)
+            },
+            initDataFromVuexStore () {
+                this.filterList = this.$store.state.GeneralChart.editConfig.chartFilterMeta
             }
         },
         watch: {
             colKeyword () {
                 this.searchColList()
             }
+        },
+        mounted () {
+            this.initDataFromVuexStore()
         }
     }
 </script>

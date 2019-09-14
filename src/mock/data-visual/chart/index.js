@@ -139,15 +139,20 @@ export default {
             return chart
         })
 
+        Mock.post(mock, ApiUrl.getGeneralChartEditConfig.name, ApiUrl.getGeneralChartEditConfig.api, function (params) {
+            let chart = ChartList.filter(c => c.id === Number(params.id))[0]
+            return chart.editConfig
+        })
+
         Mock.post(mock, ApiUrl.addOrUpdateGeneralChart.name, ApiUrl.addOrUpdateGeneralChart.api, function (params) {
             let id = params.id
             let editConfig = JSON.parse(params.editConfig)
             if (id) { // 编辑
-                let chart = ChartList.filter(c => c.id === Number(id))
+                let chart = ChartList.filter(c => c.id === Number(id))[0]
                 chart.name = editConfig.basicProperties.name
                 chart.remark = editConfig.basicProperties.remark
-                chart.dashId = editConfig.basicProperties.dashId
-                chart.tabId = editConfig.basicProperties.tabId
+                chart.dashId = Number(editConfig.basicProperties.dashId)
+                chart.tabId = Number(editConfig.basicProperties.tabId)
                 chart.editConfig = params.editConfig
                 chart.renderMeta = params.renderMeta
                 chart.largeChartType = LargeChartType.General.code

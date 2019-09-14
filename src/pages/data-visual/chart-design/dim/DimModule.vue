@@ -173,10 +173,14 @@
                 })
                 this.changeDimStore()
                 this.batchAddModalVisible = false
+            },
+            initDataFromVuexStore () {
+                this.dimList = this.$store.state.GeneralChart.editConfig.dimConfig.main.colList
+                this.contrastDimList = this.$store.state.GeneralChart.editConfig.dimConfig.contrast.colList
             }
         },
         mounted () {
-
+            this.initDataFromVuexStore()
         }
     }
 </script>

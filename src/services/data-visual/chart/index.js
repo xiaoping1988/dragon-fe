@@ -20,6 +20,10 @@ export const ApiUrl = {
         api: ApiBase + '/add-or-update-general',
         name: '新增或者修改一个普通图表配置'
     },
+    getGeneralChartEditConfig: {
+        api: ApiBase + '/get-general-chart-edit-config',
+        name: '获取一个普通报表的设计配置'
+    },
     addOrUpdateGpsMap: {
         api: ApiBase + '/add-or-update-gpsmap',
         name: '新增或者修改一个经纬度地图配置'
@@ -50,6 +54,7 @@ export const queryData = (params) => {return post(ApiUrl.queryData.api, params)}
 export const previewData = (params) => {return post(ApiUrl.previewData.api, params)}
 export const getChart = (params) => {return post(ApiUrl.getChart.api, params)}
 export const addOrUpdateGeneralChart = (params) => {return post(ApiUrl.addOrUpdateGeneralChart.api, params)}
+export const getGeneralChartEditConfig = (params) => {return post(ApiUrl.getGeneralChartEditConfig.api, params)}
 export const addOrUpdateGpsMap = (params) => {return post(ApiUrl.addOrUpdateGpsMap.api, params)}
 export const addOrUpdateExternalChart = (params) => {return post(ApiUrl.addOrUpdateExternalChart.api, params)}
 export const deleteChart = (params) => {return post(ApiUrl.deleteChart.api, params)}

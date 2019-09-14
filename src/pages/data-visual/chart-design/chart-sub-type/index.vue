@@ -80,7 +80,14 @@
                     itemMeta = item.getChartMeta(this.$store.state.GeneralChart.editConfig)
                 }
                 this.$store.commit('GeneralChart/updateChartMeta', itemMeta)
+            },
+            initDataFromVuexStore () {
+                this.userSelectedChartSubType = this.$store.state.GeneralChart.editConfig.chartStyle.subType
+                this.updateEnableAndActiveItem()
             }
+        },
+        mounted () {
+            this.initDataFromVuexStore()
         }
     }
 </script>

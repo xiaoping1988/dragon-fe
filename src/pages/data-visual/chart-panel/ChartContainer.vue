@@ -269,7 +269,12 @@
             },
             openChartEdit () {
                 if (this.chart.largeChartType === LargeChartType.General.code) { // 普通报表
-
+                    this.$router.push({
+                        path: '/chart-design',
+                        query: {
+                            chartId: this.chart.id
+                        }
+                    })
                 } else if (this.chart.largeChartType === LargeChartType.GpsMap.code) { // 经纬度地图
 
                 } else if (this.chart.largeChartType === LargeChartType.External.code) { // 外部报表

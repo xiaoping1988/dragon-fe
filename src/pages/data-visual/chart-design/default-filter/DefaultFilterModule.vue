@@ -167,7 +167,13 @@
             toggleShowCondition (col) {
                 col.colConfig.showCondition = !col.colConfig.showCondition
                 this.$forceUpdate()
+            },
+            initDataFromVuexStore () {
+                this.filterList = this.$store.state.GeneralChart.editConfig.defaultFilterMeta
             }
+        },
+        mounted () {
+            this.initDataFromVuexStore()
         }
     }
 </script>

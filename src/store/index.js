@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const GeneralChartEditConfig = function () {
+export const GeneralChartEditConfig = function () {
     this.workTable = { // 工作表配置
         tbId: '', // 表ID
         tbName: '', // 表名
@@ -28,9 +28,9 @@ const GeneralChartEditConfig = function () {
         } // 次轴
     }
     this.basicProperties = {
+        projId: '', // 文件夹ID
         dashId: '', // 仪表盘ID
         tabId: '', // 页签ID
-        chartId: '', // 图表ID
         name: '', // 图表名称
         remark: '' // 描述
     }
@@ -58,8 +58,9 @@ const GeneralChartDesign = {
         }
     },
     mutations:{
-        updateEditConfig (state, config) {
+        initEditConfig (state, config) {
             state.editConfig = config
+            state.renderMeta.filterMeta = config.chartFilterMeta
             console.log(state)
         },
         updateWorkTable (state, workTable) {

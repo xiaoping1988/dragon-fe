@@ -122,7 +122,11 @@
                             <span>日期字段</span>
                         </div>
                         <div class="measure-bs-form-input">
-                            <el-select v-model="configForm.THBTimeCol" size="mini" style="width: 100%">
+                            <el-select v-model="configForm.THBTimeCol"
+                                       size="mini"
+                                       clearable
+                                       style="width: 100%"
+                                       @change="changeTHBTimeCol">
                                 <el-option v-for="item in dateColList" :value="item.colName" :key="item.colName" :label="item.colLabel"></el-option>
                             </el-select>
                         </div>
@@ -130,9 +134,11 @@
                     <el-row class="d-row d-form-item">
                         <div class="measure-bs-form-label"><span>对比类型</span></div>
                         <div class="measure-bs-form-input">
-                            <el-checkbox-group v-model="configForm.THB">
+                            <el-checkbox-group v-model="configForm.THB"
+                                               @change="changeTHB">
                                 <el-checkbox v-for="(item, j) in THBList"
                                              :key="j"
+                                             :disabled="configForm.THBTimeCol === undefined || configForm.THBTimeCol === ''"
                                              :label="item.code">{{item.name}}</el-checkbox>
                             </el-checkbox-group>
                         </div>
@@ -141,7 +147,10 @@
                         <div class="measure-bs-form-label"><span>数值设置</span></div>
                         <div class="measure-bs-form-input">
                             <el-radio-group v-model="configForm.THBValueType">
-                                <el-radio v-for="item in THBValueTypeList" :key="item.code" :label="item.code">{{item.name}}</el-radio>
+                                <el-radio v-for="item in THBValueTypeList"
+                                          :key="item.code"
+                                          :label="item.code"
+                                          :disabled="configForm.THB === undefined || configForm.THB.length === 0">{{item.name}}</el-radio>
                             </el-radio-group>
                         </div>
                     </el-row>
@@ -327,10 +336,27 @@
                 if (this.secondMeasureList.length) {
                     this.changeMeasureStore()
                 }
+            },
+            initDataFromVuexStore () {
+                this.mainMeasureList = this.$store.state.GeneralChart.editConfig.measureConfig.main.colList
+                this.mainType = this.$store.state.GeneralChart.editConfig.measureConfig.main.type
+                this.secondMeasureList = this.$store.state.GeneralChart.editConfig.measureConfig.second.colList
+                this.secondType = this.$store.state.GeneralChart.editConfig.measureConfig.second.type
+            },
+            changeTHBTimeCol () {
+                if (!this.configForm.THBTimeCol) {
+                    this.configForm.THB = []
+                    this.configForm.THBValueType = ''
+                }
+            },
+            changeTHB () {
+                if (!this.configForm.THB.length) {
+                    this.configForm.THBValueType = ''
+                }
             }
         },
         mounted () {
-
+            this.initDataFromVuexStore()
         }
     }
 </script>

@@ -94,7 +94,13 @@
             changeCondition (conditionValueArr, showLabelArr) {
                 this.chartFilterValue = JSON.stringify(conditionValueArr)
                 this.updateChart()
+            },
+            initDataFromVuexStore () {
+                this.chartInsideFilterList = this.$store.state.GeneralChart.editConfig.chartFilterMeta
             }
+        },
+        mounted () {
+            this.initDataFromVuexStore()
         }
     }
 </script>
