@@ -8,6 +8,7 @@ import MetaDemo from './meta-demo'
 import {mockChartData} from './mockChartData'
 import {compareStr} from '../../../utils/assist'
 import {config} from './editConfig'
+import {DashList} from '../dashboard'
 
 let dateFilterColumn = {
     colLabel: '时间字段',
@@ -142,7 +143,13 @@ export default {
 
         Mock.post(mock, ApiUrl.getGeneralChartEditConfig.name, ApiUrl.getGeneralChartEditConfig.api, function (params) {
             let chart = ChartList.filter(c => c.id === Number(params.id))[0]
-            return chart.editConfig
+            let dash = DashList.filter(d => d.id === chart.dashId)
+            return {
+                editConfig: chart.editConfig,
+                dashId: chart.dashId,
+                tabId: chart.tabId,
+                projId: dash.projId
+            }
         })
 
         Mock.post(mock, ApiUrl.addOrUpdateGeneralChart.name, ApiUrl.addOrUpdateGeneralChart.api, function (params) {

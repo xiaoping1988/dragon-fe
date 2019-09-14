@@ -100,7 +100,11 @@
                     getGeneralChartEditConfig({
                         id: this.chartId
                     }).then(res => {
-                        this.$store.commit('GeneralChart/initEditConfig', JSON.parse(res.data))
+                        let editConfig = JSON.parse(res.data.editConfig)
+                        editConfig.basicProperties.dashId = res.data.dashId
+                        editConfig.basicProperties.tabId = res.data.tabId
+                        editConfig.basicProperties.projId = res.data.projId
+                        this.$store.commit('GeneralChart/initEditConfig', editConfig)
                         this.initDataFromVuexStore()
                         this.loading = false
                         this.inited = true
