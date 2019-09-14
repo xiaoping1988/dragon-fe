@@ -56,11 +56,11 @@
 </template>
 
 <script>
-    import DWorkTable from './WorkTable'
+    import DWorkTable from './work-table'
     import DDimModule from './dim/DimModule'
     import DMeasureModule from './measure/MeasureModule'
     import DDefaultFilterModule from './default-filter/DefaultFilterModule'
-    import DChartPreviewModule from './ChartPreviewModule'
+    import DChartPreviewModule from './chart-preview'
     import DChartSubType from './chart-sub-type'
     import DChartInsideFilter from './chart-inside-filter'
     export default {

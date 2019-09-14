@@ -11,6 +11,14 @@ export const ApiUrl = {
     listTbLogicCol: {
         api: ApiBase + '/list-logic-by-tb',
         name: '获取某张表的逻辑字段(计算字段、分组字段等)'
+    },
+    addOrUpdateFormula: {
+        api: ApiBase + '/add-or-update-formula',
+        name: '新增或者修改一个计算字段'
+    },
+    deleteLogicCol: {
+        api: ApiBase + '/delete-logic-col',
+        name: '删除一个逻辑字段'
     }
 }
 
@@ -75,3 +83,5 @@ export const DataType = {
 
 export const listTbCol = (params) => {return post(ApiUrl.listTbCol.api, params)}
 export const listTbLogicCol = (params) => {return post(ApiUrl.listTbLogicCol.api, params)}
+export const addOrUpdateFormula = (params) => {return post(ApiUrl.addOrUpdateFormula.api, params)}
+export const deleteLogicCol = (params) => {return post(ApiUrl.deleteLogicCol.api, params)}

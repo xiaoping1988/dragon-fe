@@ -5,10 +5,10 @@
                 工作表
             </div>
             <div class="table-name-panel">
-                <div class="table-name d-ellipsis" 
-                     :title="tbInfo.tbNameCn" 
+                <div class="table-name d-ellipsis"
+                     :title="tbInfo.tbNameCn"
                      @click="openPreviewTable">{{tbInfo.tbNameCn}}</div>
-                <div class="exchange-table" 
+                <div class="exchange-table"
                      title="切换工作表"
                      @click="openExchangeTable">
                     <i class="fa fa-exchange"></i>
@@ -23,7 +23,7 @@
                 <div class="col-btn">
                     <i class="fa fa-plus"></i>
                     <ul class="d-btn-list">
-                        <li >添加计算字段</li>
+                        <li @click="openAddCompute">添加计算字段</li>
                     </ul>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                          @dragstart="dragColStart($event, col)"
                          @dragover="allowDrop($event)">
                         <!--<div class="pre-angle">-->
-                            <!--<i v-if="col.dataType === dataTypeObj.date.code" class="fa" :class="[col.showTimeFreq ? 'fa-angle-down' : 'fa-angle-right']"></i>-->
+                        <!--<i v-if="col.dataType === dataTypeObj.date.code" class="fa" :class="[col.showTimeFreq ? 'fa-angle-down' : 'fa-angle-right']"></i>-->
                         <!--</div>-->
                         <div class="pre-icon">
                             <i class="fa" :class="'fa-' + dataTypeObj[col.dataType].icon"></i>
@@ -56,12 +56,12 @@
                         </div>
                     </div>
                     <!--<ul v-if="col.dataType === dataTypeObj.date.code" v-show="col.showTimeFreq" class="time-freq-list">-->
-                        <!--<li v-for="(item, index) in timeFreqList"-->
-                            <!--:key="index"-->
-                            <!--class="time-freq-item"-->
-                            <!--draggable="true">-->
-                            <!--<span>{{item.name}}</span>-->
-                        <!--</li>-->
+                    <!--<li v-for="(item, index) in timeFreqList"-->
+                    <!--:key="index"-->
+                    <!--class="time-freq-item"-->
+                    <!--draggable="true">-->
+                    <!--<span>{{item.name}}</span>-->
+                    <!--</li>-->
                     <!--</ul>-->
                 </li>
                 <li v-for="(col, index) in searchedLogicColList" :key="index">
@@ -75,6 +75,10 @@
                         </div>
                         <div class="col-label d-ellipsis">
                             {{col.colLabel}}
+                        </div>
+                        <div class="btn">
+                            <i class="fa fa-pencil" @click="openEditCompute(col)" title="编辑配置"></i>
+                            <i class="fa fa-trash-o" @click="deleteLogicColById(col)" title="删除字段"></i>
                         </div>
                     </div>
                 </li>
@@ -95,20 +99,35 @@
                 width="360px">
             <DWorkTableSelect v-if="showExchanged" @select="exchangeTable"></DWorkTableSelect>
         </el-dialog>
+        <el-dialog
+                :visible.sync="showComputeFieldModal"
+                title="新字段"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false"
+                :show-close="false"
+                top="30px"
+                width="600px">
+            <DComputeFieldForm v-if="showComputeFieldModal"
+                               :col="editComputeField"
+                               @submit="submitCompute"
+                               @cancel="showComputeFieldModal = false"></DComputeFieldForm>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    import {getTb} from '../../../services/data-map/tb-manage'
+    import {getTb} from '../../../../services/data-map/tb-manage'
     import {
-        DataType
-    } from '../../../services/data-map/col-manage'
-    import DPreviewTable from '../../data-map/tb-manage/PreviewTable'
-    import DWorkTableSelect from '../dashboard/workTableSelect'
-    import {TimeFreq} from '../constants'
+        DataType,
+        deleteLogicCol
+    } from '../../../../services/data-map/col-manage'
+    import DPreviewTable from '../../../data-map/tb-manage/PreviewTable'
+    import DWorkTableSelect from '../../dashboard/workTableSelect'
+    import {TimeFreq} from '../../constants'
+    import DComputeFieldForm from './ComputeFieldForm'
     export default {
         name: 'DWorkTable',
-        components: {DPreviewTable, DWorkTableSelect},
+        components: {DPreviewTable, DWorkTableSelect, DComputeFieldForm},
         props: {
             tbId: [String,Number]
         },
@@ -126,7 +145,9 @@
                 logicColList: [], // 工作表的全局逻辑字段数据
                 searchedColList: [], // 搜索到的原始字段
                 searchedLogicColList: [], // 搜索到的逻辑字段
-                colKeyword: '' // 搜索字段的关键词
+                colKeyword: '', // 搜索字段的关键词
+                showComputeFieldModal: false,
+                editComputeField: null
             }
         },
         methods: {
@@ -152,8 +173,8 @@
             },
             searchColList () {
                 if (this.colKeyword === '') {
-                    this.searchedColList = this.tbInfo.colList
-                    this.searchedLogicColList = this.tbInfo.logicColList
+                    this.searchedColList = [...this.tbInfo.colList]
+                    this.searchedLogicColList = [...this.tbInfo.logicColList]
                 } else {
                     this.searchedColList = this.tbInfo.colList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
                     this.searchedLogicColList = this.tbInfo.logicColList.filter(c => c.colName.includes(this.colKeyword.toLowerCase()) || c.colLabel.includes(this.colKeyword))
@@ -182,6 +203,41 @@
             },
             dragColStart (e, col) {
                 e.dataTransfer.setData('dragingCol', JSON.stringify(col))
+            },
+            openAddCompute () {
+                this.editComputeField = null
+                this.showComputeFieldModal = true
+            },
+            openEditCompute (col) {
+                this.editComputeField = col
+                this.showComputeFieldModal = true
+            },
+            submitCompute (logicCol) {
+                if (this.editComputeField) { // 编辑
+                    let i = this.tbInfo.logicColList.findIndex(c => c.id === logicCol.id)
+                    let j = this.searchedLogicColList.findIndex(c => c.id === logicCol.id)
+                    this.tbInfo.logicColList[i] = logicCol
+                    this.searchedLogicColList[j] = logicCol
+                } else { // 新增
+                    this.tbInfo.logicColList.push(logicCol)
+                    this.searchedLogicColList.push(logicCol)
+                }
+                this.showComputeFieldModal = false
+            },
+            deleteLogicColById (col) {
+                let msg = '确认删除字段<strong class="d-error">"' + col.colLabel + '"</strong>吗?'
+                let vue = this
+                vue.$confirmInfo(msg, function () {
+                    deleteLogicCol({
+                        id: col.id
+                    }).then(res => {
+                        let i = vue.tbInfo.logicColList.findIndex(c => c.id === col.id)
+                        let j = vue.searchedLogicColList.findIndex(c => c.id === col.id)
+                        vue.tbInfo.logicColList.splice(i, 1)
+                        vue.searchedLogicColList.splice(j, 1)
+                    }).catch(vue.$handleError)
+                })
+
             }
         },
         watch: {
@@ -336,6 +392,23 @@
 
     .d-work-table .column .col-list .col-item .col-label {
         flex-grow: 1;
+    }
+
+    .d-work-table .column .col-list .col-item .btn {
+        width: 45px;
+        display: none;
+    }
+
+    .d-work-table .column .col-list .col-item .btn i {
+        margin-left: 12px;
+    }
+
+    .d-work-table .column .col-list .col-item .btn i:hover {
+        color: #3a8ee6;
+    }
+
+    .d-work-table .column .col-list .col-item:hover .btn {
+        display: inline-block;
     }
 
     .d-work-table .column .col-list .time-freq-list {

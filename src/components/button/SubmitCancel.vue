@@ -1,6 +1,6 @@
 <template>
   <div class="d-submit-cancel">
-    <hr v-if="!nohr">
+    <!--<hr v-if="!nohr">-->
     <el-button @click="cancel" :size="size">{{cacelText}}</el-button>
     <el-button type="primary" @click="submit" :size="size">{{submitText}}</el-button>
     <slot></slot>

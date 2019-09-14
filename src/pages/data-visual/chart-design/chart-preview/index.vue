@@ -16,9 +16,9 @@
 </template>
 
 <script>
-    import DChartFactory from '../chart-factory'
-    import DFilterList from '../chart-filter/FilterList'
-    import {previewData} from '../../../services/data-visual/chart'
+    import DChartFactory from '../../chart-factory'
+    import DFilterList from '../../chart-filter/FilterList'
+    import {previewData} from '../../../../services/data-visual/chart'
     export default {
         name: 'DChartPreviewModule',
         components: {DChartFactory, DFilterList},

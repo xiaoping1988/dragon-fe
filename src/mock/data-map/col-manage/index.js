@@ -134,17 +134,43 @@ export default {
         })
 
         Mock.post(mock, ApiUrl.listTbLogicCol.name, ApiUrl.listTbLogicCol.api, function (params) {
-            // let res = ColList.filter(c => c.tbId === Number(params.tbId))
-            return [
-                {
-                    id: 1,
-                    colName: 'newcol',
-                    colLabel: '北京订单金额',
-                    dataType: DataType.num.code,
-                    formula: 'sum(col_2)',
-                    formulaShow: 'sum([订单金额])'
-                }
-            ]
+            let res = LogicColList.filter(c => c.tbId === Number(params.tbId))
+            return res
+        })
+
+        Mock.post(mock, ApiUrl.addOrUpdateFormula.name, ApiUrl.addOrUpdateFormula.api, function (params) {
+            let id = params.id
+            let colName = ''
+            if (params.id) { // 修改
+                let col = LogicColList.filter(c => c.id === Number(params.id))[0]
+                col.colLabel = params.colLabel
+                col.dataType = params.dataType
+                col.formula = params.formula
+                col.formulaShow = params.formulaShow
+                colName = col.colName
+            } else {
+                id = new Date().getTime()
+                colName = 'col_' + id
+                LogicColList.push({
+                    id: id,
+                    tbId: Number(params.tbId),
+                    colName: colName,
+                    colLabel: params.colLabel,
+                    dataType: params.dataType,
+                    formula: params.formula,
+                    formulaShow: params.formulaShow
+                })
+            }
+            return {
+                id: id,
+                colName: colName
+            }
+        })
+
+        Mock.post(mock, ApiUrl.deleteLogicCol.name, ApiUrl.deleteLogicCol.api, function (params) {
+            let i = LogicColList.findIndex(c => c.id === Number(params.id))
+            LogicColList.splice(i, 1)
+            return ''
         })
     }
 }

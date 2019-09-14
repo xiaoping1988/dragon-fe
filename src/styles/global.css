@@ -393,3 +393,14 @@ i {
 .tag-item .btn i:hover {
     color: #cccccc;
 }
+
+.item-list .item {
+    line-height: 32px;
+    cursor: pointer;
+    padding: 0px 10px;
+    box-sizing: border-box;
+}
+
+.item-list .item:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
