@@ -139,6 +139,54 @@ export default {
             return chart
         })
 
+        Mock.post(mock, ApiUrl.addOrUpdateGeneralChart.name, ApiUrl.addOrUpdateGeneralChart.api, function (params) {
+            let id = params.id
+            let editConfig = JSON.parse(params.editConfig)
+            if (id) { // 编辑
+                let chart = ChartList.filter(c => c.id === Number(id))
+                chart.name = editConfig.basicProperties.name
+                chart.remark = editConfig.basicProperties.remark
+                chart.dashId = editConfig.basicProperties.dashId
+                chart.tabId = editConfig.basicProperties.tabId
+                chart.editConfig = params.editConfig
+                chart.renderMeta = params.renderMeta
+                chart.largeChartType = LargeChartType.General.code
+                chart.chartType = editConfig.chartStyle.type
+            } else { // 新增
+                id = new Date().getTime()
+                let sizeX = editConfig.chartStyle.type === ChartType.IndexCard.code ? 4 : 6
+                let sizeY = editConfig.chartStyle.type === ChartType.IndexCard.code ? 2 : 4
+                let col = 0
+                let row = 0
+                ChartList.filter(c => c.dashId === Number(editConfig.basicProperties.dashId) && c.tabId === Number(editConfig.basicProperties.tabId)).forEach(c => {
+                    if ((c.row + c.sizeY) > row) {
+                        row = c.row + c.sizeY
+                    }
+                })
+                ChartList.push({
+                    id: id,
+                    name: editConfig.basicProperties.name,
+                    remark: editConfig.basicProperties.remark,
+                    dashId: Number(editConfig.basicProperties.dashId),
+                    tabId: Number(editConfig.basicProperties.tabId),
+                    editConfig: params.editConfig,
+                    renderMeta: params.renderMeta,
+                    largeChartType: LargeChartType.General.code,
+                    chartType: editConfig.chartStyle.type,
+                    row: row,
+                    col: col,
+                    sizeX: sizeX,
+                    sizeY: sizeY,
+                    creator: 'xiaoyi',
+                    creatorCn: '小一',
+                    departmentId: 1,
+                    departmentName: '数据智能-数据仓库',
+                    isCertified: 1 // 是否认证
+                })
+            }
+            return id
+        })
+
         Mock.post(mock, ApiUrl.addOrUpdateExternalChart.name, ApiUrl.addOrUpdateExternalChart.api, function (params) {
             let id = params.id
             if (id) { // 修改

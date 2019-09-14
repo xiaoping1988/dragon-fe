@@ -6,7 +6,7 @@
                          @change="changeCondition"
                          horizontal></DFilterList>
         </el-row>
-        <div class="d-chart-container d-chart-full-screen">
+        <div class="chart-container d-chart-full-screen">
             <DChartFactory id="previewChart"
                            :meta="chartMeta"
                            :data="chartData"
@@ -111,7 +111,7 @@
         overflow: auto;
     }
 
-    .d-chart-container {
+    .d-chart-preview .chart-container {
         width: 100%;
         height: calc(100% - 48px);
         min-height: 400px;

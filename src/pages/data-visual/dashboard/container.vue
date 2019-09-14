@@ -187,7 +187,8 @@
                         query: {
                             tbId: table.id,
                             dashId: this.dashId,
-                            tabId: this.activeTabId
+                            tabId: this.activeTabId,
+                            projId: this.projId
                         }
                     })
                 } else if (this.largeChartType === LargeChartType.GpsMap.code) { // 经纬度地图

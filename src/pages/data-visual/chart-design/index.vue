@@ -52,6 +52,7 @@
                 </div>
             </div>
         </div>
+        <DLoading :loading="loading"></DLoading>
     </div>
 </template>
 
@@ -63,6 +64,7 @@
     import DChartPreviewModule from './chart-preview'
     import DChartSubType from './chart-sub-type'
     import DChartInsideFilter from './chart-inside-filter'
+    import {addOrUpdateGeneralChart} from '../../../services/data-visual/chart'
     export default {
         name: 'DChartDesign',
         components: {
@@ -83,7 +85,8 @@
                     chartId: '', // 图表ID
                     name: '', // 图表名称
                     remark: '' // 描述
-                }
+                },
+                loading: false
             }
         },
         methods: {
@@ -96,7 +99,28 @@
             submit () {
                 if (this.validate()) {
                     this.updateBasicPropertiesStore()
+                    this.loading = true
+                    addOrUpdateGeneralChart({
+                        id: this.$route.query.chartId,
+                        editConfig: JSON.stringify(this.$store.state.GeneralChart.editConfig),
+                        renderMeta: JSON.stringify(this.$store.state.GeneralChart.renderMeta)
+                    }).then(res => {
+                        this.backToDash(res.data)
+                    }).catch(error => {
+                        this.$handleError(error)
+                        this.loading = false
+                    })
                 }
+            },
+            backToDash (chartId) {
+                this.$router.push({
+                        path: '/data-visual/dashboard/' + this.$route.query.projId + '/' + this.$route.query.dashId,
+                        query: {
+                            tabId: this.$route.query.tabId,
+                            chartId: chartId
+                        }
+                    }
+                )
             },
             updateBasicPropertiesStore () {
                 this.$store.commit('GeneralChart/updateBasicProperties', this.basicProperties)
