@@ -1,35 +1,35 @@
 <template>
     <li class="d-chart-filter-item">
         <div class="label" :style="{width: labelWidth + 'px'}">
-            {{meta.showName}}
+            {{meta.colLabel}}
         </div>
         <div class="control">
             <DDatePicker
-                    v-if="filterControlTypeObj.date.code === meta.filterConfig.controlType"
-                    :type="meta.filterConfig.dateType"
+                    v-if="filterControlTypeObj.date.code === meta.colConfig.controlType"
+                    :type="meta.colConfig.timeFreq"
                     range
-                    :value="meta.filterConfig.defaultValue"
+                    :value="meta.colConfig.defaultValue"
                     :width="controlWidth"
                     @inited="initedCondition"
                     @change="changeCondition"></DDatePicker>
 
-            <DSelect v-if="filterControlTypeObj.select.code === meta.filterConfig.controlType"
+            <DSelect v-if="filterControlTypeObj.select.code === meta.colConfig.controlType"
                      :width="controlWidth"
-                     :value="meta.filterConfig.defaultValue"
+                     :value="meta.colConfig.defaultValue"
                      :data="selectData"
                      @focus="setSelectData"
                      @inited="initedCondition"
                      @change="changeCondition"></DSelect>
 
-            <DInputNumber v-if="filterControlTypeObj.num.code === meta.filterConfig.controlType"
+            <DInputNumber v-if="filterControlTypeObj.num.code === meta.colConfig.controlType"
                           :width="controlWidth"
-                          :value="meta.filterConfig.defaultValue"
+                          :value="meta.colConfig.defaultValue"
                           @inited="initedCondition"
                           @change="changeCondition"></DInputNumber>
 
-            <DInputText  v-if="filterControlTypeObj.text.code === meta.filterConfig.controlType"
+            <DInputText  v-if="filterControlTypeObj.text.code === meta.colConfig.controlType"
                          :width="controlWidth"
-                         :value="meta.filterConfig.defaultValue"
+                         :value="meta.colConfig.defaultValue"
                          @inited="initedCondition"
                          @change="changeCondition"></DInputText>
 

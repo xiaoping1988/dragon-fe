@@ -1,5 +1,5 @@
 <template>
-    <el-input :style="{width: width + 'px'}"
+    <el-input :style="containerStyle"
               size="mini"
               v-model="inputValue"
               placeholder="请输入关键词"
@@ -16,6 +16,18 @@
         data () {
             return {
                 inputValue: ''
+            }
+        },
+        computed: {
+            containerStyle () {
+                if (this.width) {
+                    return {
+                        width: this.width + 'px'
+                    }
+                }
+                return {
+                    width: '100%'
+                }
             }
         },
         methods: {

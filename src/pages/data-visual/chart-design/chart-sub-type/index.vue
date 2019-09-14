@@ -90,13 +90,15 @@
     .chart-sub-type-list {
         display: flex;
         flex-wrap: wrap;
+        padding: 0px 5px;
+        box-sizing: border-box;
     }
 
     .chart-sub-type-item {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         position: relative;
-        margin: 2px;
+        margin: 1px;
         padding: 0px;
     }
 
@@ -123,6 +125,7 @@
 
     .chat-sub-type-active {
         background-color: #ffffff;
-        border: 1px solid rgba(81,130,228,.6) ;
+        border: 1px solid rgba(81,130,228,.6);
+        margin: 0px;
     }
 </style>

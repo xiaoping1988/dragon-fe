@@ -143,11 +143,15 @@ export default {
         Mock.post(mock, ApiUrl.getTb.name, ApiUrl.getTb.api, function (params) {
             let tb = TbList.filter(t => t.id === Number(params.id))[0]
             let res = JSON.parse(JSON.stringify(tb))
-            res.colList = ColList.filter(c => c.tbId === res.id)
-            res.logicColList = LogicColList.filter(c => c.tbId === res.id)
-            res.lastDataModifiedTime = DateUtils.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss')
             let db = DbList.filter(d => d.id === res.dbId)[0]
             res.dbName = db.dbName
+            res.colList = ColList.filter(c => c.tbId === res.id).map(c => {
+                c.dbName = db.dbName
+                c.tbName = tb.tbName
+                return c
+            })
+            res.logicColList = LogicColList.filter(c => c.tbId === res.id)
+            res.lastDataModifiedTime = DateUtils.formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss')
             let baseDs = DsList.filter(d => d.id === db.dsId)[0]
             res.dsName = baseDs.name
             let queryEngines = DsList.filter(d => d.baseDsId === baseDs.id).sort((a, b) => b.priority - a.priority)

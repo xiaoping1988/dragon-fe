@@ -50,6 +50,7 @@ const GeneralChartDesign = {
         workTableColList: [], // 工作表的所有字段,包括计算字段
         configUpdateCount: 0, // 配置变化次数,自动选择图表和生成图表元数据
         chartMetaUpdateCount: 0, // 图表元数据变化次数
+        chartInsideFilterUpdateCount: 0, // 图内筛选配置变化次数
         editConfig: new GeneralChartEditConfig(),
         renderMeta: { // 图表渲染配置
             chartMeta: {}, // 图形渲染配置
@@ -108,6 +109,7 @@ const GeneralChartDesign = {
             state.renderMeta.filterMeta = chartFilterMeta
             state.editConfig.chartFilterMeta = chartFilterMeta
             state.configUpdateCount++
+            state.chartInsideFilterUpdateCount++
             console.log(state)
         },
         updateDefaultFilterMeta (state, defaultFilterMeta) {

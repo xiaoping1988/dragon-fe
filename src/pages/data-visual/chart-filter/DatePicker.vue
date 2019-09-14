@@ -1,12 +1,12 @@
 <template>
-    <div :style="{width: width + 'px'}">
+    <div :style="containerStyle">
         <el-select
                 v-model="currentValue"
                 size="mini"
                 @change="changeDateOption"
                 ref="Select"
                 :popper-append-to-body="false"
-                :style="{width: width + 'px'}">
+                style="width: 100%">
             <el-option :value="allValue" label="全部">全部</el-option>
             <el-option v-for="(item, index) in optionList" :value="item.dateNum" :key="index" :label="item.name">{{ item.name }}</el-option>
             <el-option :value="customDateOptionValue" label="自定义时间">自定义时间</el-option>
@@ -43,7 +43,7 @@
                                 @change="changEndDate"></el-date-picker>
             </div>
             <div slot="footer">
-                <DSubmitCancel @submit="saveCustomDate" @cancel="cancelEditCustomDate" nohr></DSubmitCancel>
+                <DSubmitCancel @submit="saveCustomDate" @cancel="cancelEditCustomDate" nohr size="mini" submitText="确定"></DSubmitCancel>
             </div>
         </el-dialog>
     </div>
@@ -103,6 +103,16 @@
                     return 'yyyy'
                 }
                 return 'yyyy-MM-dd'
+            },
+            containerStyle () {
+                if (this.width) {
+                    return {
+                        width: this.width + 'px'
+                    }
+                }
+                return {
+                    width: '100%'
+                }
             }
         },
         methods: {
@@ -132,6 +142,9 @@
                         this.currentDateStr = ''
                         this.currentValue = tmpValue
                     } else { // 自定义时间
+                        if (typeof(tmpValue) === 'number') {
+                            return
+                        }
                         this.currentDateStr = tmpValue
                         this.lastSelectOptionValue = this.customDateOptionValue
                         if (this.range) {
@@ -157,7 +170,7 @@
             },
             changeDateOption (value) {
                 if (value === this.allValue) { // 全部
-                    this.$emit('change', '', '')
+                    this.$emit('change', '', '', '')
                     this.lastSelectOptionValue = value
                 } else if (value === this.customDateOptionValue) { // 自定义时间,弹出操作界面
                     this.openCustomDateForm()
@@ -165,7 +178,7 @@
                     let option = this.optionList.filter(o => o.dateNum === value)[0]
                     this.showLabel = option.name
                     this.currentDateStr = TimeFreq[this.type].getDateStr(value, this.range)
-                    this.$emit('change', this.currentDateStr, this.showLabel)
+                    this.$emit('change', this.currentDateStr, this.showLabel, value)
                     this.lastSelectOptionValue = value
                 }
             },
@@ -228,6 +241,9 @@
                 this.initData()
             },
             type () {
+                this.initData()
+            },
+            value () {
                 this.initData()
             }
         },

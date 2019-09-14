@@ -39,9 +39,7 @@
                     图表类型
                 </div>
                 <DChartSubType></DChartSubType>
-                <div class="module-title">
-                    图内筛选
-                </div>
+                <DChartInsideFilter></DChartInsideFilter>
                 <div class="module-title">
                     图表备注
                 </div>
@@ -64,9 +62,18 @@
     import DDefaultFilterModule from './default-filter/DefaultFilterModule'
     import DChartPreviewModule from './ChartPreviewModule'
     import DChartSubType from './chart-sub-type'
+    import DChartInsideFilter from './chart-inside-filter'
     export default {
         name: 'DChartDesign',
-        components: {DWorkTable, DDimModule, DMeasureModule, DDefaultFilterModule, DChartPreviewModule, DChartSubType},
+        components: {
+            DWorkTable,
+            DDimModule,
+            DMeasureModule,
+            DDefaultFilterModule,
+            DChartPreviewModule,
+            DChartSubType,
+            DChartInsideFilter
+        },
         data () {
             return {
                 tbId: '',

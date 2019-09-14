@@ -8,7 +8,7 @@
                reserve-keyword
                placeholder="可输入关键词搜索"
                :remote-method="filterOptions"
-               :style="{width: width + 'px'}"
+               :style="containerStyle"
                :popper-append-to-body="false"
                class="d-select"
                @focus="focusInput"
@@ -25,6 +25,18 @@
             value: String,
             data: Array,
             width: Number
+        },
+        computed: {
+            containerStyle () {
+                if (this.width) {
+                    return {
+                        width: this.width + 'px'
+                    }
+                }
+                return {
+                    width: '100%'
+                }
+            }
         },
         data () {
             return {

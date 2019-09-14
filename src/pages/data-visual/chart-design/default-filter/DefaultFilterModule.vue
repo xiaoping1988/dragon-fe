@@ -1,7 +1,7 @@
 <template>
     <div class="d-default-filter">
         <div class="label">过滤器</div>
-        <ul class="filter-list"
+        <ul class="default-filter-list"
             @dragover="allowDrop($event)"
             @drop="dragDropCol($event)">
             <li v-for="(item, index) in filterList"
@@ -190,17 +190,17 @@
         padding-bottom: 10px;
     }
 
-    .filter-list {
+    .default-filter-list {
         height: calc(100% - 36px);
         overflow: auto;
     }
 
-    .filter-list .filter-item {
+    .default-filter-list .filter-item {
         padding: 0px;
         cursor: pointer;
     }
 
-    .filter-list .filter-item-head {
+    .default-filter-list .filter-item-head {
         display: flex;
         height: 28px;
         line-height: 28px;
@@ -219,11 +219,11 @@
         flex-grow: 1;
     }
 
-    .filter-list .filter-item {
+    .default-filter-list .filter-item {
         margin-bottom: 10px;
     }
 
-    .filter-list .filter-item:hover .oper-btn {
+    .default-filter-list .filter-item:hover .oper-btn {
         display: block;
     }
 

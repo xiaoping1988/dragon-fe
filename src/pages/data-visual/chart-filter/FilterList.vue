@@ -49,7 +49,7 @@
                 if (!this.horizontal) {
                     let maxWidth = 0
                     this.data.forEach(d => {
-                        let len = getByteLength(d.showName)
+                        let len = getByteLength(d.colLabel)
                         maxWidth = len > maxWidth ? len : maxWidth
                     })
                     this.labelWidth = maxWidth * 6
@@ -72,12 +72,12 @@
                     tbId: col.tbId,
                     tbName: col.tbName,
                     dbName: col.dbName,
-                    oper: col.filterConfig.oper,
+                    oper: col.colConfig.oper,
                     dataType: col.dataType,
                     value: conditionValue
                 }
                 this.showLabelObj[col.colName] = {
-                    showName: col.showName,
+                    colLabel: col.colLabel,
                     showLabel: showLabel
                 }
             }

@@ -118,7 +118,9 @@
                         <div class="measure-bs-form-label">
                             <el-tooltip class="item" effect="dark" content="所选日期字段必须出现在图内筛选、默认过滤器或者维度列中" placement="top">
                                 <i class="el-icon-info"></i>
-                            </el-tooltip><span>日期字段</span></div>
+                            </el-tooltip>
+                            <span>日期字段</span>
+                        </div>
                         <div class="measure-bs-form-input">
                             <el-select v-model="configForm.THBTimeCol" size="mini" style="width: 100%">
                                 <el-option v-for="item in dateColList" :value="item.colName" :key="item.colName" :label="item.colLabel"></el-option>

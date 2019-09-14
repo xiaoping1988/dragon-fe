@@ -1,5 +1,5 @@
 <template>
-    <div :style="{width: width + 'px'}">
+    <div :style="containerStyle">
         <el-input :style="{width: (width/2 - 14) + 'px'}"
                   size="mini"
                   placeholder="大于等于"
@@ -25,6 +25,18 @@
             return {
                 start: '',
                 end: ''
+            }
+        },
+        computed: {
+            containerStyle () {
+                if (this.width) {
+                    return {
+                        width: this.width + 'px'
+                    }
+                }
+                return {
+                    width: '100%'
+                }
             }
         },
         methods: {

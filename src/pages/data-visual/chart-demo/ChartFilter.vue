@@ -14,7 +14,7 @@
                           v-if="item.value !== '' && item.value !== '全部'"
                           :key="index"
                           class="item">
-                        <span class="label">{{item.showName}}</span>
+                        <span class="label">{{item.colLabel}}</span>
                         <span class="value">{{item.showLabel}}</span>
                     </span>
                 </span>
@@ -207,57 +207,61 @@
     import DInputText from '../chart-filter/InputText'
     import DFilterItem from '../chart-filter/FilterItem'
     import DFilterList from '../chart-filter/FilterList'
-    import {FilterControlType, TimeFreq} from '../constants'
+    import {FilterControlType, TimeFreq, Operator} from '../constants'
     import {DataType} from '../../../services/data-map/col-manage'
     let dateFilterColumn = {
-            showName: '时间字段',
-            colName: 'createtime',
-            tbId: 1,
-            dbName: 'dw',
-            tbName: 'tb',
-            filterConfig: { // 筛选配置
-                controlType: FilterControlType.date.code, // 筛选控件类型
-                defaultValue: 7, // 默认值
-                dateType: TimeFreq.day.code, // 日期类型
-                dataType: DataType.date.code // 数据类型
-            }
+        colLabel: '时间字段',
+        colName: 'createtime',
+        tbId: 1,
+        dbName: 'dw',
+        tbName: 'tb',
+        dataType: DataType.date.code, // 数据类型
+        colConfig: { // 筛选配置
+            controlType: FilterControlType.date.code, // 筛选控件类型
+            oper: Operator.between.code,
+            defaultValue: 7, // 默认值
+            timeFreq: TimeFreq.day.code // 日期类型
         }
+    }
     let numberFilterColumn = {
-            showName: '数字字段的所产生的',
-            colName: 'amt',
-            tbId: 1,
-            dbName: 'dw',
-            tbName: 'tb',
-            filterConfig: {
-                controlType: FilterControlType.num.code,
-                defaultValue: '1,5',
-                dataType: DataType.num.code // 数据类型
-            }
+        colLabel: '数字字段的所产生的',
+        colName: 'amt',
+        tbId: 1,
+        dbName: 'dw',
+        tbName: 'tb',
+        dataType: DataType.num.code, // 数据类型
+        colConfig: {
+            controlType: FilterControlType.num.code,
+            defaultValue: '1,5',
+            oper: Operator.between.code
         }
+    }
     let selectFilterColumn = {
-            showName: '枚举字段',
-            colName: 'state',
-            tbId: 1,
-            dbName: 'dw',
-            tbName: 'tb',
-            filterConfig: {
-                controlType: FilterControlType.select.code,
-                defaultValue: '北京',
-                dataType: DataType.text.code // 数据类型
-            }
+        colLabel: '枚举字段',
+        colName: 'state',
+        tbId: 1,
+        dbName: 'dw',
+        tbName: 'tb',
+        dataType: DataType.text.code, // 数据类型
+        colConfig: {
+            controlType: FilterControlType.select.code,
+            oper: Operator.in.code,
+            defaultValue: '北京'
         }
+    }
     let textFilterColumn = {
-            showName: '文本字段',
-            colName: 'addr',
-            tbId: 1,
-            dbName: 'dw',
-            tbName: 'tb',
-            filterConfig: {
-                controlType: FilterControlType.text.code,
-                defaultValue: 'xiao',
-                dataType: DataType.text.code // 数据类型
-            }
+        colLabel: '文本字段',
+        colName: 'addr',
+        tbId: 1,
+        dbName: 'dw',
+        tbName: 'tb',
+        dataType: DataType.text.code, // 数据类型
+        colConfig: {
+            controlType: FilterControlType.text.code,
+            defaultValue: 'xiao',
+            oper: Operator.like.code
         }
+    }
     export default {
         name: 'DChartFilterDemo',
         components: {DDatePicker, DSelect, DInputNumber, DInputText, DFilterItem, DFilterList},

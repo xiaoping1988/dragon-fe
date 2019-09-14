@@ -43,7 +43,7 @@
                                             v-if="item.showLabel !== '' && item.showLabel !== '全部'"
                                             :key="index"
                                             class="d-desclist-index">
-                                        <div class="d-desclist-index-term">{{item.showName}}</div>
+                                        <div class="d-desclist-index-term">{{item.colLabel}}</div>
                                         <div class="d-desclist-index-detail">{{item.showLabel}}</div>
                                     </el-col>
                             </el-row>
@@ -53,7 +53,7 @@
                                   v-if="item.showLabel !== '' && item.showLabel !== '全部'"
                                   :key="index"
                                   class="item">
-                                <span class="label">{{item.showName}}</span>
+                                <span class="label">{{item.colLabel}}</span>
                                 <span class="value">{{item.showLabel}}</span>
                             </span>
                         </span>

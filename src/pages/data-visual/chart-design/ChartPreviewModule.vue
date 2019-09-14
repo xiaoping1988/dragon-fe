@@ -1,6 +1,11 @@
 <template>
     <div class="d-chart-preview">
-        <div></div>
+        <el-row class="d-row">
+            <DFilterList :data="chartInsideFilterList"
+                         @inited="initedFilterList"
+                         @change="changeCondition"
+                         horizontal></DFilterList>
+        </el-row>
         <div class="d-chart-container d-chart-full-screen">
             <DChartFactory id="previewChart"
                            :meta="chartMeta"
@@ -12,21 +17,27 @@
 
 <script>
     import DChartFactory from '../chart-factory'
+    import DFilterList from '../chart-filter/FilterList'
     import {previewData} from '../../../services/data-visual/chart'
     export default {
         name: 'DChartPreviewModule',
-        components: {DChartFactory},
+        components: {DChartFactory, DFilterList},
         data () {
             return {
                 loading: false,
                 chartMeta: {}, // 预览图表的chartMeta,切换指标维度会改这个值
                 chartData: [], // 图表数据
-                lastUpdateTime: new Date().getTime() // 上一次更新时间
+                lastUpdateTime: new Date().getTime(), // 上一次更新时间
+                chartInsideFilterList: [],
+                chartFilterValue: '[]'
             }
         },
         watch: {
             '$store.state.GeneralChart.chartMetaUpdateCount': function (newValue) {
                 this.updateChart()
+            },
+            '$store.state.GeneralChart.chartInsideFilterUpdateCount': function (newValue) {
+                this.chartInsideFilterList = this.$store.state.GeneralChart.editConfig.chartFilterMeta
             }
         },
         methods: {
@@ -57,7 +68,8 @@
                 this.loading = true
                 let params = {
                     editConfig: JSON.stringify(this.$store.state.GeneralChart.editConfig),
-                    chartMeta: JSON.stringify(this.$store.state.GeneralChart.renderMeta.chartMeta)
+                    chartMeta: JSON.stringify(this.$store.state.GeneralChart.renderMeta.chartMeta),
+                    chartFilterValue: this.chartFilterValue
                 }
                 previewData(params).then(res => {
                     this.chartData = res.data
@@ -74,6 +86,14 @@
             },
             sortData () {
 
+            },
+            initedFilterList (conditionValueArr, showLabelArr) {
+                this.chartFilterValue = JSON.stringify(conditionValueArr)
+                this.updateChart()
+            },
+            changeCondition (conditionValueArr, showLabelArr) {
+                this.chartFilterValue = JSON.stringify(conditionValueArr)
+                this.updateChart()
             }
         }
     }
