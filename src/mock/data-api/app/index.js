@@ -95,7 +95,9 @@ export default {
         Mock.post(mock, ApiUrl.getApp.name, ApiUrl.getApp.api, function (params) {
             let app = AppList.filter(a => a.id === Number(params.id))[0]
             app.ownerList = AppOwnerList.filter(a => a.appId === app.id)
-            app.apiList = []
+            app.apiList = [
+                {id: 1, name: '查询用户', remark: '按时间查询用户', callCnt7: 100}
+            ]
             return app
         })
     }

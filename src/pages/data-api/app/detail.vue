@@ -40,8 +40,20 @@
                                 width="220">
                         </el-table-column>
                         <el-table-column
+                                prop="callCnt7"
+                                label="近7天调用次数"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
                                 prop="remark"
                                 label="API描述">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="100">
+                            <template slot-scope="scope">
+                                <el-button type="text" size="mini" >查看API文档</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </el-card>
