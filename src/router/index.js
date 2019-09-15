@@ -113,6 +113,27 @@ let router = new Router({
         {
             path: '/chart-design',
             component: Pages.DataVisualChartDesign
+        },
+        {
+            path: '/data-api',
+            component: Pages.DataApi,
+            children: [
+                {path: 'app', component: Pages.DataApiApp},
+                {path: 'api-market', component: Pages.DataApiMarket},
+                {path: 'my-api', component: Pages.DataApiMy}
+            ],
+            redirect: '/data-api/my-api'
+        },
+        {
+            path: '/index-system',
+            component: Pages.IndexSystem,
+            children: [
+                {path: 'index', component: Pages.IndexSystemIndex},
+                {path: 'dim', component: Pages.IndexSystemDim},
+                {path: 'business', component: Pages.IndexSystemBusiness},
+                {path: 'subject', component: Pages.IndexSystemSubject}
+            ],
+            redirect: '/index-system/index'
         }
     ]
 })
