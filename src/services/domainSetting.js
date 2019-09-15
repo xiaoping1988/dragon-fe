@@ -30,6 +30,10 @@ const domain = {
     sso: { // 单点登录
         fe: '', // 前端域名
         be: '' // 后端域名
+    },
+    dataApi: { // 数据api
+        fe: '', // 前端域名
+        be: '' // 后端域名
     }
 }
 
@@ -66,6 +70,10 @@ if (process.env.NODE_ENV === 'development') { // 开发环境
         fe: 'http://localhost:8080', // 前端域名
         be: 'http://localhost:8081' // 后端域名
     }
+    domain.dataApi = {
+        fe: 'http://localhost:8080', // 前端域名
+        be: 'http://localhost:8081' // 后端域名
+    }
 } else if (process.env.NODE_ENV === 'production') {
     domain.auth = {
         fe: 'https://xiaoping1988.github.io', // 前端域名
@@ -96,6 +104,10 @@ if (process.env.NODE_ENV === 'development') { // 开发环境
         be: 'https://xiaoping1988.github.io' // 后端域名
     }
     domain.sso = {
+        fe: 'https://xiaoping1988.github.io', // 前端域名
+        be: 'https://xiaoping1988.github.io' // 后端域名
+    }
+    domain.dataApi = {
         fe: 'https://xiaoping1988.github.io', // 前端域名
         be: 'https://xiaoping1988.github.io' // 后端域名
     }

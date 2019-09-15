@@ -119,6 +119,7 @@ let router = new Router({
             component: Pages.DataApi,
             children: [
                 {path: 'app', component: Pages.DataApiApp},
+                {path: 'app/:id', component: Pages.DataApiAppDetail},
                 {path: 'api-market', component: Pages.DataApiMarket},
                 {path: 'my-api', component: Pages.DataApiMy}
             ],

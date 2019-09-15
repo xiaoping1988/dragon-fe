@@ -47,11 +47,12 @@ export default {
     DataVisualChartDesign: () => import('../pages/data-visual/chart-design/index.vue'),
     DataApi: () => import('../pages/data-api/index.vue'),
     DataApiApp: () => import('../pages/data-api/app/index.vue'),
+    DataApiAppDetail: () => import('../pages/data-api/app/detail.vue'),
     DataApiMarket: () => import('../pages/data-api/api-market/index.vue'),
     DataApiMy: () => import('../pages/data-api/my-api/index.vue'),
     IndexSystem: () => import('../pages/index-system/index.vue'),
     IndexSystemIndex: () => import('../pages/index-system/index/index.vue'),
     IndexSystemDim: () => import('../pages/index-system/dim/index.vue'),
     IndexSystemBusiness: () => import('../pages/index-system/business/index.vue'),
-    IndexSystemSubject: () => import('../pages/index-system/subject/index.vue')
+    IndexSystemSubject: () => import('../pages/index-system/subject/index.vue'),
 }

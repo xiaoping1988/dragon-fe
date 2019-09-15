@@ -6,6 +6,7 @@ import Message from './message'
 import DataMap from './data-map'
 import DataVisual from './data-visual'
 import SSO from './sso'
+import DataApi from './data-api'
 
 export default {
     /**
@@ -19,6 +20,7 @@ export default {
         DataMap.bootstrap(mock)
         DataVisual.bootstrap(mock)
         SSO.bootstrap(mock)
+        DataApi.bootstrap(mock)
     },
     /**
      * mock服务的返回结果集，并打印日志,

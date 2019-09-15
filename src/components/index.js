@@ -3,8 +3,8 @@ import Loading from './Loading.vue'
 import SubmitCancel from './button/SubmitCancel.vue'
 import EditSaveSwitch from './button/EditSaveSwitch.vue'
 import FormatValue from './format/FormatValue.vue'
-import Draggable from './draggable-old'
 import DraggableContainer from './draggable/DraggableContainer'
+import PageHeader from './PageHeader'
 
 export default {
     Detail: Detail,
@@ -12,5 +12,6 @@ export default {
     SubmitCancel: SubmitCancel,
     EditSaveSwitch: EditSaveSwitch,
     FormatValue: FormatValue,
-    DraggableContainer: DraggableContainer
+    DraggableContainer: DraggableContainer,
+    PageHeader: PageHeader
 }
