@@ -82,6 +82,10 @@ let router = new Router({
                     ]
                 },
                 {
+                    path: 'template',
+                    component: Pages.DataVisualTemplate
+                },
+                {
                     path: 'chart-demo',
                     component: Pages.DataVisualChartDemo,
                     children: [
@@ -135,6 +139,42 @@ let router = new Router({
                 {path: 'subject', component: Pages.IndexSystemSubject}
             ],
             redirect: '/index-system/index'
+        },
+        {
+            path: '/data-system',
+            component: Pages.DataSystem,
+            children: [
+                {
+                    path: 'business-analyse',
+                    component: Pages.DataSystemBusinessAnalyse,
+                    children: [
+                        {path: 'plate', component: Pages.DataSystemBusinessAnalysePlate},
+                        {path: 'business', component: Pages.DataSystemBusinessAnalyseBusiness},
+                        {path: 'process', component: Pages.DataSystemBusinessAnalyseProcess}
+                    ],
+                    redirect: '/data-system/business-analyse/plate'
+                },
+                {
+                    path: 'model-design',
+                    component: Pages.DataSystemModelDesign,
+                    children: [
+                        {path: 'subject', component: Pages.DataSystemModelDesignSubject},
+                        {path: 'dim', component: Pages.DataSystemModelDesignDim},
+                        {path: 'fact', component: Pages.DataSystemModelDesignFact}
+                    ],
+                    redirect: '/data-system/model-design/subject'
+                },
+                {
+                    path: 'basic-config',
+                    component: Pages.DataSystemBasicConfig,
+                    children: [
+                        {path: 'dw-layer', component: Pages.DataSystemBasicConfigDwLayer},
+                        {path: 'word-mapping', component: Pages.DataSystemBasicConfigWordMapping}
+                    ],
+                    redirect: '/data-system/basic-config/dw-layer'
+                }
+            ],
+            redirect: '/data-system/business-analyse/plate'
         }
     ]
 })

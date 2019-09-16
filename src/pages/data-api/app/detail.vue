@@ -21,7 +21,7 @@
             <el-col class="d-col" :span="16">
                 <el-card shadow="never">
                     <div slot="header">
-                        <span class="d-card-title">API列表</span>
+                        <span class="d-card-title">已申请的API列表</span>
                         <div style="float: right;">
                             <el-button class="d-card-btn" type="text" @click="applyApi">
                                 申请API
