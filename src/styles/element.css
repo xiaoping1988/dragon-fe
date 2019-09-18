@@ -34,6 +34,7 @@
 
 .d-side-nav .el-menu-item.is-active {
     border-left: 5px solid #409EFF;
+    padding-left: 15px!important;
 }
 
 .d-head-nav .el-menu-item.is-active,

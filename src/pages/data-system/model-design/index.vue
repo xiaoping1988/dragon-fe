@@ -14,7 +14,7 @@
             return {
                 sideMenuList: [
                     {name: '主题', path: '/data-system/model-design/subject'},
-                    {name: '维度', path: '/data-system/model-design/dim'},
+                    {name: '一致性维度', path: '/data-system/model-design/dim'},
                     {name: '事实表', path: '/data-system/model-design/fact'}
                 ]
             }

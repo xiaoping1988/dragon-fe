@@ -8,31 +8,26 @@ export const ApiUrl = {
         api: ApiBase + '/list-my',
         name: '获取我负责的所有API'
     },
-    addOrUpdate: {
-        api: ApiBase + '/add-or-update',
-        name: '新增或者编辑一个应用'
+    releaseApi: {
+        api: ApiBase + '/release',
+        name: '发布一个API'
     },
     deleteById: {
         api: ApiBase + '/delete-by-id',
-        name: '删除一个应用'
+        name: '删除一个API'
     },
-    deleteOwner: {
-        api: ApiBase + '/delete-owner',
-        name: '删除应用的一个负责人'
+    addOrUpdate: {
+        api: ApiBase + '/add-or-update',
+        name: '新增或者修改一个API'
     },
-    addOwner: {
-        api: ApiBase + '/add-owner',
-        name: '增加应用的一个负责人'
-    },
-    getApp: {
+    getApi: {
         api: ApiBase + '/get',
-        name: '获取一个应用详情'
+        name: '获取一个API详情'
     }
 }
 
-export const listMyApp = (params) => {return post(ApiUrl.listMyApp.api, params)}
-export const addOrUpdate = (params) => {return post(ApiUrl.addOrUpdate.api, params)}
+export const listMyApi = (params) => {return post(ApiUrl.listMyApi.api, params)}
+export const releaseApi = (params) => {return post(ApiUrl.releaseApi.api, params)}
+export const addOrUpdateDevApi = (params) => {return post(ApiUrl.addOrUpdate.api, params)}
 export const deleteById = (params) => {return post(ApiUrl.deleteById.api, params)}
-export const deleteOwner = (params) => {return post(ApiUrl.deleteOwner.api, params)}
-export const addOwner = (params) => {return post(ApiUrl.addOwner.api, params)}
-export const getApp = (params) => {return post(ApiUrl.getApp.api, params)}
+export const getDevApi = (params) => {return post(ApiUrl.getApi.api, params)}

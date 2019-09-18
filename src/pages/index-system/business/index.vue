@@ -1,5 +1,9 @@
 <template>
-    <div></div>
+    <DPageContent>
+        <el-card shadow="never">
+
+        </el-card>
+    </DPageContent>
 </template>
 
 <script>

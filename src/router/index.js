@@ -125,7 +125,8 @@ let router = new Router({
                 {path: 'app', component: Pages.DataApiApp},
                 {path: 'app/:id', component: Pages.DataApiAppDetail},
                 {path: 'api-market', component: Pages.DataApiMarket},
-                {path: 'my-api', component: Pages.DataApiMy}
+                {path: 'my-api', component: Pages.DataApiMy},
+                {path: 'guide-dev', component: Pages.DataApiGuideDev}
             ],
             redirect: '/data-api/my-api'
         },
@@ -176,7 +177,15 @@ let router = new Router({
             ],
             redirect: '/data-system/business-analyse/plate'
         }
-    ]
+    ],
+    mode: 'history',
+    srcollBehavior(to, from, savedPosition){
+        if(to.hash){
+            return {
+                selector:to.hash
+            }
+        }
+    }
 })
 
 // router.beforeEach(function (to, from, next) {

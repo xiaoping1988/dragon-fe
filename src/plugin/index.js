@@ -41,6 +41,5 @@ export default {
                 Vue.component('D' + key, c[key])
             })
         })
-
     }
 }
