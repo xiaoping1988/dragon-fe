@@ -255,7 +255,7 @@ export default {
                         }
                     })
                 } else {
-                    searchTbList = allAuthTbList.filter(t => t.dbId === params.dbId && t.tbName.includes(params.tbName.toLowerCase()))
+                    searchTbList = allAuthTbList.filter(t => t.dbId === params.dbId)
                 }
             } else {
                 searchTbList = allAuthTbList.filter(t => {

@@ -16,6 +16,11 @@
             <el-table
                     :data="tableData">
                 <el-table-column
+                        prop="id"
+                        label="API ID"
+                        width="80">
+                </el-table-column>
+                <el-table-column
                         prop="name"
                         label="名称"
                         width="250">
@@ -25,7 +30,8 @@
                 </el-table-column>
                 <el-table-column
                         prop="callCnt7"
-                        label="近7天调用次数">
+                        label="近7天调用次数"
+                        width="150">
                 </el-table-column>
                 <el-table-column
                         prop="remark"

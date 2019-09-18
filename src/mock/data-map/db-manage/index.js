@@ -25,6 +25,11 @@ export default {
             return DbList
         })
 
+        Mock.post(mock, ApiUrl.listUserOwnDbByType.name, ApiUrl.listUserOwnDbByType.api, function (params) {
+            let dsIds = DsList.filter(d => d.type === params.dbType).map(d => d.id)
+            return DbList.filter(d => dsIds.includes(d.dsId))
+        })
+
         Mock.post(mock, ApiUrl.getDb.name, ApiUrl.getDb.api, function (params) {
             let db = DbList.filter(d => d.id ===  Number(params.id))[0]
             db.tbCount = TbList.filter(t => t.dbId === db.id).length
