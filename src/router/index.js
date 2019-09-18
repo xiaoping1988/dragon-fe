@@ -179,7 +179,7 @@ let router = new Router({
             redirect: '/data-system/business-analyse/plate'
         }
     ],
-    mode: 'history',
+    // mode: 'history',
     srcollBehavior(to, from, savedPosition){
         if(to.hash){
             return {
