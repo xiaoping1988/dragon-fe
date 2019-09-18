@@ -23,6 +23,10 @@ export const ApiUrl = {
     getApi: {
         api: ApiBase + '/get',
         name: '获取一个API详情'
+    },
+    listApiCallTrendData: {
+        api: ApiBase + '/list-call-trend-data',
+        name: '获取一个API的调用趋势数据'
     }
 }
 
@@ -31,3 +35,4 @@ export const releaseApi = (params) => {return post(ApiUrl.releaseApi.api, params
 export const addOrUpdateDevApi = (params) => {return post(ApiUrl.addOrUpdate.api, params)}
 export const deleteById = (params) => {return post(ApiUrl.deleteById.api, params)}
 export const getDevApi = (params) => {return post(ApiUrl.getApi.api, params)}
+export const listApiCallTrendData = (params) => {return post(ApiUrl.listApiCallTrendData.api, params)}

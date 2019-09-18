@@ -52,6 +52,7 @@ export default {
     DataApiMarket: () => import('../pages/data-api/api-market/index.vue'),
     DataApiMy: () => import('../pages/data-api/my-api/index.vue'),
     DataApiGuideDev: () => import('../pages/data-api/my-api/GuideDev.vue'),
+    DataApiMyDetail: () => import('../pages/data-api/my-api/detail.vue'),
     IndexSystem: () => import('../pages/index-system/index.vue'),
     IndexSystemIndex: () => import('../pages/index-system/index/index.vue'),
     IndexSystemDim: () => import('../pages/index-system/dim/index.vue'),

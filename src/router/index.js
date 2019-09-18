@@ -126,6 +126,7 @@ let router = new Router({
                 {path: 'app/:id', component: Pages.DataApiAppDetail},
                 {path: 'api-market', component: Pages.DataApiMarket},
                 {path: 'my-api', component: Pages.DataApiMy},
+                {path: 'api-dev/:id', component: Pages.DataApiMyDetail},
                 {path: 'guide-dev', component: Pages.DataApiGuideDev}
             ],
             redirect: '/data-api/my-api'

@@ -134,6 +134,52 @@ export default {
     },
 
     /**
+     * 获取某个日期范围内的所有小时
+     * @param startDateStr 字符串日期开始
+     * @param stopDateStr 字符串日期结束
+     * @returns {Array}
+     */
+    getHoursByStr (startDateStr, stopDateStr, parttern) {
+        if (!parttern || parttern === '') parttern = 'yyyy-MM-dd'
+        let dateArray = []
+        let startDate = this.parseStrToDate(startDateStr, parttern)
+        let stopDate = this.parseStrToDate(stopDateStr, parttern)
+        let currentDate = startDate
+        while (currentDate <= stopDate) {
+            let day = this.formatDate(currentDate, parttern)
+            for (let i = 1; i < 25; i ++) {
+                let hour = i
+                if (i < 10) {
+                    hour = '0' + i
+                }
+                dateArray.push(day + ' ' + hour + ':00')
+            }
+            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1))
+        }
+        return dateArray
+    },
+
+    getWeeksByStr (startDateStr, stopDateStr, parttern) {
+        if (!parttern || parttern === '') parttern = 'yyyy-MM-dd'
+        let dateArray = {}
+        let startDate = this.parseStrToDate(startDateStr, parttern)
+        let stopDate = this.parseStrToDate(stopDateStr, parttern)
+        let currentDate = startDate
+        while (currentDate <= stopDate) {
+            let d2 = new Date(currentDate.getTime())
+            d2.setMonth(0);
+            d2.setDate(1);
+            let rq = currentDate-d2;
+            let days = Math.ceil(rq/(24*60*60*1000))
+            let num = Math.ceil(days/7)
+            let week = this.formatDate(currentDate, 'yyyy') + '年第' + num + '周'
+            dateArray[week] = 1
+            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1))
+        }
+        return Object.keys(dateArray)
+    },
+
+    /**
      * 获取两个时间区间的天数
      * @param startDate
      * @param stopDate
